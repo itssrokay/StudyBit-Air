@@ -1,0 +1,4 @@
+export type ThemePreference='light'|'dark'|'system';
+export const resolveTheme=(preference:ThemePreference,systemDark:boolean)=>preference==='system'?(systemDark?'dark':'light'):preference;
+export const themeBootstrap="(()=>{try{const p=localStorage.getItem('learning-space-theme')||'system';const mode=p==='dark'||(p==='system'&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';document.documentElement.dataset.theme=mode;document.documentElement.style.colorScheme=mode}catch{}})()";
+export function applyTheme(preference:ThemePreference,systemDark:boolean){const theme=resolveTheme(preference,systemDark);document.documentElement.dataset.theme=theme;document.documentElement.style.colorScheme=theme;try{localStorage.setItem('learning-space-theme',preference);}catch{}const meta=document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');if(meta)meta.content=theme==='dark'?'#111a15':'#f8f9f6';return theme;}

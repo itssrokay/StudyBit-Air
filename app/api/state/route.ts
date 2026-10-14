@@ -15,6 +15,8 @@ export async function PUT(request:Request){
  const raw=await request.text();if(raw.length>4000000)return json({error:'Library is too large.'},413);
  let input;try{input=JSON.parse(raw);}catch{return json({error:'Invalid JSON.'},400);}
  const parsed=stateSchema.safeParse(input.state);if(!parsed.success||!Number.isInteger(input.revision)||input.revision<0)return json({error:parsed.success?'Invalid revision.':parsed.error.issues[0]?.message},400);
+ // Preserve newer preferences when a previously opened older client saves its library.
+ if(input.state.coach===undefined||input.state.settings.theme===undefined){const row=await env.DB.prepare('SELECT body, revision FROM learning_states WHERE user_id = ?').bind(user.userId).first<{body:string;revision:number}>();if(row&&row.revision===input.revision){const previous=stateSchema.safeParse(JSON.parse(row.body));if(previous.success){if(input.state.coach===undefined)parsed.data.coach=previous.data.coach;if(input.state.settings.theme===undefined)parsed.data.settings.theme=previous.data.settings.theme;}}}
  const result=await env.DB.prepare('INSERT INTO learning_states (user_id, body, revision, updated_at) VALUES (?, ?, 1, ?) ON CONFLICT(user_id) DO UPDATE SET body=excluded.body, revision=learning_states.revision+1, updated_at=excluded.updated_at WHERE learning_states.revision=?').bind(user.userId,JSON.stringify(parsed.data),new Date().toISOString(),input.revision).run();
  if(!result.meta.changes)return json({error:'Your library changed in another tab. Export your current copy, then reload to get the latest version.'},409);
  const row=await env.DB.prepare('SELECT revision FROM learning_states WHERE user_id=?').bind(user.userId).first<{revision:number}>();

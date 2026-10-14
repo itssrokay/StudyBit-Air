@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import {themeBootstrap} from "../lib/theme";
 
 export const metadata: Metadata = {
   title: "Learning Space · A little progress, every day",
@@ -16,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{__html:themeBootstrap}}/></head>
       <body className="antialiased">{children}</body>
     </html>
   );

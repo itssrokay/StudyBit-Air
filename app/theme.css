@@ -1,0 +1,605 @@
+:root[data-theme="dark"]{--bg:#111a15;--paper:#1b271f;--ink:#e4eddf;--muted:#b0c0ac;--teal:#a3c994;--teal-dark:#bdd9b1;--line:#354638;--soft:#26362a;--orange:#daa778}
+:root[data-theme="dark"] button:focus-visible,:root[data-theme="dark"] a:focus-visible {outline:3px solid #557c69
+}
+:root[data-theme="dark"] input:focus,:root[data-theme="dark"] textarea:focus,:root[data-theme="dark"] select:focus {outline:2px solid #5c7566
+}
+:root[data-theme="dark"] input,:root[data-theme="dark"] textarea,:root[data-theme="dark"] select {border:1px solid #3b4b3f;background:#27322a
+}
+:root[data-theme="dark"] input::placeholder,:root[data-theme="dark"] textarea::placeholder {color:#becbbb
+}
+:root[data-theme="dark"] .sidebar {background:#26322a
+}
+:root[data-theme="dark"] .brand-mark {color:#17271d
+}
+:root[data-theme="dark"] .workspace-pill>svg {color:#b9c6b5
+}
+:root[data-theme="dark"] .workspace-icon {background:#253028;color:#b0c2aa
+}
+:root[data-theme="dark"] .nav-label {color:#bdc9b9
+}
+:root[data-theme="dark"] .sidebar nav button {color:#b4c1b1
+}
+:root[data-theme="dark"] .sidebar nav button.active,:root[data-theme="dark"] .settings-nav.active {background:#253128;color:#becebd
+}
+:root[data-theme="dark"] .nav-dot {background:#4c694a
+}
+:root[data-theme="dark"] .goal-nav button {color:#b5c2b2
+}
+:root[data-theme="dark"] .mini-dot {background:#677569
+}
+:root[data-theme="dark"] .mini-dot.teal {background:#486a52
+}
+:root[data-theme="dark"] .mini-dot.orange {background:#7d6e48
+}
+:root[data-theme="dark"] .mini-dot.lavender {background:#666b7a
+}
+:root[data-theme="dark"] .mini-dot.blue {background:#536d73
+}
+:root[data-theme="dark"] .mini-dot.rose {background:#726162
+}
+:root[data-theme="dark"] .add-goal {color:#b9c6b5
+}
+:root[data-theme="dark"] .growth-card {background:#263129;border:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .growth-card svg {color:#b1c3ac
+}
+:root[data-theme="dark"] .growth-card h4 {color:#c5d0bf
+}
+:root[data-theme="dark"] .growth-card p {color:#b9c6b3
+}
+:root[data-theme="dark"] .settings-nav {color:#b6c3b2
+}
+:root[data-theme="dark"] .avatar {background:#253027;color:#b6c0ae
+}
+:root[data-theme="dark"] .profile small {color:#becaba
+}
+:root[data-theme="dark"] .profile a {color:#bdc9b7
+}
+:root[data-theme="dark"] .topbar {background:#27322a
+}
+:root[data-theme="dark"] .breadcrumb {color:#bdc9b9
+}
+:root[data-theme="dark"] .breadcrumb strong {color:#c6d0c3
+}
+:root[data-theme="dark"] .search-box {color:#bcc9b7
+}
+:root[data-theme="dark"] .search-box kbd {border:1px solid #3b4b3f;color:#bdcab8
+}
+:root[data-theme="dark"] .primary {color:#17271d
+}
+:root[data-theme="dark"] .secondary {background:#27322a;border:1px solid #3b4b3f;color:#c8d2c3
+}
+:root[data-theme="dark"] .quiet-button {color:#b8c5b3;border:1px solid #3b4b3f;background:#27322a
+}
+:root[data-theme="dark"] .danger-button {color:#d7cdc1;border:1px solid #3b4b3f;background:#27322a
+}
+:root[data-theme="dark"] .icon-button {color:#b9c7b5
+}
+:root[data-theme="dark"] .icon-button:hover {background:#263129
+}
+:root[data-theme="dark"] .text-button {color:#b1c2ad
+}
+:root[data-theme="dark"] .subtle-text {color:#bbc9b7
+}
+:root[data-theme="dark"] .eyebrow {color:#bbc8b5
+}
+:root[data-theme="dark"] .live-dot {background:#677862
+}
+:root[data-theme="dark"] .heading-dot {color:#b4c7b1
+}
+:root[data-theme="dark"] .page-intro>div>p:last-child {color:#b9c6b4
+}
+:root[data-theme="dark"] .hero {border:1px solid #3b4b3f;background:#253128
+}
+:root[data-theme="dark"] .hero-tag {color:#b3c4ad
+}
+:root[data-theme="dark"] .hero h2 {color:#bfccbc
+}
+:root[data-theme="dark"] .hero p {color:#b7c6b2
+}
+:root[data-theme="dark"] .hero .primary {background:#8eb782;border-color:#3b4b3f
+}
+:root[data-theme="dark"] .hero-hint {color:#bcc9b6
+}
+:root[data-theme="dark"] .hero-decor {color:#bbc9b6
+}
+:root[data-theme="dark"] .hero:after {border:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .panel {background:#27322a
+}
+:root[data-theme="dark"] .section-heading h2 {color:#bfcabb
+}
+:root[data-theme="dark"] .section-icon {color:#b4c5ae
+}
+:root[data-theme="dark"] .count-badge {background:#263129;color:#bac8b3
+}
+:root[data-theme="dark"] .focus-subheading {color:#bcc9b7
+}
+:root[data-theme="dark"] .plan-row {border-top:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .plan-number {color:#c0ccba
+}
+:root[data-theme="dark"] .lesson-symbol.teal {background:#253128;color:#b1c3af
+}
+:root[data-theme="dark"] .lesson-symbol.lavender {background:#26302a;color:#bdc5bf
+}
+:root[data-theme="dark"] .lesson-symbol.orange {background:#263128;color:#c5c6aa
+}
+:root[data-theme="dark"] .lesson-symbol.blue {background:#25312a;color:#b7c7bd
+}
+:root[data-theme="dark"] .lesson-symbol.rose {background:#263029;color:#c2c4b8
+}
+:root[data-theme="dark"] .plan-info p {color:#bbc8b5
+}
+:root[data-theme="dark"] .plan-info p span {color:#c2cfbc
+}
+:root[data-theme="dark"] .rank-reason {color:#b6c5b0
+}
+:root[data-theme="dark"] .pinned {color:#b2c4a9!important;background:#263129
+}
+:root[data-theme="dark"] .start-lesson {border:1px solid #3b4b3f;background:#26322a;color:#bac9b4
+}
+:root[data-theme="dark"] .complete-button {border:1px solid #3b4b3f;color:#bfcdb9
+}
+:root[data-theme="dark"] .complete-button:hover {background:#253128;color:#c2d3bf
+}
+:root[data-theme="dark"] .focus-footer {border-top:1px solid #3b4b3f;color:#bccbb5
+}
+:root[data-theme="dark"] .focus-footer button {color:#beccb8
+}
+:root[data-theme="dark"] .resource-card {background:#27322a
+}
+:root[data-theme="dark"] .course-art {border-bottom:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .course-art.teal {background:#243028;color:#b4c7b2
+}
+:root[data-theme="dark"] .course-art.lavender {background:#253029;color:#c3ccc5
+}
+:root[data-theme="dark"] .course-art.orange {background:#263027;color:#c8ccb3
+}
+:root[data-theme="dark"] .course-art.blue {background:#253029;color:#becec2
+}
+:root[data-theme="dark"] .course-art.rose {background:#263028;color:#c5c7bb
+}
+:root[data-theme="dark"] .orbit {border:1.5px solid #3b4b3f
+}
+:root[data-theme="dark"] .atom {background:#4d6954
+}
+:root[data-theme="dark"] .ai-star {color:#bdc5bf
+}
+:root[data-theme="dark"] .art-caption {color:#bbc4bd
+}
+:root[data-theme="dark"] .design-circle {background:#817553
+}
+:root[data-theme="dark"] .design-square {background:#252e24;border:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .design-stripe {background:repeating-linear-gradient(45deg,transparent,transparent 4px,#7a7153 4px,#7a7153 5px)
+}
+:root[data-theme="dark"] .art-lines {background:repeating-linear-gradient(45deg,transparent,transparent 10px,#bbcbd333 11px,#bbcbd333 12px)
+}
+:root[data-theme="dark"] .card-meta {color:#bccbb7
+}
+:root[data-theme="dark"] .resource-card h3 {color:#c1cbbc
+}
+:root[data-theme="dark"] .resource-card p {color:#bcc9b7
+}
+:root[data-theme="dark"] .sample-label {color:#c1cdba;background:#263129
+}
+:root[data-theme="dark"] .progress-track {background:#253129
+}
+:root[data-theme="dark"] .progress-track i {background:#4f694c
+}
+:root[data-theme="dark"] .progress-label {color:#becbb8
+}
+:root[data-theme="dark"] .progress-label strong {color:#b4c5ae
+}
+:root[data-theme="dark"] .curiosity-row p {color:#bdcab7
+}
+:root[data-theme="dark"] .curiosity-row>svg {color:#bbc9b5
+}
+:root[data-theme="dark"] .priority-tag {border:1px solid #3b4b3f;background:#263129;color:#bfc7ad
+}
+:root[data-theme="dark"] .priority-tag.p5 {color:#b2c2a9;background:#263129;border-color:#3b4b3f
+}
+:root[data-theme="dark"] .priority-tag.p4 {color:#bec4ab
+}
+:root[data-theme="dark"] .goal-ring {background:conic-gradient(#506b4d var(--progress),#263129 0)
+}
+:root[data-theme="dark"] .goal-ring>div {background:#27322a
+}
+:root[data-theme="dark"] .goal-ring strong span {color:#c2cfbc
+}
+:root[data-theme="dark"] .goal-ring p {color:#bfccb9
+}
+:root[data-theme="dark"] .goal-message {color:#bac8b3
+}
+:root[data-theme="dark"] .goal-panel-footer {border-top:1px solid #3b4b3f;color:#beccb7
+}
+:root[data-theme="dark"] .week-tag {border:1px solid #3b4b3f;color:#bdcbb7
+}
+:root[data-theme="dark"] .rhythm-stats strong span {color:#bfccb9
+}
+:root[data-theme="dark"] .rhythm-stats small {color:#beccb8
+}
+:root[data-theme="dark"] .bar-track i {background:#243027
+}
+:root[data-theme="dark"] .chart-day.current i {background:#50694a
+}
+:root[data-theme="dark"] .chart-day span {color:#c1cebb
+}
+:root[data-theme="dark"] .chart-day.current span {color:#b5c5af
+}
+:root[data-theme="dark"] .rhythm-footer {border-top:1px solid #3b4b3f;color:#c0ccb6
+}
+:root[data-theme="dark"] .rhythm-footer svg {color:#c6ccb0
+}
+:root[data-theme="dark"] .rhythm-footer strong {color:#b9c7b0
+}
+:root[data-theme="dark"] .coach-card {border:1px solid #3b4b3f;background:#263129
+}
+:root[data-theme="dark"] .coach-icon {color:#c1c7ae
+}
+:root[data-theme="dark"] .coach-kicker {color:#c2cbb4
+}
+:root[data-theme="dark"] .coach-card h3 {color:#c9cfbd
+}
+:root[data-theme="dark"] .coach-card p {color:#bfc9b4
+}
+:root[data-theme="dark"] .coach-card>button {color:#b9c3ac;border-top:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .coach-mode {color:#c4cdb9
+}
+:root[data-theme="dark"] .gentle-note {color:#bfcdb8
+}
+:root[data-theme="dark"] .page-footer {color:#c0cdbb;border-top:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .loading-state,:root[data-theme="dark"] .storage-error {color:#b9c7b3
+}
+:root[data-theme="dark"] .filter-tabs button {color:#bbc9b6
+}
+:root[data-theme="dark"] .filter-tabs button.selected {color:#c1d2bf;border-color:#3b4b3f
+}
+:root[data-theme="dark"] .sort-label {color:#bbc8b5
+}
+:root[data-theme="dark"] .library-info {color:#becbb8
+}
+:root[data-theme="dark"] .library-card-bottom {color:#bcc9b5
+}
+:root[data-theme="dark"] .import-banner {border:1px dashed #3b4b3f;background:#263129
+}
+:root[data-theme="dark"] .import-icon {background:#253028;color:#b9c9b1
+}
+:root[data-theme="dark"] .import-banner p {color:#bbc9b4
+}
+:root[data-theme="dark"] .empty {color:#bbc9b5
+}
+:root[data-theme="dark"] .empty h3 {color:#c8d4c1
+}
+:root[data-theme="dark"] .goal-card p {color:#bbc8b5
+}
+:root[data-theme="dark"] .goal-detail {color:#bdcab7
+}
+:root[data-theme="dark"] .focus-selected {background:#253128;color:#b2c3aa
+}
+:root[data-theme="dark"] .note-card {background:#263129;border:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .note-card>svg {color:#c3cbb2
+}
+:root[data-theme="dark"] .note-card small {color:#c2cab3
+}
+:root[data-theme="dark"] .note-card h3 {color:#ccd2c0
+}
+:root[data-theme="dark"] .note-card p {color:#bec7b1
+}
+:root[data-theme="dark"] .note-card>span {color:#bdc5ae
+}
+:root[data-theme="dark"] .stat>svg {color:#bccbb5
+}
+:root[data-theme="dark"] .stat strong span {color:#bdcab6
+}
+:root[data-theme="dark"] .stat p {color:#b9c7b4
+}
+:root[data-theme="dark"] .activity-row {border-bottom:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .completed-icon {background:#253128;color:#b6c8ae
+}
+:root[data-theme="dark"] .activity-row p {color:#bccab6
+}
+:root[data-theme="dark"] .activity-row>span:not(.completed-icon),:root[data-theme="dark"] .activity-row>small {color:#bbc9b5
+}
+:root[data-theme="dark"] .connection-tag {border:1px solid #3b4b3f;color:#bbc9b4
+}
+:root[data-theme="dark"] .connection-tag.connected .mini-dot {background:#456f4a
+}
+:root[data-theme="dark"] .coach-form>p {color:#b9c7b3
+}
+:root[data-theme="dark"] .prompt-chips button {border:1px solid #3b4b3f;color:#bac9b3
+}
+:root[data-theme="dark"] .connection-help {border-top:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .connection-help h4 {color:#b7c6b0
+}
+:root[data-theme="dark"] .connection-help p {color:#bdcbb7
+}
+:root[data-theme="dark"] .connection-help a {color:#b2c4aa
+}
+:root[data-theme="dark"] .coach-explainer>svg {color:#b9cbb1
+}
+:root[data-theme="dark"] .coach-explainer p {color:#bccbb6
+}
+:root[data-theme="dark"] .coach-response {color:#b6c5b0
+}
+:root[data-theme="dark"] .suggestion {border:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .suggestion p {color:#bbc9b4
+}
+:root[data-theme="dark"] .settings-panel h2 svg {color:#bbc9b3
+}
+:root[data-theme="dark"] .settings-panel p {color:#bbc9b5
+}
+:root[data-theme="dark"] .settings-panel hr {border-top:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .save-indicator {color:#bac9b2
+}
+:root[data-theme="dark"] .toast {background:#8cb17f;border:1px solid #3b4b3f;color:#d0dbcb
+}
+:root[data-theme="dark"] .toast>button {color:#c6d4bf
+}
+:root[data-theme="dark"] .toast>svg {color:#c1d1bb
+}
+:root[data-theme="dark"] .modal-backdrop {background:#17291db3
+}
+:root[data-theme="dark"] .modal {background:#27322a;border:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .modal-heading {border-bottom:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .modal-heading p {color:#bccab7
+}
+:root[data-theme="dark"] .import-tabs {border-bottom:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .import-tabs button {color:#bbc9b3
+}
+:root[data-theme="dark"] .import-tabs .selected {color:#c5d4bd
+}
+:root[data-theme="dark"] .import-notice {background:#263129;color:#b9c8b2
+}
+:root[data-theme="dark"] .modal-actions {border-top:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .form-error {color:#d8cec0!important
+}
+:root[data-theme="dark"] .upload-zone {border:1px dashed #3b4b3f;background:#263129;color:#b7c7b0
+}
+:root[data-theme="dark"] .upload-zone span {color:#bfccb9
+}
+:root[data-theme="dark"] .json-help {color:#bbcab3
+}
+:root[data-theme="dark"] .json-help pre {background:#263129;color:#b4c6ad
+}
+:root[data-theme="dark"] .import-preview {border:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .import-preview h3 span {color:#bccbb6
+}
+:root[data-theme="dark"] .preview-row>span {color:#bfcdb9
+}
+:root[data-theme="dark"] .preview-done {color:#bccab6
+}
+:root[data-theme="dark"] .ranking-explanation>div>span {border:1px solid #3b4b3f;color:#b9cab1
+}
+:root[data-theme="dark"] .ranking-explanation p {color:#bdcab6
+}
+:root[data-theme="dark"] .resource-overview>.course-art {border:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .overview-tags {color:#bcc9b5
+}
+:root[data-theme="dark"] .resource-overview p {color:#bdcbb7
+}
+:root[data-theme="dark"] .resource-overview small {color:#c0cdba
+}
+:root[data-theme="dark"] .syllabus-row {border-bottom:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .lesson-check {border:1px solid #3b4b3f;color:#b7c9af
+}
+:root[data-theme="dark"] .done .lesson-check {background:#253128;border-color:#3b4b3f
+}
+:root[data-theme="dark"] .lesson-index {color:#c1cfbb
+}
+:root[data-theme="dark"] .syllabus-lesson span {color:#beccb7
+}
+:root[data-theme="dark"] .syllabus-row.done .syllabus-lesson strong {color:#bccab6
+}
+:root[data-theme="dark"] .resource-management {border-top:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .session-content>p {color:#bdcbb7
+}
+:root[data-theme="dark"] .session-timer {background:#263129;border:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .session-timer strong {color:#b2c3aa
+}
+:root[data-theme="dark"] .session-timer strong span {color:#c1cfbb
+}
+:root[data-theme="dark"] .session-content>small {color:#c0ceb9
+}
+:root[data-theme="dark"] .page-intro>div>p:last-child,:root[data-theme="dark"] .hero p {color:#b4c2af
+}
+:root[data-theme="dark"] .plan-info p,:root[data-theme="dark"] .focus-subheading,:root[data-theme="dark"] .resource-card p,:root[data-theme="dark"] .progress-label,:root[data-theme="dark"] .curiosity-row p,:root[data-theme="dark"] .library-info {color:#b6c4b0
+}
+:root[data-theme="dark"] .hero-hint,:root[data-theme="dark"] .focus-footer,:root[data-theme="dark"] .card-meta,:root[data-theme="dark"] .goal-ring p,:root[data-theme="dark"] .goal-message,:root[data-theme="dark"] .goal-panel-footer,:root[data-theme="dark"] .rhythm-stats small,:root[data-theme="dark"] .coach-card p,:root[data-theme="dark"] .coach-mode {color:#b7c5b0
+}
+:root[data-theme="dark"] .rank-reason {color:#b3c2ac
+}
+:root[data-theme="dark"] .sidebar nav button,:root[data-theme="dark"] .goal-nav button,:root[data-theme="dark"] .settings-nav {color:#b3c1ae
+}
+:root[data-theme="dark"] .hero-tag {color:#b1c1aa
+}
+:root[data-theme="dark"] .coach-card h3 {color:#c6cebd
+}
+:root[data-theme="dark"] .settings-panel p,:root[data-theme="dark"] .coach-form>p,:root[data-theme="dark"] .coach-explainer p,:root[data-theme="dark"] .ranking-explanation p,:root[data-theme="dark"] .modal-heading p,:root[data-theme="dark"] .modal-content small,:root[data-theme="dark"] .session-content>small {color:#b6c5af
+}
+:root[data-theme="dark"] .folder-browser {border-bottom:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .folder-browser label {color:#b7c7b0
+}
+:root[data-theme="dark"] .folder-browser select {background:#27322a
+}
+:root[data-theme="dark"] .folder-browser>span {color:#bbc9b3
+}
+:root[data-theme="dark"] .folder-label {color:#b2c3a9
+}
+:root[data-theme="dark"] .capture-guide h3 {color:#c1d0bb
+}
+:root[data-theme="dark"] .capture-guide p {color:#b8c7b1
+}
+:root[data-theme="dark"] .capture-guide ol {color:#b7c6b0
+}
+:root[data-theme="dark"] .capture-guide .capture-limit {color:#becbb8
+}
+:root[data-theme="dark"] .capture-scope {border:1px solid #3b4b3f;background:#263129;color:#bec7ae
+}
+:root[data-theme="dark"] .capture-scope strong {color:#b9c3ab
+}
+:root[data-theme="dark"] .ai-grouping {background:#263129;border:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .ai-grouping summary {color:#b9c9b2
+}
+:root[data-theme="dark"] .grouped-preview-row {border-top:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .grouped-preview-row>span {color:#beccb6
+}
+:root[data-theme="dark"] .module-focus {background:#263129;border:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .module-group {border:1px solid #3b4b3f;background:#27322a
+}
+:root[data-theme="dark"] .module-group.module-active {border-color:#3b4b3f
+}
+:root[data-theme="dark"] .module-group>summary:before {color:#bccbb5
+}
+:root[data-theme="dark"] .inline-lesson-editor {background:#263129;border:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .group-suggestions {border:1px solid #3b4b3f;background:#26322a
+}
+:root[data-theme="dark"] .group-suggestions>p {color:#bbcab3
+}
+:root[data-theme="dark"] .study-position {background:#253128;color:#b8c9af
+}
+:root[data-theme="dark"] .study-block {background:#263129;border:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .study-block p {color:#bbc9b3
+}
+:root[data-theme="dark"] .suggestion>small {color:#b7c8ae
+}
+:root[data-theme="dark"] .habit-panel {background:#263129;border-color:#3b4b3f
+}
+:root[data-theme="dark"] .habit-panel svg {color:#c3c7aa
+}
+:root[data-theme="dark"] .habit-panel h2 {color:#c2d0bb
+}
+:root[data-theme="dark"] .habit-panel p {color:#bac9b2
+}
+:root[data-theme="dark"] .habit-panel>div>span {color:#b9c8b1
+}
+:root[data-theme="dark"] .habit-calendar span {background:#253028;color:#bfcdb8;border:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .habit-calendar span.learned {background:#56704c;color:#17271d;border-color:#3b4b3f
+}
+:root[data-theme="dark"] .ai-settings-message {color:#b3c4ab!important
+}
+:root[data-theme="dark"] .book-contents {border:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .book-contents summary {color:#b8c8b0
+}
+:root[data-theme="dark"] .book-ai {background:#263129
+}
+:root[data-theme="dark"] .book-chapter-row>span {color:#bccbb4
+}
+:root[data-theme="dark"] .local-mode-strip {background:#253129;border:1px solid #3b4b3f;color:#b0c1a9
+}
+:root[data-theme="dark"] .local-setup,:root[data-theme="dark"] .sync-conflicts {background:#263129
+}
+:root[data-theme="dark"] .sync-conflicts ul {color:#b5c5ae
+}
+:root[data-theme="dark"] .local-sync-message {color:#b0c2a9!important
+}
+:root[data-theme="dark"] .sync-values pre {border:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .muted-label {color:#b2c1b0
+}
+:root[data-theme="dark"] .insight-card {background:#27322a
+}
+:root[data-theme="dark"] .insight-card:first-child {background:#263129
+}
+:root[data-theme="dark"] .insight-card .coach-kicker {color:#c6d3c2
+}
+:root[data-theme="dark"] .insight-card p {color:#c6d1c3
+}
+:root[data-theme="dark"] .insight-card details {color:#c8d3c5
+}
+:root[data-theme="dark"] .conversation-link.selected {background:#253129
+}
+:root[data-theme="dark"] .conversation-link small {color:#b3c2b0
+}
+:root[data-theme="dark"] .coach-storage-note {color:#b1c1af
+}
+:root[data-theme="dark"] .memory-summary p {color:#b2c1af
+}
+:root[data-theme="dark"] .conversation-header p {color:#c8d3c5
+}
+:root[data-theme="dark"] .coach-mode-picker>button {background:#26312a
+}
+:root[data-theme="dark"] .coach-mode-picker>button.selected {background:#253128;color:#bdcdbc;border-color:#3b4b3f
+}
+:root[data-theme="dark"] .coach-availability {color:#c8d4c5;background:#263129
+}
+:root[data-theme="dark"] .coach-welcome-mark {background:#253128;color:#aec2aa
+}
+:root[data-theme="dark"] .conversation-welcome p {color:#b2c1b0
+}
+:root[data-theme="dark"] .coach-starters button {border:1px solid #3b4b3f;color:#c1cfbd;background:#26322a
+}
+:root[data-theme="dark"] .coach-message {background:#26312a;border:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .coach-message.user {background:#253128;border-color:#3b4b3f
+}
+:root[data-theme="dark"] .message-caption {color:#c6d3c4
+}
+:root[data-theme="dark"] .message-caption time {color:#b3c1b0
+}
+:root[data-theme="dark"] .message-context {color:#b1c1af
+}
+:root[data-theme="dark"] .coach-question {color:#becdbd;border-top:1px solid #3b4b3f
+}
+:root[data-theme="dark"] .coach-action-preview {border:1px solid #3b4b3f;background:#27322a
+}
+:root[data-theme="dark"] .coach-action-preview>.coach-kicker {color:#c5d3c0
+}
+:root[data-theme="dark"] .coach-action-preview p {color:#c8d3c5
+}
+:root[data-theme="dark"] .coach-action-preview li small {color:#b2c1af
+}
+:root[data-theme="dark"] .coach-action-preview>small {color:#b2c1af
+}
+:root[data-theme="dark"] .coach-priority-preview small {color:#b2c1af
+}
+:root[data-theme="dark"] .applied-label {color:#bfd1be
+}
+:root[data-theme="dark"] .coach-thinking {color:#c7d4c4
+}
+:root[data-theme="dark"] .coach-composer {background:#27322a
+}
+:root[data-theme="dark"] .composer-input textarea {background:#26322a
+}
+:root[data-theme="dark"] .coach-composer>small {color:#b2c2af
+}
+:root[data-theme="dark"] .composer-context {background:#263129;color:#c4d0c1
+}
+:root[data-theme="dark"] .active-coach-plan {background:#253128;border-top:1px solid #3b4b3f;color:#c0cfbd
+}
+:root[data-theme="dark"] input,:root[data-theme="dark"] textarea,:root[data-theme="dark"] select{background:#18251c;border-color:#405344;color:var(--ink)}
+:root[data-theme="dark"] .plant{opacity:.8}
+:root[data-theme="dark"] .modal-backdrop{background:#030905bb}
+.appearance-options{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}.appearance-options button{display:flex;align-items:center;gap:9px;padding:13px 15px;min-height:44px;border:1px solid var(--line);border-radius:9px;background:var(--bg);font-size:13px}.appearance-options button.selected{border-color:var(--teal);color:var(--teal)}.theme-swatch{width:20px;height:20px;border:1px solid #859781;border-radius:50%;background:#f6f8f1}.theme-swatch.dark{background:#17251c}.theme-swatch.system{background:linear-gradient(90deg,#f6f8f1 50%,#17251c 50%)}
+.widget-gallery{margin-top:20px}.widget-gallery>summary{display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--teal);font-size:13px;padding:8px 0}.widget-gallery>p{font-size:12px;margin:12px 0}.widget-gallery>label{max-width:240px;margin:15px 0}.widget-preview-grid{--widget-bg:#f3f6ec;--widget-ink:#294331;--widget-muted:#53684d;--widget-tile:#e2ebd8;--widget-accent:#568348;--widget-track:#dbe5d2;display:grid;grid-template-columns:1fr;gap:15px}.widget-preview-grid[data-widget-theme=dark]{--widget-bg:#22342a;--widget-ink:#e8f1de;--widget-muted:#b7c9af;--widget-tile:#344b37;--widget-accent:#b8d883;--widget-track:#3c5042}.widget-preview{padding:23px;border-radius:28px;background:var(--widget-bg);color:var(--widget-ink);border:1px solid var(--widget-track);min-width:0}.widget-preview-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:10px;letter-spacing:1.2px;font-weight:600;color:var(--widget-muted)}.streak-widget-body{display:flex;align-items:center;justify-content:space-between;gap:5px}.streak-widget-body>div{min-width:0}.streak-widget-body strong{font-size:58px;line-height:1.2;display:block;margin-top:8px}.streak-widget-body b{display:block;font-size:14px;font-weight:600}.streak-widget-body p{font-size:13px;margin-top:9px;line-height:1.55}.streak-widget-body img{width:115px;height:145px;flex-shrink:0}.widget-preview>small{display:block;font-size:10px;margin-top:12px;color:var(--widget-muted)}.overview-widget-body{display:flex;gap:15px;align-items:center;margin:18px 0}.widget-ring{width:104px;height:104px;flex-shrink:0;border-radius:50%;background:conic-gradient(var(--widget-accent) var(--widget-progress),var(--widget-track) 0);padding:11px}.widget-ring>div{height:100%;width:100%;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;background:var(--widget-bg)}.widget-ring strong{font-size:23px}.widget-ring span{font-size:9px;margin-top:5px;color:var(--widget-muted)}.widget-metric-tiles{display:flex;flex-direction:column;gap:8px;flex:1;min-width:0}.widget-metric-tiles button{display:flex;align-items:center;gap:8px;background:var(--widget-tile);color:var(--widget-ink);border-radius:14px;padding:12px;font-size:11px;text-align:left}.widget-metric-tiles strong{font-size:19px;margin-right:3px}.widget-preview-next{font-size:12px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.widget-variants{display:grid;gap:8px;margin:15px 0}.widget-variants div{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:12px;background:var(--soft);border-radius:8px;font-size:11px}.widget-variants span{text-align:right;color:var(--muted);overflow-wrap:anywhere}.widget-variants strong{flex-shrink:0}.widget-gallery>small{display:block;margin-top:12px;line-height:1.8}.widget-preview-heading button{color:var(--widget-ink);padding:4px}
+@media(max-width:650px){.widget-preview{padding:18px}.streak-widget-body img{width:85px;height:120px}.streak-widget-body strong{font-size:50px}.streak-widget-body p{font-size:12px}.overview-widget-body{gap:10px}.widget-ring{width:84px;height:84px;padding:9px}.widget-ring strong{font-size:20px}.widget-metric-tiles button{padding:9px;font-size:10px;gap:5px}.widget-metric-tiles strong{font-size:16px}.widget-gallery>small{font-size:11px}.widget-preview-heading{font-size:9px}.widget-variants div{flex-wrap:wrap;gap:6px}.widget-variants span{text-align:left}}
+@media(max-width:650px){.page-intro>div>p:last-child{font-size:12px;line-height:1.7}.plan-info h3{font-size:13px;line-height:1.45}.plan-info p{font-size:11px;line-height:1.6}.rank-reason{font-size:10px!important}.focus-footer{font-size:10px;line-height:1.7}.resource-card h3{font-size:13px}.resource-card p,.card-meta,.progress-label{font-size:10px}.curiosity-row h3{font-size:13px}.curiosity-row p{font-size:11px}.settings-panel p{font-size:12px}.settings-panel small{font-size:11px}.settings-panel label{font-size:12px}.settings-panel input,.settings-panel textarea,.settings-panel select{font-size:16px}.settings-panel .secondary,.settings-panel .primary{font-size:12px;min-height:40px}.goal-message{font-size:11px}.goal-ring p{font-size:10px}.goal-panel-footer{font-size:10px}.coach-card p{font-size:12px}.modal p,.modal small{font-size:11px}.modal input,.modal textarea,.modal select{font-size:16px}.complete-button,.start-lesson{min-width:30px;min-height:30px}}
+.android-widget-panel{grid-column:1/-1}.android-widget-panel .widget-preview-grid{grid-template-columns:1fr 1fr}.android-widget-panel .widget-variants{grid-template-columns:1fr 1fr}.android-widget-panel .widget-preview-grid .widget-preview{padding:25px}.android-widget-panel .widget-gallery>label{max-width:280px}
+@media(max-width:800px){.android-widget-panel .widget-preview-grid,.android-widget-panel .widget-variants{grid-template-columns:1fr}.android-widget-panel .widget-preview-grid .widget-preview{padding:20px}}
+.widget-preview-grid .widget-preview p,.widget-preview-grid .widget-preview small{color:var(--widget-muted)!important}

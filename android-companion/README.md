@@ -1,10 +1,14 @@
-# Learning Space for Android · 0.5.0
+# Learning Space for Android · 0.6.0
 
 The Android app now contains the full dashboard and saves its library on the phone. It opens without login, internet, or a computer. The private hosted website remains an optional, separate account-backed copy.
 
 ## Update from 0.3 / 0.4
 
-Install the new APK over the existing app. Package name and signing certificate are unchanged, and version code increases to 6. Do not uninstall if you want to preserve existing app data and widget styles. This is a personal development build, not a Play Store release.
+Install the new APK over the existing app. Package name and signing certificate are unchanged, and version code increases to 7. Do not uninstall if you want to preserve existing app data and widget styles. This is a personal development build, not a Play Store release.
+
+## Appearance
+
+Settings → Make yourself at home offers Light, Dark, and System. The choice persists in library backups and Wi-Fi sync. System resolves separately on each device. A local bootstrap cache prevents a bright frame when reopening a dark library. Native toolbar, status/navigation bars, dialogs, and widgets follow the saved appearance; widgets may use their own override.
 
 ## Use offline
 
@@ -34,9 +38,9 @@ Enter a personal OpenAI key in the app’s Settings. Android Keystore encrypts i
 
 ## Widgets
 
-Six resizable native RemoteViews widgets: Today, Streak, Daily goal, Next lesson, Reading, and Weekly rhythm. Long press the Samsung home screen → Widgets → Learning Space, or request a pin from the app’s Widgets menu. Choose Light or Forest. Widget configuration supports reconfiguration where the launcher offers it.
+Seven resizable native RemoteViews widgets: Overview, Today, Streak, Daily goal, Next lesson, Reading, and Weekly rhythm. Overview combines a capped daily-goal ring with real streak and rolling-week metrics. Streak has an original sprout character and supportive encouragement. Long press the Samsung home screen → Widgets → Learning Space, or request a pin from the app’s Widgets menu. Choose app appearance, Light, Forest, or phone appearance. Widget configuration supports reconfiguration where the launcher offers it.
 
-The embedded dashboard refreshes a bounded snapshot as local progress changes, without browser sign-in or manual snapshot sharing. Widgets render that cached data, adjust daily minutes/streaks at rollover, and show freshness in larger layouts. They do not run background account/network synchronization when the app is closed.
+The embedded dashboard refreshes a bounded snapshot as local progress changes, without browser sign-in or manual snapshot sharing. Widgets render that cached data, adjust daily minutes/streaks at rollover, and show freshness in larger layouts. Refresh opens the local dashboard to rebuild the snapshot and attempt foreground Wi-Fi sync; its timestamp advances only when the dashboard supplies a snapshot. They do not run background network synchronization when the app is closed. A stale next lesson is labelled Saved next step. Rolling-week counts and missed-day streak resets are derived in the native renderer.
 
 ## Build and verification
 
