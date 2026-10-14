@@ -1,10 +1,10 @@
-# Learning Space for Android · 0.4.1
+# Learning Space for Android · 0.5.0
 
 The Android app now contains the full dashboard and saves its library on the phone. It opens without login, internet, or a computer. The private hosted website remains an optional, separate account-backed copy.
 
-## Update from 0.3
+## Update from 0.3 / 0.4
 
-Install the new APK over the existing app. Package name and signing certificate are unchanged, and version code increases to 5. Do not uninstall if you want to preserve existing app data and widget styles. This is a personal development build, not a Play Store release.
+Install the new APK over the existing app. Package name and signing certificate are unchanged, and version code increases to 6. Do not uninstall if you want to preserve existing app data and widget styles. This is a personal development build, not a Play Store release.
 
 ## Use offline
 
@@ -21,6 +21,12 @@ Start the computer server (`npm run lan` from the project, after `npm run build:
 On the phone, open Wi-Fi / Settings, enter the computer’s address and code, and choose Save connection & sync. The code stays in the computer’s private `.local-learning` folder and does not expire after one use. Phone connection settings persist across app restarts. The computer must be running and both devices must be on a network that allows communication between them. If its DHCP address changes, update the saved address. A firewall or guest Wi-Fi/client isolation can prevent a connection.
 
 Sync happens while the app is open: after local saves, on reconnect, periodically, or on explicit request. When the computer is unavailable, learning continues locally. Three-way merging combines separate edits, new courses, and distinct study events. Conflicting fields require a choice before replacing either value; stale server/local writes are rejected. Sync exchanges library metadata and notes, not book files or API keys. It uses HTTP with a persistent connection code on a trusted private network, not internet hosting. The native network bridge only accepts private IPv4/loopback destinations and a fixed library endpoint.
+
+## Conversations & coach
+
+The dashboard has insight cards based on saved activity. Reply / Ask coach carries the insight into a conversation. Chat history and explicitly edited learning intent/preferences are saved in the same offline library, exported in backups, and merged through Wi-Fi sync. Smart guidance needs no API key: it explains the existing ranking, proposes short plans, and asks when intent or outside activity is uncertain. It does not interpret arbitrary conversation like an AI model.
+
+AI conversation uses your personal key, internet, the latest message, up to 12 recent messages, remembered preferences, goals, recorded activity, and bounded resource metadata. It excludes private course/lesson notes. Priority, module-focus, and today-plan changes are previews until Apply. A custom time target expires at the end of your timezone day and does not change your normal daily goal. History holds up to 8 conversations of 40 messages; delete older conversations when you need room. Memory is editable and never silently inferred.
 
 ## AI
 

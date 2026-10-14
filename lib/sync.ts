@@ -7,10 +7,11 @@ export function mergeLearningStates(base:LearningState|null,phone:LearningState,
   if(equal(l,r))return l;if(equal(l,b))return r;if(equal(r,b))return l;
   if(path.endsWith('.studiedMinutes')&&typeof l==='number'&&typeof r==='number')return Math.max(l,r);
   if(path.endsWith('.createdAt')&&typeof l==='string'&&typeof r==='string')return l<r?l:r;
-  if(Array.isArray(l)&&Array.isArray(r)&&['resources','goals','studyLog','lessons'].includes(path.split('.').at(-1)||'')){
+  if(Array.isArray(l)&&Array.isArray(r)&&['resources','goals','studyLog','lessons','conversations','messages'].includes(path.split('.').at(-1)||'')){
    const bm=new Map((Array.isArray(b)?b:[]).map((x:any)=>[x.id,x])),lm=new Map(l.map(x=>[x.id,x])),rm=new Map(r.map(x=>[x.id,x]));
    const ids=[...new Set([...bm.keys(),...l.map(x=>x.id),...r.map(x=>x.id)])];
-   return ids.map(id=>merge(bm.get(id),lm.get(id),rm.get(id),path+'.'+id,lm.get(id)?.title||rm.get(id)?.title||label)).filter(x=>x!==undefined);
+   const items=ids.map(id=>merge(bm.get(id),lm.get(id),rm.get(id),path+'.'+id,lm.get(id)?.title||rm.get(id)?.title||label)).filter(x=>x!==undefined);
+   return path.endsWith('.messages')?items.sort((a,b)=>a.at.localeCompare(b.at)||a.id.localeCompare(b.id)):items;
   }
   if(l&&r&&typeof l==='object'&&typeof r==='object'&&!Array.isArray(l)&&!Array.isArray(r)){
    const result:any={};for(const key of new Set([...Object.keys(b||{}),...Object.keys(l),...Object.keys(r)])){const v=merge(b?.[key],l[key],r[key],path?path+'.'+key:key,label);if(v!==undefined)result[key]=v;}return result;

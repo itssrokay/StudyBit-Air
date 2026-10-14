@@ -10,7 +10,7 @@ public class MainActivity extends Activity {
   if(!importIntent(getIntent()))loadLocal(safePath(getIntent().getStringExtra("path")));
  }
  private void loadLocal(String path){web.loadUrl(LOCAL+"/"+safePath(path));}
- static String safePath(String path){return path!=null&&(path.matches("\\?page=(today|library|activity|settings)")||path.matches("\\?resource=[a-zA-Z0-9_-]{1,100}"))?path:"";}
+ static String safePath(String path){return path!=null&&(path.matches("\\?page=(today|library|activity|settings|coach)")||path.matches("\\?resource=[a-zA-Z0-9_-]{1,100}"))?path:"";}
  static boolean allowed(Uri u){return "https".equals(u.getScheme())&&"appassets.androidplatform.net".equals(u.getHost());}
  private WebResourceResponse assetResponse(Uri uri){try{if(!allowed(uri))return resourceError(403,"Blocked");String path=uri.getPath();if(path==null||path.equals("/"))path="/index.html";if(path.contains("..")||path.contains("\\")||path.contains("\u0000"))return resourceError(404,"Not found");String mime=path.endsWith(".html")?"text/html":path.endsWith(".js")||path.endsWith(".mjs")?"text/javascript":path.endsWith(".css")?"text/css":path.endsWith(".svg")?"image/svg+xml":"application/octet-stream";Map<String,String> headers=new HashMap<>();headers.put("Cache-Control","no-cache");headers.put("X-Content-Type-Options","nosniff");return new WebResourceResponse(mime,"UTF-8",200,"OK",headers,getAssets().open("dashboard"+path));}catch(Exception e){return resourceError(404,"Not found");}}
  private WebResourceResponse resourceError(int status,String text){return new WebResourceResponse("text/plain","UTF-8",status,text,new HashMap<>(),new ByteArrayInputStream(text.getBytes()));}
