@@ -1,10 +1,10 @@
-# Learning Space for Android · 0.4.0
+# Learning Space for Android · 0.4.1
 
 The Android app now contains the full dashboard and saves its library on the phone. It opens without login, internet, or a computer. The private hosted website remains an optional, separate account-backed copy.
 
 ## Update from 0.3
 
-Install the new APK over the existing app. Package name and signing certificate are unchanged, and version code increases to 4. Do not uninstall if you want to preserve existing app data and widget styles. This is a personal development build, not a Play Store release.
+Install the new APK over the existing app. Package name and signing certificate are unchanged, and version code increases to 5. Do not uninstall if you want to preserve existing app data and widget styles. This is a personal development build, not a Play Store release.
 
 ## Use offline
 
