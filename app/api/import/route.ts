@@ -6,6 +6,8 @@ export async function POST(request:Request){
  let url:URL;try{url=new URL(input.url);}catch{return Response.json({error:'Enter a valid link.'},{status:400});}
  if(!['https:','http:'].includes(url.protocol))return Response.json({error:'Use an http or https link.'},{status:400});
  const host=url.hostname.replace(/^www\./,'');
+ if(host==='boot.dev')return Response.json({title:'',provider:'Boot.dev',notice:'This link saves the current resource. For chapter or lesson grouping, use Browser capture on the loaded Boot.dev outline. A lesson page does not expose the whole course.'});
+ if(host==='100xdevs.com')return Response.json({title:'',provider:'100xDevs',notice:'For all loaded lecture cards and durations, use Browser capture, then import its JSON. Expand other course folders and capture them too; URLs alone cannot guarantee a complete outline.'});
  if(!['youtube.com','youtu.be','m.youtube.com'].includes(host))return Response.json({title:'',provider:host});
  const videoId=host==='youtu.be'?url.pathname.slice(1):url.searchParams.get('v');
  if(!videoId)return Response.json({title:'',provider:'YouTube',notice:'For playlists, paste the lesson list or upload a JSON syllabus. Playlist extraction needs an additional integration.'});

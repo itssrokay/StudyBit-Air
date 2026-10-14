@@ -1,0 +1,9 @@
+{
+  "manifest_version": 3,
+  "name": "Learning Space · Course Capture",
+  "version": "0.1.0",
+  "description": "Capture a loaded course outline, review its folders and lessons, and import it into Learning Space.",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "action": {"default_popup": "popup.html", "default_title": "Capture course outline"},
+  "content_security_policy": {"extension_pages": "script-src 'self'; object-src 'self'"}
+}

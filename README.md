@@ -4,9 +4,9 @@ A private, account-backed personal learning dashboard. Built with React, Vinext,
 
 ## What works
 
-- A daily lesson plan with a configurable budget (45 minutes initially).
+- A daily lesson plan with a configurable budget (45 minutes initially), including resumable study blocks for long videos.
 - A ranked library of courses, videos, articles, and topics.
-- Course-order prerequisites, explicit priorities, focus goals, deadlines, and pinning.
+- Course-order prerequisites, explicit priorities, focus goals, deadlines, and pinning. Learning-area folders and lesson modules can be nested; a course can focus on one module branch.
 - Lesson completion, course progress, focus timer, resource and lesson notes, and activity history.
 - Course import from a pasted syllabus or JSON. YouTube video links use oEmbed metadata; other links are saved for manual labeling.
 - Editable import previews, prior-completion import, archive/restore, backup export and full backup restore.
@@ -40,9 +40,9 @@ Tests cover time budgets, prerequisites, pinning, completion, archive exclusion,
 
 ## Ranking
 
-Resource score = priority × 12 + goal importance × 4 + focus bonus 12 + started bonus 6 + deadline bonus (6/14/20 within 30/7/3 days). Completed and archived resources are excluded. Only the next unfinished lesson from each resource is eligible. Pinning an eligible lesson adds 1,000. Each further lesson from the same resource gets a 30-point variety penalty. Whole lessons must fit the remaining time. The plan is recomputed as progress or priorities change.
+Resource score = priority × 12 + goal importance × 4 + focus bonus 12 + started bonus 6 + deadline bonus (6/14/20 within 30/7/3 days). Completed and archived resources are excluded. Only the next unfinished lesson from each resource is eligible. Pinning an eligible lesson adds 1,000. Each further lesson from the same resource gets a 30-point variety penalty. Lessons longer than the remaining time become study blocks. Eligible lessons follow the focused module branch when one is selected. Ties prefer a full lesson that fits over a partial block. The plan is recomputed as progress or priorities change.
 
-Learning time is the estimated duration of lessons marked complete, grouped by the selected timezone. The timer is a focus aid; it does not independently create activity. Undoing completion removes its logged time.
+Learning time is the estimated duration of lessons marked complete, grouped by the selected timezone. The timer is a focus aid; it does not independently create activity. Logging a study block increments studied minutes and creates a dated activity record. Completion logs only the unlogged remaining duration, so it does not double count blocks. Undoing completion clears that lesson’s logged blocks and completion time.
 
 ## Importing
 
@@ -69,14 +69,24 @@ JSON resource shape:
 
 Imports preserve prior completion without fabricating study timestamps. Full exported backups go through Settings → Restore a backup. Restore replaces the complete library after confirmation.
 
-Paid platform login/progress synchronization, full YouTube playlist extraction, video downloading, and PDF extraction are not included. The dashboard never claims to have read protected course content.
+Paid platform login/progress synchronization, server-side YouTube playlist extraction, video downloading, and PDF extraction are not included. The Chrome companion can capture a loaded playlist. The dashboard never claims to have read protected course content.
 
 ## Optional AI
 
 No API key is required for the dashboard. To connect AI, enable the OpenAI Developers plugin in Codex and configure `OPENAI_API_KEY` as a Sites server secret using its supported key workflow. `OPENAI_MODEL` optionally selects a compatible Responses API model; the default is `gpt-4.1-mini`. Redeploy after changing runtime environment values. Do not put keys in browser storage, Git, or the hosting manifest.
 
-The server calls the [Responses API with Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs), sets `store: false`, limits inputs and outputs, validates returned suggestions, and sends only goal/settings/resource summaries for coaching. Course syllabus text is sent only when requesting AI import. Notes and API keys are not exposed to the client. AI errors preserve the library. Priorities are applied only after reviewing the response.
+The server calls the [Responses API with Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs), sets `store: false`, limits inputs and outputs, validates returned suggestions, and sends only goal/settings/resource summaries for coaching. Course syllabus text is sent only when requesting AI import. API keys are not exposed to the client. Coach requests do not send notes; they send goals, folders, module names, completion counts, and next-lesson metadata. AI errors preserve the library. Priorities are applied only after reviewing the response.
 
 ## Publishing
 
 The exact Site identity is tracked in `.openai/hosting.json`. Use the Sites skill source-workflow helper to push and package, then save/deploy that exact pushed commit with the owner-private operation. Migrations are applied by Sites during deployment. Preserve private access.
+
+## Grouped course capture
+
+The Chrome prototype is in `browser-companion/`; a ZIP download is available at `/downloads/learning-space-companion.zip`. Load it unpacked in Chrome using its README instructions. It uses activeTab, scripting and local storage only. It captures loaded DOM outline metadata on a user click and exports reviewed JSON; it has no continuous scraping, automatic watch tracking, direct account pairing, or Chrome Web Store release.
+
+Capture multiple course folders into a draft, export, and import the JSON. The dashboard supports lesson `modulePath`, `format` (video/exercise/reading), and `sourceId`, plus resource `folderPath`, `focusModule`, `captureScope`, and `captureNote`. Choose Merge into an existing course to append new items idempotently while preserving existing IDs, notes, progress, and manual grouping. Existing records and older backups receive default values; no database schema migration is needed.
+
+A syllabus can use `DevOps > Docker > Images | 15 | https://...`. Import previews and course details offer title-based topic folder suggestions. These are local heuristics, visibly distinct from AI suggestions. Optional AI grouping accepts a contextual request and returns validated assignments for only the supplied lesson IDs; it never changes titles, order, durations, or URLs. AI coaching can recommend priorities and an existing module focus using goal and next-lesson context. All suggestions require review before applying. AI grouping supports up to 200 lessons per request; manual and local topic grouping support up to 500.
+
+Boot.dev’s public course page exposes chapter-level tasks rather than every exercise. Lesson capture excludes recent history from other courses. 100xDevs exposes loaded titles and durations; missing direct URLs intentionally fall back to the source folder. No guessed playback URL is generated. Review import coverage on every course.
