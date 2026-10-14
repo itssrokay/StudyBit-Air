@@ -60,3 +60,11 @@ next-env.d.ts
 android-companion/.build/
 
 android-companion/*.keystore
+
+/.offline-dist/
+/.local-tools/
+/.local-learning/
+android-companion/assets/dashboard/
+android-companion/.gradle/
+android-companion/build/
+android-companion/local.properties

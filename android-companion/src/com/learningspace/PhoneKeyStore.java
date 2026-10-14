@@ -1,0 +1,11 @@
+package com.learningspace;
+import android.content.*;import android.security.keystore.*;import android.util.Base64;import java.security.*;import javax.crypto.*;import javax.crypto.spec.GCMParameterSpec;import org.json.*;
+public class PhoneKeyStore {
+ private final Context c;private static final String ALIAS="LearningSpaceOpenAI";public PhoneKeyStore(Context c){this.c=c;}
+ private SecretKey secret()throws Exception{KeyStore store=KeyStore.getInstance("AndroidKeyStore");store.load(null);if(store.containsAlias(ALIAS))return (SecretKey)store.getKey(ALIAS,null);KeyGenerator gen=KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES,"AndroidKeyStore");gen.init(new KeyGenParameterSpec.Builder(ALIAS,KeyProperties.PURPOSE_ENCRYPT|KeyProperties.PURPOSE_DECRYPT).setBlockModes(KeyProperties.BLOCK_MODE_GCM).setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE).setKeySize(256).build());return gen.generateKey();}
+ public synchronized void save(String key,String model)throws Exception{if(key==null||key.length()<20||key.length()>400||key.contains("\n")||key.contains("\r")||!model.matches("[a-zA-Z0-9._:-]{1,100}"))throw new Exception("Invalid API key or model");Cipher cipher=Cipher.getInstance("AES/GCM/NoPadding");cipher.init(Cipher.ENCRYPT_MODE,secret());c.getSharedPreferences("phone_ai",0).edit().putString("ciphertext",Base64.encodeToString(cipher.doFinal(key.getBytes("UTF-8")),Base64.NO_WRAP)).putString("iv",Base64.encodeToString(cipher.getIV(),Base64.NO_WRAP)).putString("model",model).commit();}
+ public synchronized String key()throws Exception{SharedPreferences p=c.getSharedPreferences("phone_ai",0);String raw=p.getString("ciphertext","");if(raw.isEmpty())return "";Cipher cipher=Cipher.getInstance("AES/GCM/NoPadding");cipher.init(Cipher.DECRYPT_MODE,secret(),new GCMParameterSpec(128,Base64.decode(p.getString("iv",""),Base64.NO_WRAP)));return new String(cipher.doFinal(Base64.decode(raw,Base64.NO_WRAP)),"UTF-8");}
+ public String model(){return c.getSharedPreferences("phone_ai",0).getString("model","gpt-4.1-mini");}
+ public synchronized String settings()throws Exception{return new JSONObject().put("connected",!key().isEmpty()).put("personal",!key().isEmpty()).put("canSave",true).put("model",model()).put("local",true).toString();}
+ public synchronized void remove(){c.getSharedPreferences("phone_ai",0).edit().clear().commit();}
+}

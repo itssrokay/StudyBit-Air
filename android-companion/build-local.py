@@ -29,7 +29,10 @@ sources=list((root/'src').rglob('*.java'))+list((build/'generated').rglob('*.jav
 run('javac','--release','8','-cp',paths['android'],'-d',classes,*sources)
 jar=build/'classes.jar';run('jar','cf',jar,'-C',classes,'.')
 run('java','-cp',paths['r8'],'com.android.tools.r8.D8','--min-api','26','--lib',paths['android'],'--output',build,jar)
-with ZipFile(build/'unsigned.apk','a',ZIP_STORED) as z:z.write(build/'classes.dex','classes.dex')
+with ZipFile(build/'unsigned.apk','a',ZIP_STORED) as z:
+ z.write(build/'classes.dex','classes.dex')
+ for asset in (root/'assets').rglob('*'):
+  if asset.is_file():z.write(asset,'assets/'+str(asset.relative_to(root/'assets')))
 keystore=build/'debug.keystore'
 if not keystore.exists():run('keytool','-genkeypair','-alias','learning-debug','-keystore',keystore,'-storetype','PKCS12','-storepass','android','-keypass','android','-dname','CN=Learning Space Development','-keyalg','RSA','-keysize','2048','-validity','10000')
 run('javac','-cp',paths['apksig'],'-d',build,root/'tools/SignApk.java')
@@ -40,4 +43,6 @@ run('java','-cp',str(build)+os.pathsep+str(paths['apksig']),'LearningApkVerify',
 checkpath=str(classes)+os.pathsep+str(paths['android'])
 run('javac','-cp',checkpath,'-d',build,root/'tools/WidgetStoreCheck.java')
 run('java','-cp',str(build)+os.pathsep+checkpath,'WidgetStoreCheck')
+run('javac','-cp',checkpath,'-d',build,root/'tools/LocalLibraryCheck.java')
+run('java','-cp',str(build)+os.pathsep+checkpath,'LocalLibraryCheck')
 print('Signed APK: '+str(output))

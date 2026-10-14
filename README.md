@@ -1,6 +1,6 @@
 # Learning Space
 
-A private, account-backed personal learning dashboard. Built with React, Vinext, Cloudflare Workers, and D1 through Sites.
+A personal learning dashboard with a private hosted library and a login-free Android/local mode. Built with React, Vinext, Cloudflare Workers, D1, and a native Android companion.
 
 ## What works
 
@@ -105,6 +105,18 @@ Streaks count calendar days in the selected timezone with at least the chosen nu
 
 ## Android widgets
 
-Download `/downloads/learning-space-android.apk` from Settings. The six native widgets are Today, Streak, Daily goal, Next lesson, Reading, and Weekly rhythm. They cache a bounded snapshot of progress and next tasks, with no notes or API keys. Embedded dashboard use refreshes them through a constrained bridge. If browser-based authentication is needed, share/export a snapshot to the companion. They do not provide background account synchronization. See the Android README for installation, styling, build instructions, and the untested Samsung device checks.
+Download `/downloads/learning-space-android.apk` from Settings. The six native widgets are Today, Streak, Daily goal, Next lesson, Reading, and Weekly rhythm. They cache a bounded snapshot of progress and next tasks, with no notes or API keys. The bundled Android dashboard refreshes them through a constrained local bridge, without hosted sign-in or manual snapshot sharing. Wi-Fi synchronization runs while the app is open; widgets do not fetch accounts in the background. See the Android README for installation, styling, build instructions, and the untested Samsung device checks.
 
 The Chrome and Android source packages are downloadable alongside the APK. The site stays owner-private. Local preview data and hosted account data are separate databases; use a backup export/restore when transferring a local prototype library.
+
+## Android 0.4: no login, offline first, optional Wi-Fi sync
+
+The phone app now opens its bundled dashboard and keeps an atomic local library file. It never loads the hosted sign-in page by default. Widgets refresh directly from phone progress. PDF/EPUB originals use app-private storage and a scoped reading-app content URI; backup export uses the Android document picker. Personal OpenAI keys use Android Keystore and are excluded from Wi-Fi sync.
+
+The offline entry is `offline/main.tsx`, built separately by `npm run build:offline`. It shares the dashboard, schemas, planning, books, and habits with the hosted app through `lib/client-api.ts`. Browser-only local copies use transactional IndexedDB; native copies use the app’s local bridge. Hosted API authentication remains intact and the site stays owner-private.
+
+Run `npm run lan`, then open `http://localhost:5180/`. The computer browser connects itself to the local server. Settings shows a private Wi-Fi URL and persistent connection code for the phone. `public/downloads/learning-space-lan.zip` is a standalone Node 22 setup with bundled dependencies/assets. Private runtime files in `.local-learning/` are ignored and never packaged.
+
+Three-way sync uses a saved baseline, preserves independent changes/deletions, combines unique study events without counting them twice, and exposes conflicting fields for review. Revisions protect both local and server writes. Sync runs while the app is open and keeps local work available when the computer is absent. Book bytes and API keys are not synced. The hosted library and the local copies remain separate; use backup export/restore to move existing hosted data once. A changed DHCP address needs a connection-settings update.
+
+Meaningful checks: `node --experimental-strip-types --test tests/learning.test.mjs tests/sync.test.mjs tests/lan-server.test.mjs`, `npx tsc --noEmit`, `npm run build:offline`, and the Android builder’s persistence/address/snapshot/signature checks. Browser QA uses two independent origins to verify actual synchronization and reload persistence. Phone-specific WebView, Keystore, SAF, and launcher checks remain pending on the real Samsung device.

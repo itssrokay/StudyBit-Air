@@ -1,36 +1,43 @@
-# Learning Space for Android · 0.3.0
+# Learning Space for Android · 0.4.0
 
-A native companion for the private Learning Space dashboard, with six resizable home-screen widgets. This is a development APK for personal testing, not a Play Store release.
+The Android app now contains the full dashboard and saves its library on the phone. It opens without login, internet, or a computer. The private hosted website remains an optional, separate account-backed copy.
 
-## Use on your Samsung phone
+## Update from 0.3
 
-1. Open the hosted dashboard on your phone and sign in with the account that owns the site. Download the APK from Settings → Android & widgets, and install it yourself.
-2. Open Learning Space. If dashboard sign-in opens your browser, use the Browser button and continue there. Browser cookies and WebView cookies are separate; browser sign-in does not automatically sign the embedded dashboard in.
-3. From the browser dashboard, choose Settings → Android & widgets → Share / export widget snapshot. Share the JSON file to Learning Space, or choose Widgets → Import widget snapshot inside the app.
-4. Long press the Samsung home screen → Widgets → Learning Space. Choose Today’s plan, Streak, Daily goal, Next lesson, Reading, or Weekly rhythm. Choose Light or Forest and resize it. Widget style can be reconfigured from the launcher where supported. The app’s Widgets menu also offers pin requests.
+Install the new APK over the existing app. Package name and signing certificate are unchanged, and version code increases to 4. Do not uninstall if you want to preserve existing app data and widget styles. This is a personal development build, not a Play Store release.
 
-Widgets use a validated local snapshot. They refresh when the embedded dashboard sends a snapshot or when you import/share one. Periodic widget rendering redraws the cached data; it does not fetch your account in the background. Date rollover clears today’s displayed minutes, and stale streaks reset after a missed day. Larger widgets show the last sync time. Small widgets open the app to inspect/refresh the snapshot.
+## Use offline
 
-The app opens external course URLs in a browser. The web dashboard extracts PDF/EPUB outlines locally and syncs chapter metadata; original files stay on the importing device. This companion does not include a native PDF/EPUB reader. Use your reading app for the original book. You can attach a matching original on another device without changing the learning plan.
+Courses, priorities, goals, notes, study blocks, streaks, book outlines, and progress are stored locally. The app bundles its HTML, JavaScript, CSS, icons, and PDF worker. It serves them at a stable app-owned HTTPS origin using WebView resource interception. The library uses an atomic file in app-private storage with revision checks. No hosted sign-in or expiring callback is used.
 
-## Implementation
+PDF/EPUB files are chosen through Android’s document picker, extracted on the phone, and copied to app-private book storage. Open book uses a scoped read-only content URI for your installed reading app. There is no built-in full PDF/EPUB reader. Original files do not sync over Wi-Fi; attach the matching file separately on another device.
 
-Java framework Activity/WebView, RemoteViews, SharedPreferences, six AppWidgetProviders, and a configuration activity. Minimum API 26, target/compile API 34. One UI 9 / Android 17 device behavior still needs physical-phone testing.
+Export backups through Settings; Android’s Save document picker chooses their destination. Restore a hosted backup through Settings → Restore a backup, or share a full library JSON to Learning Space and confirm restoration after validation. Metadata/progress/backups exclude OpenAI keys and original book files. Uninstalling or clearing app data removes the local copy, so keep backups.
 
-Only Internet permission is requested. No OpenAI key, site session, or pairing credential is embedded in the APK. The JavaScript bridge accepts only bounded widget snapshots. Embedded navigation/bridge writes are restricted to the dashboard host; intent deep links are constrained to known pages or resource IDs. App data backup is disabled. Imported snapshots are validated and reduced to the allowed fields before storage.
+## Same Wi-Fi sync
 
-## Build
+Start the computer server (`npm run lan` from the project, after `npm run build:offline`) or unzip the standalone computer setup and run `node server.mjs`. Open `http://localhost:5180/` on the computer. Settings → On this device shows its private Wi-Fi address and connection code; the computer browser pairs itself automatically.
 
-The conventional Gradle project requires JDK 17+, Gradle 8.10.2, Android SDK platform 34, and build tools. Open this directory in Android Studio or run `gradle assembleDebug`. Android SDK setup/license acceptance is performed by the developer.
+On the phone, open Wi-Fi / Settings, enter the computer’s address and code, and choose Save connection & sync. The code stays in the computer’s private `.local-learning` folder and does not expire after one use. Phone connection settings persist across app restarts. The computer must be running and both devices must be on a network that allows communication between them. If its DHCP address changes, update the saved address. A firewall or guest Wi-Fi/client isolation can prevent a connection.
 
-A lightweight macOS builder is also included and was used for the supplied APK:
+Sync happens while the app is open: after local saves, on reconnect, periodically, or on explicit request. When the computer is unavailable, learning continues locally. Three-way merging combines separate edits, new courses, and distinct study events. Conflicting fields require a choice before replacing either value; stale server/local writes are rejected. Sync exchanges library metadata and notes, not book files or API keys. It uses HTTP with a persistent connection code on a trusted private network, not internet hosting. The native network bridge only accepts private IPv4/loopback destinations and a fixed library endpoint.
 
-```
-python3 build-local.py
-```
+## AI
 
-It uses Java 17+ and Python 3, downloads pinned/checksummed AAPT2/R8/apksig artifacts from Google Maven and Robolectric’s Android 14 framework artifact from Maven Central, compiles resources and Java, runs D8, signs with a generated local development certificate, verifies APK v2/v3 signatures, and runs native snapshot validation checks. Outputs go to `../public/downloads/learning-space-android.apk`. Toolchain and keystore are ignored under `.build/`. Keep the signing certificate if you want future APKs to update an installed development build. Gradle and this lightweight builder can use different debug certificates.
+Enter a personal OpenAI key in the app’s Settings. Android Keystore encrypts it; neither the saved plaintext nor the encryption key is exposed to the dashboard. AI requests go directly from native code to OpenAI over HTTPS on an explicit request. Coaching excludes notes and validates resource references; grouping validates lesson IDs; book-name plans remain visibly inferred. AI needs internet, while deterministic planning and local imports do not. Hosted and phone keys are separate connections.
 
-The supplied APK compiled successfully and passed signature/snapshot checks. Installation, authentication, rendering, resizing, launcher pinning, share intents, process recreation, and battery behavior have not been tested on a real Samsung device or emulator. The build host has no Android emulator or connected phone. This is the next device verification step, not a claim of completed Android QA.
+## Widgets
 
-Widget behavior follows the [Android widget overview](https://developer.android.com/develop/ui/views/appwidgets/overview) and [advanced widget guidance](https://developer.android.com/develop/ui/views/appwidgets/advanced).
+Six resizable native RemoteViews widgets: Today, Streak, Daily goal, Next lesson, Reading, and Weekly rhythm. Long press the Samsung home screen → Widgets → Learning Space, or request a pin from the app’s Widgets menu. Choose Light or Forest. Widget configuration supports reconfiguration where the launcher offers it.
+
+The embedded dashboard refreshes a bounded snapshot as local progress changes, without browser sign-in or manual snapshot sharing. Widgets render that cached data, adjust daily minutes/streaks at rollover, and show freshness in larger layouts. They do not run background account/network synchronization when the app is closed.
+
+## Build and verification
+
+Run `npm run build:offline` in the web project first to populate `assets/dashboard`, then `python3 android-companion/build-local.py`. The builder pins and verifies Google Maven AAPT2/R8/apksig and Maven Central Robolectric Android artifacts, compiles Java/resources, includes the offline assets, signs with the existing local development certificate, verifies APK signatures, and checks native library persistence/revision rejection, LAN address restrictions, and widget snapshot validation. The keystore/toolchain remain ignored under `.build/`.
+
+The Gradle project supports Android Studio/JDK 17+, Gradle 8.10.2, and Android SDK 34. Its assets source directory uses the prebuilt offline dashboard. Minimum API 26; target/compile API 34. [Android’s local-network permission guidance](https://developer.android.com/privacy-and-security/local-network-permission) says apps targeting SDK 36 or lower retain LAN access through INTERNET; do not request ACCESS_LOCAL_NETWORK until targeting SDK 37. This build requests only INTERNET and confines LAN calls in native code.
+
+Checks cover the compiled APK, embedded offline files, v2/v3 signatures, native disk persistence after reopening, stale writes, and two independent browser replicas syncing through the computer server. A real Samsung Android 17 / One UI 9 device is not attached to the build host. Installation, Android Keystore, WebView callbacks, document picker/reading app, and launcher behavior still need device testing. The prior browser-login loop is removed structurally: the app’s initial URL is its bundled dashboard, not the hosted site.
+
+References: [in-app WebView content](https://developer.android.com/develop/ui/views/layout/webapps/load-local-content), [Android widgets](https://developer.android.com/develop/ui/views/appwidgets/overview).

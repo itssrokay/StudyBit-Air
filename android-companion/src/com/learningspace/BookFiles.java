@@ -1,0 +1,7 @@
+package com.learningspace;
+import android.content.*;import android.net.Uri;import java.io.*;
+public class BookFiles {
+ static File file(Context c,String id){if(id==null||!id.matches("[a-zA-Z0-9_-]{1,100}"))throw new IllegalArgumentException();return new File(new File(c.getFilesDir(),"books"),id);}
+ static void save(Context c,String id,String name,Uri picked)throws Exception{if(!name.toLowerCase().matches(".*\\.(pdf|epub)$"))throw new Exception("Choose a PDF or EPUB");File f=file(c,id);f.getParentFile().mkdirs();File tmp=new File(f.getPath()+".tmp");try(InputStream in=c.getContentResolver().openInputStream(picked);FileOutputStream out=new FileOutputStream(tmp)){if(in==null)throw new IOException();byte[] buffer=new byte[16384];int n,total=0;while((n=in.read(buffer))!=-1){total+=n;if(total>50*1024*1024)throw new Exception("Book exceeds 50 MB");out.write(buffer,0,n);}out.getFD().sync();}if(!tmp.renameTo(f))throw new IOException();c.getSharedPreferences("book_files",0).edit().putString(id,name).apply();}
+ static boolean open(Context c,String id){File f=file(c,id);if(!f.exists())return false;String name=c.getSharedPreferences("book_files",0).getString(id,"book.pdf");Uri uri=Uri.parse("content://"+c.getPackageName()+".books/"+id);Intent intent=new Intent(Intent.ACTION_VIEW).setDataAndType(uri,name.toLowerCase().endsWith(".epub")?"application/epub+zip":"application/pdf").addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);try{c.startActivity(Intent.createChooser(intent,"Read your book"));return true;}catch(Exception e){return false;}}
+}
