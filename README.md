@@ -5,12 +5,15 @@ A private, account-backed personal learning dashboard. Built with React, Vinext,
 ## What works
 
 - A daily lesson plan with a configurable budget (45 minutes initially), including resumable study blocks for long videos.
-- A ranked library of courses, videos, articles, and topics.
+- A ranked library of courses, books, videos, articles, and topics.
 - Course-order prerequisites, explicit priorities, focus goals, deadlines, and pinning. Learning-area folders and lesson modules can be nested; a course can focus on one module branch.
 - Lesson completion, course progress, focus timer, resource and lesson notes, and activity history.
 - Course import from a pasted syllabus or JSON. YouTube video links use oEmbed metadata; other links are saved for manual labeling.
 - Editable import previews, prior-completion import, archive/restore, backup export and full backup restore.
 - Account-specific D1 storage, authenticated APIs, optimistic revision checks, and unsaved-change warnings.
+- PDF bookmark/contents extraction, EPUB navigation, manual chapter lists, and editable page-based reading blocks. Original book files stay local; chapter metadata and progress sync.
+- Current/best streaks based on logged learning, a configurable daily threshold, and a 28-day habit calendar.
+- A signed Android development APK with six native widget types in light/forest styles and validated cached snapshots. See `android-companion/README.md`.
 - An optional server-side OpenAI coach and AI syllabus organizer with structured, validated outputs and explicit review before applying priorities.
 
 Sample courses are illustrative. They are not purchased course content. Seed progress has no completion timestamps and does not contribute to study history.
@@ -23,6 +26,7 @@ Set `d1` to `DB` in `.openai/hosting.json`. Generate migrations with `npm run db
 
 ```
 node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0000_tan_zaladane.sql
+node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0001_conscious_longshot.sql
 npm run dev
 ```
 
@@ -36,7 +40,7 @@ node --experimental-strip-types --test tests/learning.test.mjs
 npm run build
 ```
 
-Tests cover time budgets, prerequisites, pinning, completion, archive exclusion, timezone rollover, import parsing, unsafe URLs, and duplicate IDs.
+Tests cover time budgets, prerequisites, study blocks, course merges, timezone/streak rollover, book page blocks, API-key encryption and owner isolation, widget snapshots, and capture deduplication/order. Real browser checks also cover InterviewReady’s visible course outline, PDF bookmarks, EPUB navigation, key save/remove, and widget export.
 
 ## Ranking
 
@@ -69,13 +73,15 @@ JSON resource shape:
 
 Imports preserve prior completion without fabricating study timestamps. Full exported backups go through Settings → Restore a backup. Restore replaces the complete library after confirmation.
 
-Paid platform login/progress synchronization, server-side YouTube playlist extraction, video downloading, and PDF extraction are not included. The Chrome companion can capture a loaded playlist. The dashboard never claims to have read protected course content.
+Paid platform login/progress synchronization, server-side YouTube playlist extraction, video downloading, OCR for scanned PDFs, and full-text book hosting are not included. The Chrome companion can capture a loaded playlist. The dashboard never claims to have read protected course content.
 
 ## Optional AI
 
-No API key is required for the dashboard. To connect AI, enable the OpenAI Developers plugin in Codex and configure `OPENAI_API_KEY` as a Sites server secret using its supported key workflow. `OPENAI_MODEL` optionally selects a compatible Responses API model; the default is `gpt-4.1-mini`. Redeploy after changing runtime environment values. Do not put keys in browser storage, Git, or the hosting manifest.
+No API key is required for the dashboard. In Settings → Your AI connection, enter your own OpenAI API key and model, save it, and optionally test the connection. Your key is encrypted with AES-GCM in an account-specific D1 row and never returned to the browser, included in backups, or sent to widgets. Saving does not call OpenAI; Test connection calls the models endpoint without generating a model response. AI features use your OpenAI account. Remove key deletes the stored personal key.
 
-The server calls the [Responses API with Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs), sets `store: false`, limits inputs and outputs, validates returned suggestions, and sends only goal/settings/resource summaries for coaching. Course syllabus text is sent only when requesting AI import. API keys are not exposed to the client. Coach requests do not send notes; they send goals, folders, module names, completion counts, and next-lesson metadata. AI errors preserve the library. Priorities are applied only after reviewing the response.
+The server must have a separate 32-byte base64 `LEARNING_KEYS_SECRET` runtime secret. Local preview loads it from ignored `.dev.vars`. Keep this encryption secret stable across redeploys; replacing it makes existing encrypted keys unreadable. An optional server `OPENAI_API_KEY` / `OPENAI_MODEL` is a fallback; the personal key takes precedence. The default model is `gpt-4.1-mini`. No keys belong in Git or the hosting manifest.
+
+The server calls the [Responses API with Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs), sets `store: false`, limits inputs and outputs, validates returned suggestions, and sends only goal/settings/resource summaries for coaching. Course syllabus text is sent only when requesting AI organization. Book-title-only requests generate a visibly inferred reading plan, not a verified table of contents or edition metadata. Contents extraction sends only the text shown in the book importer, title/author, and learner context on an explicit request. PDFs are not uploaded for outline extraction. API keys are not exposed to the client. Coach requests do not send notes; they send goals, folders, module names, completion counts, and next-lesson metadata. AI errors preserve the library. Priorities are applied only after reviewing the response.
 
 ## Publishing
 
@@ -83,10 +89,22 @@ The exact Site identity is tracked in `.openai/hosting.json`. Use the Sites skil
 
 ## Grouped course capture
 
-The Chrome prototype is in `browser-companion/`; a ZIP download is available at `/downloads/learning-space-companion.zip`. Load it unpacked in Chrome using its README instructions. It uses activeTab, scripting and local storage only. It captures loaded DOM outline metadata on a user click and exports reviewed JSON; it has no continuous scraping, automatic watch tracking, direct account pairing, or Chrome Web Store release.
+The Chrome prototype is in `browser-companion/`; a ZIP download is available at `/downloads/learning-space-companion.zip`. Load it unpacked in Chrome using its README instructions. It uses activeTab, scripting and local storage only. It discovers sidebar, navigation, main-content and structured outline metadata on a user click, can scan up to 40 recognized chapter disclosures, and exports reviewed JSON; it has no continuous scraping, automatic watch tracking, direct account pairing, or Chrome Web Store release.
 
-Capture multiple course folders into a draft, export, and import the JSON. The dashboard supports lesson `modulePath`, `format` (video/exercise/reading), and `sourceId`, plus resource `folderPath`, `focusModule`, `captureScope`, and `captureNote`. Choose Merge into an existing course to append new items idempotently while preserving existing IDs, notes, progress, and manual grouping. Existing records and older backups receive default values; no database schema migration is needed.
+Capture multiple course folders into a draft, export, and import the JSON. The dashboard supports lesson `modulePath`, `format` (video/exercise/reading), and `sourceId`, plus resource `folderPath`, `focusModule`, `captureScope`, and `captureNote`. Choose Merge into an existing course to append new items idempotently while preserving existing IDs, notes, progress, and manual grouping. Existing records and older backups receive compatible defaults. The personal-key table is introduced by migration `0001_conscious_longshot.sql`.
 
 A syllabus can use `DevOps > Docker > Images | 15 | https://...`. Import previews and course details offer title-based topic folder suggestions. These are local heuristics, visibly distinct from AI suggestions. Optional AI grouping accepts a contextual request and returns validated assignments for only the supplied lesson IDs; it never changes titles, order, durations, or URLs. AI coaching can recommend priorities and an existing module focus using goal and next-lesson context. All suggestions require review before applying. AI grouping supports up to 200 lessons per request; manual and local topic grouping support up to 500.
 
 Boot.dev’s public course page exposes chapter-level tasks rather than every exercise. Lesson capture excludes recent history from other courses. 100xDevs exposes loaded titles and durations; missing direct URLs intentionally fall back to the source folder. No guessed playback URL is generated. Review import coverage on every course.
+
+## Books and habits
+
+Library → Add a book accepts PDF/EPUB or just a book title. PDF leaf bookmarks become chapter tasks with estimated page ranges; a possible contents page or 15-page blocks is the fallback. Review/edit titles, durations, and PDF page ranges before saving. EPUB navigation/NCX provides chapter titles. Name-only AI plans remain unverified suggestions. Encrypted PDFs, scans, edition differences, and missing outlines may require manual chapters or OCR outside this app. Files are kept in local IndexedDB and excluded from cloud backups; attach the matching original again on another device.
+
+Streaks count calendar days in the selected timezone with at least the chosen number of logged minutes (five by default). Imported prior completion and illustrative sample progress do not earn a streak. Yesterday’s streak remains active until today is missed. Best streak and the habit calendar use recorded activity. Changing the threshold recalculates history.
+
+## Android widgets
+
+Download `/downloads/learning-space-android.apk` from Settings. The six native widgets are Today, Streak, Daily goal, Next lesson, Reading, and Weekly rhythm. They cache a bounded snapshot of progress and next tasks, with no notes or API keys. Embedded dashboard use refreshes them through a constrained bridge. If browser-based authentication is needed, share/export a snapshot to the companion. They do not provide background account synchronization. See the Android README for installation, styling, build instructions, and the untested Samsung device checks.
+
+The Chrome and Android source packages are downloadable alongside the APK. The site stays owner-private. Local preview data and hosted account data are separate databases; use a backup export/restore when transferring a local prototype library.

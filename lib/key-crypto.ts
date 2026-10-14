@@ -1,0 +1,5 @@
+const bytesToBase64=(b:Uint8Array)=>btoa(String.fromCharCode(...b));
+const base64ToBytes=(s:string)=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function keyFromSecret(secret:string){const bytes=base64ToBytes(secret);if(bytes.length!==32)throw Error('Invalid encryption configuration');return crypto.subtle.importKey('raw',bytes,{name:'AES-GCM'},false,['encrypt','decrypt']);}
+export async function encryptKey(value:string,secret:string,owner:string){const iv=crypto.getRandomValues(new Uint8Array(12));const key=await keyFromSecret(secret);const ciphertext=await crypto.subtle.encrypt({name:'AES-GCM',iv,additionalData:new TextEncoder().encode(owner)},key,new TextEncoder().encode(value));return {iv:bytesToBase64(iv),ciphertext:bytesToBase64(new Uint8Array(ciphertext))};}
+export async function decryptKey(record:{iv:string;ciphertext:string},secret:string,owner:string){const key=await keyFromSecret(secret);const bytes=await crypto.subtle.decrypt({name:'AES-GCM',iv:base64ToBytes(record.iv),additionalData:new TextEncoder().encode(owner)},key,base64ToBytes(record.ciphertext));return new TextDecoder().decode(bytes);}

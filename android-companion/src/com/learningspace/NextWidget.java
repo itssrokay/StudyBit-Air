@@ -1,0 +1,1 @@
+package com.learningspace; public class NextWidget extends LearningWidget { @Override String type(){return "next";} }

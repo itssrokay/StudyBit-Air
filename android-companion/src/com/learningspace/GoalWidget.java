@@ -1,0 +1,1 @@
+package com.learningspace; public class GoalWidget extends LearningWidget { @Override String type(){return "goal";} }

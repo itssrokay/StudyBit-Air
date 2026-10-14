@@ -1,0 +1,1 @@
+package com.learningspace; public class TodayWidget extends LearningWidget { @Override String type(){return "today";} }

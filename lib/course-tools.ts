@@ -14,7 +14,7 @@ export function suggestModule(title:string){
  if(/javascript|\bjs\b|promise|async|callback|map, filter/.test(t))return 'Languages/JavaScript';
  return 'Foundations';
 }
-function lessonKey(l:Lesson,courseUrl:string){return l.sourceId||((l.url&&l.url!==courseUrl)?l.url:l.title.toLowerCase().replace(/\s+/g,' ').trim());}
+function lessonKey(l:Lesson,courseUrl:string){if(l.sourceId.includes('::chapter:'))return l.sourceId;return (l.url&&(l.url!==courseUrl||/\/(?:learn|lessons)\//.test(l.url)))?l.url:l.sourceId||l.title.toLowerCase().replace(/\s+/g,' ').trim();}
 export function mergeCourse(existing:Resource,incoming:Resource):Resource{
  const byKey=new Map(existing.lessons.map(l=>[lessonKey(l,existing.url),l]));
  const additions:Lesson[]=[];

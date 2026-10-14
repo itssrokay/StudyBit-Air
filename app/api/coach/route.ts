@@ -3,15 +3,15 @@ import { env } from 'cloudflare:workers';
 import { z } from 'zod';
 import { stateSchema } from '../../../lib/learning';
 import { normalizePath } from '../../../lib/course-tools';
-function config(){const runtime=env as unknown as Record<string,string|undefined>;return {key:runtime.OPENAI_API_KEY,model:runtime.OPENAI_MODEL||'gpt-4.1-mini'};}
-export async function GET(){if(!await getChatGPTUser())return Response.json({error:'Please sign in.'},{status:401});return Response.json({connected:!!config().key});}
+import { getAiConfig } from '../../../lib/ai-config';
+export async function GET(){const user=await getChatGPTUser();if(!user)return Response.json({error:'Please sign in.'},{status:401});return Response.json({connected:!!(await getAiConfig(user.userId)).key});}
 const groupInput=z.array(z.object({id:z.string().min(1).max(100),title:z.string().min(1).max(250),modulePath:z.string().max(200).default('')})).min(1).max(200);
 const grouping=z.object({message:z.string().max(3000),assignments:z.array(z.object({lessonId:z.string(),modulePath:z.string().max(200)})).max(200)});
 const coaching=z.object({message:z.string().max(3000),suggestions:z.array(z.object({resourceId:z.string(),priority:z.number().int().min(1).max(5),focusModule:z.string().max(200),reason:z.string().max(1000)})).max(12)});
 export async function POST(request:Request){
- if(!await getChatGPTUser())return Response.json({error:'Please sign in.'},{status:401});
+ const user=await getChatGPTUser();if(!user)return Response.json({error:'Please sign in.'},{status:401});
  if(request.headers.get('Origin')&&new URL(request.url).origin!==request.headers.get('Origin'))return Response.json({error:'Invalid origin.'},{status:403});
- const {key,model}=config();if(!key)return Response.json({error:'The AI coach is not connected yet. Your smart plan and topic suggestions already work. Configure a server-side OpenAI key to enable contextual AI suggestions.'},{status:503});
+ const {key,model}=await getAiConfig(user.userId);if(!key)return Response.json({error:'The AI coach is not connected yet. Your smart plan and topic suggestions already work. Configure a server-side OpenAI key to enable contextual AI suggestions.'},{status:503});
  const raw=await request.text();if(raw.length>1500000)return Response.json({error:'Input is too large.'},{status:413});
  let data;try{data=JSON.parse(raw);}catch{return Response.json({error:'Invalid input.'},{status:400});}
  const mode=data.mode==='group'?'group':'coach';

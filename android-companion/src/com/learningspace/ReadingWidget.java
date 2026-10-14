@@ -1,0 +1,1 @@
+package com.learningspace; public class ReadingWidget extends LearningWidget { @Override String type(){return "reading";} }

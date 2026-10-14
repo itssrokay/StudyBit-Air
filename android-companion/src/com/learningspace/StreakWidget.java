@@ -1,0 +1,1 @@
+package com.learningspace; public class StreakWidget extends LearningWidget { @Override String type(){return "streak";} }

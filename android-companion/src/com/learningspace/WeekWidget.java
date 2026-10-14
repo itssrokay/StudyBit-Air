@@ -1,0 +1,1 @@
+package com.learningspace; public class WeekWidget extends LearningWidget { @Override String type(){return "week";} }
