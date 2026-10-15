@@ -29,7 +29,8 @@ export function applyCoachReply(state:LearningState,raw:unknown,now=new Date()){
  const reply=validateCoachReply(raw,state);
  return {...state,resources:state.resources.map(r=>{const s=reply.suggestions.find(s=>s.resourceId===r.id);return s?{...r,priority:s.priority,focusModule:s.focusModule||r.focusModule}:r;}),coach:{...state.coach,todayPlan:reply.todayPlan?{day:dayKey(now,state.settings.timezone),minutes:reply.todayPlan.minutes,lessonIds:reply.todayPlan.lessonIds}:state.coach.todayPlan}};
 }
-export function smartCoachReply(state:LearningState,prompt:string,now=new Date()):CoachReply{
+export function smartCoachReply(state:LearningState,prompt:string,now=new Date(),context=''):CoachReply{
+ const session=state.coach.sessions.find(s=>context.startsWith('Session: '+s.lessonTitle+' in '+s.resourceTitle+'.'));if(session)return {message:session.summary+'\n\n'+session.nextStep,question:session.verdict==='detour'?'Was the change of direction intentional, or should your next block return to the priority you set?':session.difficulty==='stuck'?'Which specific part could you not explain without the material?':'What can you recall or use without looking at your notes?',suggestions:[],todayPlan:null};
  const a=coachActivity(state,now),match=prompt.match(/\b(\d{1,3})\s*(?:min(?:ute)?s?)\b/i),restart=/back on track|finish what|rhythm|start again/i.test(prompt),nextRequest=/next|why|priorit|focus/i.test(prompt);
  let minutes=match?Math.min(480,Math.max(1,Number(match[1]))):restart?20:Math.max(1,dailyBudget(state,now)-a.minutesToday);
  const suggestedState={...state,coach:{...state.coach,todayPlan:null},settings:{...state.settings,dailyMinutes:Math.min(480,a.minutesToday+minutes)}};

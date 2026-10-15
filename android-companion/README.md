@@ -1,10 +1,10 @@
-# Learning Space for Android · 0.6.0
+# Learning Space for Android · 0.7.0
 
 The Android app now contains the full dashboard and saves its library on the phone. It opens without login, internet, or a computer. The private hosted website remains an optional, separate account-backed copy.
 
 ## Update from 0.3 / 0.4
 
-Install the new APK over the existing app. Package name and signing certificate are unchanged, and version code increases to 7. Do not uninstall if you want to preserve existing app data and widget styles. This is a personal development build, not a Play Store release.
+Install the new APK over the existing app. Package name and signing certificate are unchanged, and version code increases to 8. Do not uninstall if you want to preserve existing app data and widget styles. This is a personal development build, not a Play Store release.
 
 ## Appearance
 
@@ -34,7 +34,7 @@ AI conversation uses your personal key, internet, the latest message, up to 12 r
 
 ## AI
 
-Enter a personal OpenAI key in the app’s Settings. Android Keystore encrypts it; neither the saved plaintext nor the encryption key is exposed to the dashboard. AI requests go directly from native code to OpenAI over HTTPS on an explicit request. Coaching excludes notes and validates resource references; grouping validates lesson IDs; book-name plans remain visibly inferred. AI needs internet, while deterministic planning and local imports do not. Hosted and phone keys are separate connections.
+Enter a personal OpenAI key in the app’s Settings. Android Keystore encrypts it; neither the saved plaintext nor the encryption key is exposed to the dashboard. AI requests go directly from native code to OpenAI over HTTPS for requested AI features, or after a new study session when automatic session reviews are enabled. Coaching excludes notes and validates resource references; grouping validates lesson IDs; book-name plans remain visibly inferred. AI needs internet, while deterministic planning and local imports do not. Hosted and phone keys are separate connections.
 
 ## Widgets
 
@@ -51,3 +51,13 @@ The Gradle project supports Android Studio/JDK 17+, Gradle 8.10.2, and Android S
 Checks cover the compiled APK, embedded offline files, v2/v3 signatures, native disk persistence after reopening, stale writes, and two independent browser replicas syncing through the computer server. A real Samsung Android 17 / One UI 9 device is not attached to the build host. Installation, Android Keystore, WebView callbacks, document picker/reading app, and launcher behavior still need device testing. The prior browser-login loop is removed structurally: the app’s initial URL is its bundled dashboard, not the hosted site.
 
 References: [in-app WebView content](https://developer.android.com/develop/ui/views/layout/webapps/load-local-content), [Android widgets](https://developer.android.com/develop/ui/views/appwidgets/overview).
+
+## Phone experience and session reviews (0.7.0)
+
+The phone has a dedicated four-tab layout: Today, Library, Coach, and Progress. Settings open from the profile button. The old native Widgets/Wi-Fi toolbar is removed; these tools live in Settings. Imports, course details, and focus sessions open as full-screen phone sheets. Typography uses the phone’s system font. Desktop retains its wider dashboard.
+
+Saving a session records self-reported minutes, optional difficulty/reflection, and the recommendation from before the session. A deterministic review is available offline immediately and can question a detour from the saved priorities. It never treats watch time as demonstrated understanding. Finishing a lesson records its estimated remaining minutes, labelled as estimated. Undoing a completion removes its study events and reviews.
+
+Settings → Session coaching enables personal-key AI reviews for future sessions only. The app sends the session evidence, goals, priorities, coach memory and bounded library/activity context to OpenAI; private course/lesson notes are excluded. Each generation uses API credit. Errors stay visible and require an explicit retry; queued work resumes when the app is reopened with the feature enabled. It does not run a background Android service. Reviews and follow-up chats are included in library backups and Wi-Fi merges. The latest 120 reviews are retained. Suggested plan changes remain previews until Apply.
+
+Design research: Google’s official Fitbit personal health coach public-preview overview describes event-timed Today insights, recent-activity-aware suggestions and feedback. The implementation adapts these interaction patterns for learning; it does not reproduce Fitbit’s proprietary models or prompts. https://blog.google/products-and-platforms/devices/fitbit/personal-health-coach-public-preview/
