@@ -4,7 +4,7 @@ The Android app now contains the full dashboard and saves its library on the pho
 
 ## Update from 0.3 / 0.4
 
-Install the new APK over the existing app. Package name and signing certificate are unchanged, and version code increases to 8. Do not uninstall if you want to preserve existing app data and widget styles. This is a personal development build, not a Play Store release.
+Install the new APK over the existing app. Package name and signing certificate are unchanged, and version code increases to 9. Do not uninstall if you want to preserve existing app data and widget styles. This is a personal development build, not a Play Store release.
 
 ## Appearance
 
@@ -61,3 +61,15 @@ Saving a session records self-reported minutes, optional difficulty/reflection, 
 Settings → Session coaching enables personal-key AI reviews for future sessions only. The app sends the session evidence, goals, priorities, coach memory and bounded library/activity context to OpenAI; private course/lesson notes are excluded. Each generation uses API credit. Errors stay visible and require an explicit retry; queued work resumes when the app is reopened with the feature enabled. It does not run a background Android service. Reviews and follow-up chats are included in library backups and Wi-Fi merges. The latest 120 reviews are retained. Suggested plan changes remain previews until Apply.
 
 Design research: Google’s official Fitbit personal health coach public-preview overview describes event-timed Today insights, recent-activity-aware suggestions and feedback. The implementation adapts these interaction patterns for learning; it does not reproduce Fitbit’s proprietary models or prompts. https://blog.google/products-and-platforms/devices/fitbit/personal-health-coach-public-preview/
+
+## Focus timer notifications (0.8.0)
+
+Start a focus timer from a lesson. Android owns the stopwatch in a foreground service, so opening another learning app, locking the screen or recreating the WebView does not reset it. Its standard Android notification displays a live chronometer, lesson title and planned block, with Pause/Resume and Finish controls. Tapping the notification restores the session; Finish pauses and opens the review form. A paused timer uses a normal notification and stops the foreground service. The app's floating session bar reopens the same session from any tab. Closing a sheet keeps the timer and its saved reflection/difficulty. The keyboard uses resize mode on Android.
+
+Android 13+ asks for notification permission on the first timer start. Denying permission does not grant the app notification access: the timer can run, but its drawer notification is hidden by Android. Settings → Focus sessions opens Android notification settings. Notification and lock-screen appearance still follow the phone's settings; there is no custom One UI Now Bar integration. No exact-alarm, sensor, location, microphone, wake-lock or battery-optimization bypass permission is requested.
+
+The timer's elapsed clock is monotonic in native code and includes time while the device sleeps. Paused time is excluded. State is persisted across process recreation on the same boot. Reboot recovery pauses at the last accumulated checkpoint instead of counting powered-off time. Timers are capped at 24 hours. Force stop or OS restrictions can interrupt the service, so review the time before saving. Native notification behavior still needs physical-device verification; JVM checks cover clock and lifecycle arithmetic, not One UI's rendering.
+
+Nothing is logged automatically. Finish & review rounds down to whole minutes, and permits editing; under a minute cannot be silently logged as a full block. The separate lesson-complete shortcut explicitly uses the estimated remaining duration. The timer is cleared only after the library snapshot containing its session ID successfully saves. Draft timer details remain local and do not sync to other devices. The browser uses a persistent local stopwatch fallback without claiming native notifications.
+
+The service declares Android's `specialUse` foreground type with a study-stopwatch explanation (API 34+). This is a personal sideloaded build; no Play Store policy approval is implied. References: [foreground service types](https://developer.android.com/develop/background-work/services/fgs/service-types), [notification permission](https://developer.android.com/develop/ui/compose/notifications/notification-permission).

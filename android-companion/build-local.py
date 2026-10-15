@@ -48,3 +48,6 @@ run('java','-cp',str(build)+os.pathsep+checkpath,'LocalLibraryCheck')
 run('javac','-cp',str(build)+os.pathsep+checkpath,'-d',build,root/'tools/WidgetMetricsCheck.java')
 run('java','-cp',str(build)+os.pathsep+checkpath,'WidgetMetricsCheck')
 print('Signed APK: '+str(output))
+
+run('javac','-cp',checkpath,'-d',build,root/'tools/StudyTimerCheck.java')
+run('java','-cp',str(build)+os.pathsep+checkpath,'StudyTimerCheck')
