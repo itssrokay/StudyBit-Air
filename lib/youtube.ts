@@ -63,6 +63,6 @@ export function youtubeFetchSpec(request:YouTubeRequest):{url:string;init:Reques
  return {url:'https://www.youtube.com/'+(request.kind==='playlist'?'playlist?list=':'watch?v=')+request.id+'&hl=en',init:{}};
 }
 export async function fetchYouTube(request:YouTubeRequest):Promise<string>{
- const spec=youtubeFetchSpec(request);const response=await fetch(spec.url,{...spec.init,redirect:'error',credentials:'omit',headers:{...spec.init.headers,'User-Agent':'Mozilla/5.0','Accept-Language':'en-US,en;q=0.9'},signal:AbortSignal.timeout(12000)});if(!response.ok)throw Error('YouTube could not be reached. Try again or use Browser capture.');
+ const spec=youtubeFetchSpec(request);const response=await fetch(spec.url,{...spec.init,redirect:'manual',credentials:'omit',headers:{...spec.init.headers,'User-Agent':'Mozilla/5.0','Accept-Language':'en-US,en;q=0.9'},signal:AbortSignal.timeout(12000)});if(!response.ok)throw Error('YouTube could not be reached. Try again or use Browser capture.');
  if(Number(response.headers.get('Content-Length'))>6000000)throw Error('YouTube’s outline is too large. Use Browser capture.');const reader=response.body?.getReader();if(!reader)throw Error('Empty YouTube response.');let size=0,result='';const decoder=new TextDecoder();try{while(true){const {done,value}=await reader.read();if(done)break;size+=value.byteLength;if(size>6000000)throw Error('YouTube’s outline is too large. Use Browser capture.');result+=decoder.decode(value,{stream:true});}return result+decoder.decode();}finally{await reader.cancel();}
 }
