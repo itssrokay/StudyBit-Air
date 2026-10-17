@@ -1,4 +1,17 @@
 import type { Resource, Lesson } from './learning';
+import {youtubeLink} from './youtube.ts';
+const youtubeId=(l:Lesson)=>{try{const link=youtubeLink(l.url);if(link?.kind==='video')return link.id;const id=new URL(l.url).searchParams.get('v');return id&&/^[\w-]{11}$/.test(id)?id:l.sourceId.startsWith('youtube:')?l.sourceId.slice(8):'';}catch{return '';}};
+export function refreshYouTubeCourse(existing:Resource,incoming:Resource,protectedIds:string[]=[]):Resource{
+ const byVideo=new Map(existing.lessons.map(l=>[youtubeId(l),l]).filter(([id])=>id) as [string,Lesson][]);const used=new Set<string>();
+ const lessons=incoming.lessons.map(fresh=>{const old=byVideo.get(youtubeId(fresh));if(!old)return fresh;used.add(old.id);return {...old,title:fresh.title,url:fresh.url,sourceId:fresh.sourceId,thumbnailUrl:fresh.thumbnailUrl,minutes:Math.max(fresh.minutes,old.studiedMinutes),durationSeconds:fresh.durationSeconds,durationEstimated:fresh.durationEstimated};});
+ const extras=existing.lessons.filter(old=>!used.has(old.id)).filter(old=>{
+  // Only replace the untouched synthetic course item created by older imports.
+  const placeholder=existing.lessons.length===1&&!youtubeId(old)&&(!old.url||old.url===existing.url)&&!old.sourceId;
+  return !placeholder||old.done||old.notes.length>0||old.pinned||!!old.modulePath||old.studiedMinutes>0||!!old.completedAt||protectedIds.includes(old.id);
+ });
+ if(lessons.length+extras.length>500)throw Error('The refreshed course would exceed 500 lessons. Import it as a separate course.');
+ return {...existing,url:incoming.url,provider:incoming.provider,kind:incoming.kind,thumbnailUrl:incoming.thumbnailUrl,lessons:[...lessons,...extras],captureScope:incoming.captureScope,captureNote:incoming.captureNote+(extras.length?' Previous items absent from this public outline are kept at the end.':'')};
+}
 export function normalizePath(value:string){return value.split(/[/>]/).map(s=>s.trim()).filter(Boolean).join('/').slice(0,200);}
 export function groupLessons(lessons:Lesson[]){const groups=new Map<string,Lesson[]>();for(const lesson of lessons){const name=lesson.modulePath||'Ungrouped';groups.set(name,[...(groups.get(name)||[]),lesson]);}return [...groups].map(([path,lessons])=>({path,lessons}));}
 export function suggestModule(title:string){

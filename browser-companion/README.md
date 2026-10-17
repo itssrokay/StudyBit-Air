@@ -27,3 +27,6 @@ Scan collapsed chapters collects a snapshot before/after each recognized disclos
 Collapsed folders, virtualized lists, pagination, slow lazy loading, cross-origin iframes, inaccessible browser pages, and changing DOM structures still limit coverage. Open/expand/scroll on the site, then capture again. There is no universal complete-course scraper, direct extension-to-server pairing, automatic watch tracking, or Chrome Web Store release in this prototype.
 
 Only `activeTab`, `scripting`, and `storage` permissions are requested. There are no persistent host permissions. The extension does not use an LLM; optional AI organizing and coaching live server-side in the dashboard and require its configured OpenAI key.
+
+
+YouTube: prefer pasting the playlist link directly into Learning Space → Get details for full public playlist import. Companion 0.3 also captures loaded playlist rows from watch sidebars and playlist pages, with per-video thumbnails and exposed durations. Scroll to load additional rows, capture again and merge; browser captures are explicitly partial.

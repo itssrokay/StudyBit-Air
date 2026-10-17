@@ -62,7 +62,7 @@ Settings → Session coaching enables personal-key AI reviews for future session
 
 Design research: Google’s official Fitbit personal health coach public-preview overview describes event-timed Today insights, recent-activity-aware suggestions and feedback. The implementation adapts these interaction patterns for learning; it does not reproduce Fitbit’s proprietary models or prompts. https://blog.google/products-and-platforms/devices/fitbit/personal-health-coach-public-preview/
 
-## Focus timer notifications (0.8.0)
+## Focus timer notifications (0.9.0)
 
 Start a focus timer from a lesson. Android owns the stopwatch in a foreground service, so opening another learning app, locking the screen or recreating the WebView does not reset it. Its standard Android notification displays a live chronometer, lesson title and planned block, with Pause/Resume and Finish controls. Tapping the notification restores the session; Finish pauses and opens the review form. A paused timer uses a normal notification and stops the foreground service. The app's floating session bar reopens the same session from any tab. Closing a sheet keeps the timer and its saved reflection/difficulty. The keyboard uses resize mode on Android.
 

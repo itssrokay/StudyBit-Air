@@ -36,11 +36,16 @@ export function capturePage() {
   captureNote='Loaded 100xDevs outline captured. Cards without an exposed link open the source folder in Learning Space; no lesson URL is guessed. Paid videos remain on 100xDevs. Open other folders and capture them to build a larger course.';
  }else if(host==='youtube.com'||host==='m.youtube.com'||host==='youtu.be'){
   provider='YouTube';
-  title=clean(document.querySelector('h1 yt-formatted-string')?.textContent)||heading.replace(/\s*-\s*YouTube$/,'');
-  const playlist=document.querySelector('ytd-playlist-panel-renderer');
-  if(playlist)for(const a of playlist.querySelectorAll('a[href*="watch?"]')){const name=clean(a.querySelector('#video-title')?.textContent)||clean(a.getAttribute('title'));add(name,urlFor(a),'Playlist','video',clean(a.textContent));}
-  if(!rows.length)add(title,source,'','video');
-  captureNote='Loaded playlist entries or the current video only. Recommended videos are excluded. Unknown durations default to 15 minutes; edit them in the preview.';
+  title=clean(document.querySelector('ytd-playlist-panel-renderer #title, ytd-playlist-header-renderer h1, .page-header-view-model-wiz__page-header-title')?.textContent)||heading.replace(/\s*-\s*YouTube$/,'');
+  const roots=[...document.querySelectorAll('ytd-playlist-video-list-renderer,ytd-playlist-panel-renderer')];
+  for(const root of roots)for(const row of root.querySelectorAll('ytd-playlist-video-renderer,ytd-playlist-panel-video-renderer,yt-lockup-view-model')){
+   const a=row.querySelector('a[href*="watch?"]');if(!a)continue;const u=new URL(a.href,source),id=u.searchParams.get('v');if(!id||!/^[A-Za-z0-9_-]{11}$/.test(id))continue;
+   const name=clean(row.querySelector('#video-title,.yt-lockup-metadata-view-model__title,h3')?.textContent)||clean(a.title);if(!name||/^\[?(?:private|deleted) video\]?$/i.test(name))continue;
+   const time=[...row.querySelectorAll('ytd-thumbnail-overlay-time-status-renderer,.yt-badge-shape__text')].map(e=>clean(e.textContent)).find(t=>/^\d+(?::\d{2}){1,2}$/.test(t))||'';
+   add(name,'https://www.youtube.com/watch?v='+id,'','video',time,'youtube:'+id);const item=rows.at(-1);if(item&&item.sourceId==='youtube:'+id){item.thumbnailUrl='https://i.ytimg.com/vi/'+id+'/hqdefault.jpg';item.durationSeconds=time?time.split(':').reduce((n,x)=>n*60+Number(x),0):0;}
+  }
+  if(!rows.length&&!page.searchParams.get('list')){const id=page.searchParams.get('v')||page.pathname.split('/')[1];if(id&&/^[A-Za-z0-9_-]{11}$/.test(id)){add(title,'https://www.youtube.com/watch?v='+id,'','video','','youtube:'+id);rows[0].thumbnailUrl='https://i.ytimg.com/vi/'+id+'/hqdefault.jpg';}}
+  captureNote='Loaded YouTube playlist entries only, with thumbnails. Scroll the playlist to load more entries, capture again, and merge if needed. For automatic full playlist import, paste its link in Learning Space and choose Get details. Recommendations are excluded; unknown durations are estimates.';
  }else{
   const parts=page.pathname.split('/').filter(Boolean);
   const coursePrefix=parts[0]==='learn'&&parts[1]?'/learn/'+parts[1]+'/':parts[0]==='courses'&&parts[1]?'/courses/'+parts[1]+'/':'';
@@ -64,7 +69,7 @@ export function capturePage() {
 
  if(!rows.length)throw new Error('No course outline is loaded. Open a lesson or an expanded course folder and try again.');
  const moduleOrder=[...new Set([...document.querySelectorAll('.chapter-name,[data-module-title]')].map(e=>clean(e.textContent)).filter(Boolean))];
- return {title,provider,kind:rows.length===1&&rows[0].format==='reading'?'article':'course',url:source,folderPath,captureScope:'page',captureNote,lessons:rows,capturedAt:new Date().toISOString(),discovery:{items:rows.length,modules:[...new Set(rows.map(r=>r.modulePath).filter(Boolean))],moduleOrder,unknownDurations:rows.filter(r=>r.durationEstimated).length,partial:true}};
+ return {title,provider,thumbnailUrl:rows.find(l=>l.thumbnailUrl)?.thumbnailUrl||'',kind:rows.length===1&&rows[0].format==='reading'?'article':'course',url:source,folderPath,captureScope:'page',captureNote,lessons:rows,capturedAt:new Date().toISOString(),discovery:{items:rows.length,modules:[...new Set(rows.map(r=>r.modulePath).filter(Boolean))],moduleOrder,unknownDurations:rows.filter(r=>r.durationEstimated).length,partial:true}};
 }
 export function mergeCaptures(draft,capture){
  const key=l=>l.sourceId?.includes('::chapter:')?l.sourceId:(l.url||l.sourceId||l.title.toLowerCase().trim());

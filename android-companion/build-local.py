@@ -51,3 +51,6 @@ print('Signed APK: '+str(output))
 
 run('javac','-cp',checkpath,'-d',build,root/'tools/StudyTimerCheck.java')
 run('java','-cp',str(build)+os.pathsep+checkpath,'StudyTimerCheck')
+
+run('javac','-cp',checkpath,'-d',build,root/'tools/YouTubeMetadataCheck.java')
+run('java','-cp',str(build)+os.pathsep+checkpath,'com.learningspace.YouTubeMetadataCheck')

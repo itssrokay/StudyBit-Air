@@ -1,0 +1,1241 @@
+{
+  "metadata": {
+    "playlistMetadataRenderer": {
+      "title": "Spring Boot Full Course 2026"
+    }
+  },
+  "sidebar": {
+    "playlistSidebarPrimaryInfoRenderer": {
+      "stats": [
+        {
+          "simpleText": "42 videos"
+        }
+      ]
+    },
+    "videoOwnerRenderer": {
+      "title": {
+        "simpleText": "Coder Army"
+      }
+    }
+  },
+  "contents": [
+    {
+      "lockupViewModel": {
+        "contentId": "Q04sTEwC7Kg",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "43:41"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Spring Boot & Spring Framework Full Course | Spring Boot Full Course #1"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "PVreyET_Q6I",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "31:12"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Build Your First Spring Boot Application | REST API | Spring Boot Full Course #2"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "N2EXGMJVwUU",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:28:24"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Master Apache Maven in one video | POM, Dependencies & Lifecycle | Spring Boot Full Course #3"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "dT10m_5POfs",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "39:37"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Dependency Injection & IoC Explained | Loose Coupling in Spring | Spring Boot Full Course #4"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "Az9tIgCdaRU",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:34:46"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Spring IOC Container | Beans, @Component, @Autowired & @Bean | Spring Boot Full Course #5"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "ass8cR52Cf8",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:22:42"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Circular Dependency in Spring | Bean Scope, Lazy & Eager Beans | Spring Boot Full Course #6"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "WXg3uyZPqYI",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:27:43"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Bean Lifecycle Explained | @PostConstruct, @PreDestroy, Scopes & @Lazy | Spring Boot Full Course #7"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "HqBh9hV7rik",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:11:54"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Spring XML Configuration Explained | Beans, DI, Scopes & Lifecycle | Spring Boot Full Course #8"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "a06KMY209AA",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:00:15"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Spring Boot Core | @SpringBootApplication, Auto Configurations | Spring Boot full course #9"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "4naCY3vCSfk",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "36:37"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Spring Boot application properties, @Value & Runner Interface | Spring Boot Full Course #10"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "6kCCIdLLGRs",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:37:24"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Spring Boot CRUD Project from Scratch | Create API & Architecture | Spring Boot Full Course #11"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "uRr8_0x_HYw",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "59:35"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Spring Boot CRUD Project with MySQL | Spring JPA Methods | Spring Boot Full Course #12"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "1lUBVZkDANg",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "46:37"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Spring Boot CRUD Project with Soft Delete | Spring JPA custom Methods | Spring Boot Full Course #13"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "TSHrq65q5dw",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:46:56"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "How Java Web Apps Actually Work | Servlets, Tomcat & WAR Files | Spring Boot Full Course #14"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "M7_XxF6Zczw",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:15:52"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Spring MVC Architecture | DispatcherServlet, HandlerMapping & JSP Flow | Spring Boot Full Course #15"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "vXA78rtCeTY",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:04:32"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "DTOs & Validations in Spring Boot | Make Your REST API Professional | Spring Boot Full Course #16"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "1au7XK_b1sI",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:27:27"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Spring Boot Exception Handling: Make Your APIs Professional | Spring Boot Full Course #17"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "K3H-rqhndEM",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "51:53"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Spring Boot Profiles & YAML Explained | Dev vs Prod Configuration | Spring Boot Full Course #18"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "ma-macdL9DI",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:06:20"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Spring Boot Filters | FilterChain, Logging, Auth & Request Flow | Spring Boot Full Course #19"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "fXcDynZ8C-g",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:13:19"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Spring Boot Filters | Modify Requests, Response, Headers & Bodies | Spring Boot Full Course #20"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "XE4xsgbArCQ",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:12:57"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Spring Boot Interceptors | preHandle, postHandle & afterCompletion | Spring Boot Full Course #21"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "s4B-WbUWEFs",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "50:05"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Spring AOP | Cross-Cutting Concerns & Proxies | Spring Boot Full Course #22"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "hMsALeV_uG0",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:28:23"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Spring AOP Advice Types Explained | @Before, @After, @Around | Spring Boot Full Course #23"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "Kf2V2QYikVY",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:19:35"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Spring AOP Pointcuts & Types of Proxies | Spring Boot Full Course #24"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "TT-b9ob-lN8",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "43:29"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Custom Annotations in Spring AOP | @annotation Binding & Proxies | Spring Boot Full Course #25"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "IbCHISQOMUA",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:32:39"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "JDBC in Java from Scratch | CRUD Operation with JDBC & MySQL | Spring Boot Full Course #26"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "OPjnbYbcb2E",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:05:48"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Spring JDBC Complete Tutorial | JdbcTemplate, DataSource, HikariCP | Spring Boot Full Course #27"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "XVQ27D8IIWU",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:12:40"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Hibernate Fundamentals with Spring Boot | CRUD & Entity Mapping | Spring Boot Full Course #28"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "0Ko1Ux1otqE",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:13:38"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Hibernate Internals | Persistence Context, L1 Cache & Transactions | Spring Boot Full Course #29"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "cMwR23y85qk",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:24:03"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "JPA Relationships | @OneToMany, @ManyToOne, @OneToOne & @ManyToMany | Spring Boot Full Course #30"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "mB4NMgaZE8U",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "58:22"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "JPA Cascading, Lazy Loading & N+1 Problem | EntityGraph in Spring Boot | Spring Boot Full Course #31"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "xugZno16FgQ",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:47:37"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Master Spring Data JPA in one video | JpaRepository, JPQL, Pagination | Spring Boot Full Course #32"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "mpxdC8fKy1Y",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "49:24"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Spring Transactions | ACID, @Transactional, Commit & Rollback | Spring Boot Full Course #33"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "E_Sb48BFoF0",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:00:44"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Spring @Transactional Propagation & Isolation Levels Explained | Spring Boot Full Course #34"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "KVJuG95JSpM",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:19:52"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Spring Security | Authentication, Authorization & SecurityContext | Spring Boot Full Course #35"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "iF8KMT51QtY",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:26:23"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Spring Security DB Authentication & Password Security | Spring Boot Full Course #36"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "0LLpt3OZ03g",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:32:51"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Spring Security Authentication Internals | Complete Login Flow | Spring Boot Full Course #37"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "pUWp1EuVnGs",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:22:21"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Spring JWT Authentication | JWT Internals & Stateless Security | Spring Boot Full Course #38"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "t9kRN4wMVk0",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:27:08"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "OAuth 2.0 Masterclass | Google Login with Spring Boot, OIDC & PKCE | Spring Boot Full Course #39"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "8MAjlB7g6uI",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:22:11"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Testing Spring Boot Applications | JUnit 5, Mockito & MockMvc | Spring Boot Full Course #40"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "-Wv5uCu2PIg",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:34:24"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Build a Production-Grade Full Stack Project with Spring Boot  | Microservices, Kafka & Redis | #1"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "lockupViewModel": {
+        "contentId": "ZxCcYHL96x8",
+        "contentType": "LOCKUP_CONTENT_TYPE_VIDEO",
+        "contentImage": {
+          "thumbnailBadgeViewModel": {
+            "text": "1:09:01"
+          }
+        },
+        "metadata": {
+          "lockupMetadataViewModel": {
+            "title": {
+              "content": "Building a Production-Style API Gateway in Spring Boot | GateKeeper Project | #2"
+            }
+          }
+        },
+        "rendererContext": {
+          "commandContext": {
+            "onTap": {
+              "innertubeCommand": {
+                "watchEndpoint": {
+                  "playlistId": "PLEYgx5hMdopw"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
