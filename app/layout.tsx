@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "./mobile.css";
+import "./goal-tools.css";
 import {themeBootstrap} from "../lib/theme";
 
 export const metadata: Metadata = {

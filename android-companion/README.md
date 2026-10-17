@@ -1,10 +1,10 @@
-# Learning Space for Android · 0.7.0
+# Learning Space for Android · 0.11.0
 
 The Android app now contains the full dashboard and saves its library on the phone. It opens without login, internet, or a computer. The private hosted website remains an optional, separate account-backed copy.
 
 ## Update from 0.3 / 0.4
 
-Install the new APK over the existing app. Package name and signing certificate are unchanged, and version code increases to 9. Do not uninstall if you want to preserve existing app data and widget styles. This is a personal development build, not a Play Store release.
+Install the new APK over the existing app. Package name and signing certificate are unchanged, and version code increases to 12. Do not uninstall if you want to preserve existing app data and widget styles. This is a personal development build, not a Play Store release.
 
 ## Appearance
 
@@ -73,3 +73,9 @@ The timer's elapsed clock is monotonic in native code and includes time while th
 Nothing is logged automatically. Finish & review rounds down to whole minutes, and permits editing; under a minute cannot be silently logged as a full block. The separate lesson-complete shortcut explicitly uses the estimated remaining duration. The timer is cleared only after the library snapshot containing its session ID successfully saves. Draft timer details remain local and do not sync to other devices. The browser uses a persistent local stopwatch fallback without claiming native notifications.
 
 The service declares Android's `specialUse` foreground type with a study-stopwatch explanation (API 34+). This is a personal sideloaded build; no Play Store policy approval is implied. References: [foreground service types](https://developer.android.com/develop/background-work/services/fgs/service-types), [notification permission](https://developer.android.com/develop/ui/compose/notifications/notification-permission).
+
+## To-dos and milestone rewards (0.11.0)
+
+Today has a quick checklist and the next unredeemed reward. Progress → Goals & rewards (or Settings → Goals, rewards & to-dos) manages the full collection. To-dos can have a date and a learning goal; checking them never adds study time. Learning goals and rewards accept JPEG/PNG/WebP photos, resized locally and saved with the library.
+
+Rewards count learning days or the best consecutive run since a chosen start date, using their own saved minimum minutes. New challenges start today by default. Real dated study across the library counts; sample completions without dates and future-dated activity do not. Removing activity recalculates eligibility. Redeem records the personal treat once; a redeemed receipt stays if history later changes. Nothing is purchased or awarded externally. Photos, tasks, rules and redemption receipts travel in backups and Wi-Fi sync. Update both app and computer setup to 0.11 to sync these fields.
