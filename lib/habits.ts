@@ -1,9 +1,10 @@
+import {liveStudyLogs} from './activity.ts';
 import { dailyPlan, dayKey, doneMinutes, progress, type LearningState } from './learning.ts';
 const shift=(key:string,days:number)=>new Date(Date.parse(key+'T12:00:00Z')+days*86400000).toISOString().slice(0,10);
 export function streaks(state:LearningState,now=new Date()){
  const minutes=new Map<string,number>();const add=(date:string,n:number)=>{const day=dayKey(new Date(date),state.settings.timezone);minutes.set(day,(minutes.get(day)||0)+n);};
  for(const r of state.resources)for(const l of r.lessons)if(l.done&&l.completedAt)add(l.completedAt,l.minutes-l.studiedMinutes);
- for(const log of state.studyLog)add(log.at,log.minutes);
+ for(const log of liveStudyLogs(state))add(log.at,log.minutes);
  const threshold=state.settings.streakMinimum;const qualifying=[...minutes].filter(([,n])=>n>=threshold).map(([d])=>d).sort();const days=new Set(qualifying);const today=dayKey(now,state.settings.timezone);
  let current=0,cursor=days.has(today)?today:shift(today,-1);while(days.has(cursor)){current++;cursor=shift(cursor,-1);}
  let best=0,run=0,previous='';for(const d of qualifying){run=previous&&shift(previous,1)===d?run+1:1;best=Math.max(best,run);previous=d;}

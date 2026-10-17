@@ -4,10 +4,11 @@ import type {StudySession} from './coach-schema.ts';
 export type SessionFeedback={difficulty:StudySession['difficulty'];reflection:string;timerSeconds:number;timeSource:StudySession['timeSource'];plannedMinutes:number};
 /** Snapshot the choice before logging changes the queue. Time is self-reported, never inferred mastery. */
 export function finishStudySession(state:LearningState,rid:string,lid:string,minutes:number,feedback:SessionFeedback,now=new Date(),baseline=state,sessionId=uid()):LearningState{
- if(state.coach.sessions.some(s=>s.id===sessionId))return state;
+ if(state.coach.sessions.some(s=>s.id===sessionId)||state.activityRemovals.some(e=>(e.kind==='session'||e.kind==='log')&&e.targetId===sessionId))return state;
+ const reset=state.activityRemovals.find(e=>e.kind==='lesson'&&e.targetId===lid);if(reset&&reset.at===now.toISOString())now=new Date(now.getTime()+1);
  const resource=state.resources.find(r=>r.id===rid),lesson=resource?.lessons.find(l=>l.id===lid);
  if(!resource||!lesson||lesson.done||!Number.isInteger(minutes)||minutes<1||minutes>lesson.minutes-lesson.studiedMinutes)return state;
- const next=logStudyBlock(state,rid,lid,minutes,now);if(next===state)return state;
+ const next=logStudyBlock(state,rid,lid,minutes,now,sessionId);if(next===state)return state;
  const choice=dailyPlan(baseline,now)[0];
  const recommended=choice?{resourceId:choice.resource.id,lessonId:choice.lesson.id,resourceTitle:choice.resource.title,lessonTitle:choice.lesson.title,reason:choice.reason}:null;
  const focusGoal=baseline.goals.find(g=>g.id===baseline.settings.focusGoal)?.title||'';

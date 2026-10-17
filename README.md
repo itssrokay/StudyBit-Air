@@ -126,3 +126,15 @@ Meaningful checks: `node --experimental-strip-types --test tests/learning.test.m
 Paste a playlist URL (or a watch URL containing `list=`) in Add resource → Link → Get details. Review every public video in source order, with creator, exact video durations, rounded planning minutes, and YouTube thumbnails. No YouTube or OpenAI key is needed. The hosted app and computer server fetch public metadata; Android 0.9 fetches it directly, without needing the computer. Importing needs internet; saved lessons and progress work offline. Thumbnails need internet and fall back to the built-in cover if unavailable.
 
 Existing playlist resources have **Refresh from YouTube** under Modules & lessons. Preview before applying. Matching videos retain IDs, progress, notes, pins, and modules; custom course title, priority, and goal remain. An untouched synthetic placeholder can be replaced; previous items with saved work are kept. Partial outlines and unavailable entries are labelled. Playlists are bounded to 500 distinct videos. Public YouTube page layouts can change; Browser capture remains a fallback. No playback, account cookies, or YouTube watch-history sync is involved.
+
+
+### Reading and course outlines (0.10)
+Use **Add → Article / post** to save an article, X/Twitter post, or thread link. Suggested titles come from the URL; edit the title and optionally paste up to 20,000 characters of reading text. Pasted text works offline. Reading time is an editable estimate (220 words/minute for pasted text). Opening the original still needs that website’s access. No article bodies, private posts, or complete threads are scraped automatically.
+
+Use **Add → File** for a nested chapter JSON file, a `.txt` / `.md` outline, or an existing flat capture. Download `public/downloads/course-template.json` in the importer. Chapter JSON shape:
+```json
+{"title":"My course","chapters":[{"title":"Chapter 1","lessons":[{"title":"Introduction","minutes":15,"url":"https://example.com/intro","format":"video"}]}]}
+```
+Lessons need titles; minutes default to 15 and links are optional. `format` can be `video`, `reading`, or `exercise`. Nested chapters preserve source order (up to eight levels, 500 lessons). In **Course outline**, use `# Chapter` / `## Subchapter` headings, then `Lesson title | minutes | optional URL | optional done`. The editable preview validates errors before saving. Imported completion never invents study time or streaks.
+
+Use **Progress / Activity → Study history** or **Delete session** on a review to remove a recorded block. Use resource **Details → Reset resource progress** to start a course again, keeping notes and its outline. Unmarking a finished lesson resets its study history. Deleting a resource removes its linked records. Cleanup also repairs dangling history from older versions. Removal records persist through backup/restore and Wi-Fi merges, so stale copies do not silently resurrect removed time. Sync still asks you to resolve a delete-versus-edit conflict that contains an offline course edit. Existing API credentials are unchanged.

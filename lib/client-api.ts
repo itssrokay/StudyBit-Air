@@ -1,3 +1,4 @@
+import {importLinkMetadata} from './link-import';
 import {importYouTube,youtubeLink} from './youtube';
 import {readLibrary,saveLibrary,nativeBridge,nativeRequest} from './local-store';import {prepareOfflineAI} from './offline-ai';
 let local=false;
@@ -17,7 +18,7 @@ export async function apiRequest(path:string,options:RequestInit={}):Promise<Res
   }
   if(path==='/api/coach'&&method==='GET')return json({connected:bridge?JSON.parse(bridge.aiSettings()).connected:false});
   if(path==='/api/coach'||path==='/api/book-plan'){if(!bridge||!JSON.parse(bridge.aiSettings()).connected)return json({error:'Add your OpenAI key in the app’s Settings first. AI needs internet; your library works offline.'},503);const request=prepareOfflineAI(path,input);const response=await nativeRequest('requestOpenAI',request.body);if(!response.ok)return response;return json(request.parse(await response.json()));}
-  if(path==='/api/import'){if(youtubeLink(input.url)){if(bridge?.requestYouTube)return json(await importYouTube(input.url,async request=>{const response=await nativeRequest('requestYouTube',request);const result=await response.json() as {error?:string;text:string};if(!response.ok)throw Error(result.error||'YouTube could not be reached.');return result.text;}));const response=await fetch('/api/import',{...options,signal:AbortSignal.timeout(50000)});if(response.status===404)throw Error('Start the updated computer Wi-Fi server or use Browser capture to import a playlist.');return response;}const url=new URL(input.url);if(!['http:','https:'].includes(url.protocol))throw Error('Use an http or https link.');return json({title:'',provider:url.hostname.replace(/^www\./,''),notice:'Link saved for manual labeling. Import a Chrome capture or syllabus for grouped lessons. Your local library does not require internet.'});}
+  if(path==='/api/import'){if(youtubeLink(input.url)){if(bridge&&!bridge.requestYouTube)throw Error('Update the Android app to import YouTube playlists.');if(bridge?.requestYouTube)return json(await importYouTube(input.url,async request=>{const response=await nativeRequest('requestYouTube',request);const result=await response.json() as {error?:string;text:string};if(!response.ok)throw Error(result.error||'YouTube could not be reached.');return result.text;}));const response=await fetch('/api/import',{...options,signal:AbortSignal.timeout(50000)});if(response.status===404)throw Error('Start the updated computer Wi-Fi server or use Browser capture to import a playlist.');return response;}return json(importLinkMetadata(input.url));}
   return json({error:'This action is unavailable on this device.'},404);
  }catch(e){return json({error:(e as Error).message||'Could not save on this device.'},(e as {status?:number}).status||400);}
 }

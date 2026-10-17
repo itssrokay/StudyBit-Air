@@ -1,0 +1,37 @@
+{
+  "title": "My course",
+  "provider": "Course creator",
+  "url": "https://example.com/course",
+  "folderPath": "Backend",
+  "chapters": [
+    {
+      "title": "Foundations",
+      "lessons": [
+        {
+          "title": "Introduction",
+          "minutes": 10,
+          "url": "https://example.com/intro"
+        },
+        {
+          "title": "HTTP basics",
+          "minutes": 20
+        }
+      ]
+    },
+    {
+      "title": "Spring",
+      "lessons": [
+        {
+          "title": "Your first API",
+          "minutes": 30,
+          "format": "video"
+        },
+        {
+          "title": "Build an endpoint",
+          "minutes": 25,
+          "format": "exercise"
+        }
+      ]
+    }
+  ]
+}

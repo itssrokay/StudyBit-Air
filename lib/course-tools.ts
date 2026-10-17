@@ -34,8 +34,8 @@ export function mergeCourse(existing:Resource,incoming:Resource):Resource{
  for(const fresh of incoming.lessons){const key=lessonKey(fresh,incoming.url);const old=byKey.get(key);if(old)continue;byKey.set(key,fresh);additions.push(fresh);}
  return {...existing,lessons:[...existing.lessons,...additions],captureNote:incoming.captureNote||existing.captureNote};
 }
-export function logStudyBlock(state:import('./learning').LearningState,rid:string,lid:string,minutes:number,now=new Date()){
+export function logStudyBlock(state:import('./learning').LearningState,rid:string,lid:string,minutes:number,now=new Date(),eventId=crypto.randomUUID()){
  const r=state.resources.find(r=>r.id===rid),l=r?.lessons.find(l=>l.id===lid);if(!l||l.done)return state;
  const amount=Math.min(Math.max(1,Math.floor(minutes)),l.minutes-l.studiedMinutes);if(!Number.isFinite(amount)||amount<=0)return state;
- return {...state,studyLog:[...state.studyLog,{id:crypto.randomUUID(),resourceId:rid,lessonId:lid,minutes:amount,at:now.toISOString()}],resources:state.resources.map(r=>r.id===rid?{...r,lessons:r.lessons.map(l=>l.id===lid?{...l,studiedMinutes:l.studiedMinutes+amount,done:l.studiedMinutes+amount>=l.minutes,completedAt:l.studiedMinutes+amount>=l.minutes?now.toISOString():null}:l)}:r)};
+ return {...state,studyLog:[...state.studyLog,{id:eventId,resourceId:rid,lessonId:lid,minutes:amount,at:now.toISOString()}],resources:state.resources.map(r=>r.id===rid?{...r,lessons:r.lessons.map(l=>l.id===lid?{...l,studiedMinutes:l.studiedMinutes+amount,done:l.studiedMinutes+amount>=l.minutes,completedAt:l.studiedMinutes+amount>=l.minutes?now.toISOString():null}:l)}:r)};
 }
