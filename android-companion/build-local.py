@@ -60,3 +60,6 @@ run('java','-cp',str(build)+os.pathsep+checkpath,'com.learningspace.ShareDraftsC
 
 run('javac','-cp',checkpath,'-d',build,root/'tools/UsageTimelineCheck.java')
 run('java','-cp',str(build)+os.pathsep+checkpath,'UsageTimelineCheck')
+
+run('javac','-cp',checkpath,'-d',build,root/'tools/DailyCoachCheck.java')
+run('java','-cp',str(build)+os.pathsep+checkpath,'com.learningspace.DailyCoachCheck')

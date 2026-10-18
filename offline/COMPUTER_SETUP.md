@@ -28,3 +28,8 @@ For Mac foreground time, download `learning-space-mac-time.zip` from Progress �
 Open this computer’s local dashboard at `http://localhost:5180/`. In Screen-time settings, classify apps and optionally enable summary sync. The server reads the companion’s local file during normal phone sync even when the computer’s browser is closed. Keep the companion and this server running. Raw app records and preferences stay in `~/Library/Application Support/Learning Space/` with private file permissions. The optional shared summaries contain category totals; app names require a separate choice. Device-minutes may overlap.
 
 “Let coach use synced screen time” is another explicit switch. It adds the available summaries to chats and session reviews using your existing key. Refresh and sync never trigger an AI call by themselves. The hosted website remains a separate library and can receive summaries through an exported backup.
+
+
+## Daily coach records (0.15)
+
+Update this server alongside Android 0.15, preserving `.local-learning/`. Daily reviews and context preferences travel with normal Wi-Fi sync. Android owns the background schedule and key; the computer does not need to stay awake for a phone review. The hosted website still has its separate account library. This server does not install a cloud schedule or automatically receive an API key.

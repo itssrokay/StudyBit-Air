@@ -1,4 +1,4 @@
-# Learning Space for Android · 0.14.0
+# Learning Space for Android · 0.15.0
 
 The Android app now contains the full dashboard and saves its library on the phone. It opens without login, internet, or a computer. The private hosted website remains an optional, separate account-backed copy.
 
@@ -102,3 +102,14 @@ Coach → Memory lets you edit your learning profile and add, edit, or forget la
 
 
 Version 0.14 adds a dedicated Screen time / Learning switch in mobile Progress, device/day/category filters, leisure budget overruns, and a direct reality check. Coach → Context has Direct/Balanced and usage consent controls. Your existing phone key still works; installing this signed APK over 0.13 preserves it and your local library. Update the computer setup to 0.14 for automatic summary sync. The optional Mac companion requires macOS 15+ and tracks only while running. See its download README for setup.
+
+
+## Daily coach (0.15.0)
+
+Install over the previous version to keep the local library and encrypted key. Coach now includes a midnight review card. It targets 12:00 AM in the dashboard timezone and reviews the day that ended. The Android system may defer execution; network-constrained background work and open/resume catch-up handle the latest completed day. The phone needs internet and an existing key, but no Mac or new cloud backend. Daily reviews are enabled by default for this requested workflow and can be paused in the card.
+
+Automatic context is the new default: saved captures, goals, compact resource inventory/notes, activity, tasks, rewards and a dated coach note. No attachments are required. Review the precise context in Coach’s context drawer. Full PDFs/EPUBs and images are not uploaded. Long text is visibly shortened. New shared X/link text can be included from the pending share queue; it is not a fetch of the complete article/thread.
+
+The native job refreshes phone usage when Usage access and the coach usage switch are enabled. It keeps raw app records local and uses category estimates, with names only through the separate choice. Synced Mac estimates are dated snapshots. Successful reviews are saved privately before library writes, deduplicated by day and timezone, and delivered through the Daily coach reviews notification channel. Enable notifications in the card if Android has not granted them. Tapping a review notification opens Coach. RECEIVE_BOOT_COMPLETED supports persisted jobs; no exact-alarm, accessibility, or battery-exemption permission is requested. Android force-stop and Samsung power restrictions can still postpone work until the app is opened.
+
+Coach-generated continuity notes are automatic, dated, editable by clearing, and separate from approved memories. Up to 60 reviews sync with backups and the v0.15 computer setup. A learning change marks its old assessment outdated. Failed automatic calls are bounded; cached successful results are recovered without another generation. This does not guarantee an exact wall-clock notification under Android scheduling constraints.

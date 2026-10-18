@@ -147,3 +147,8 @@ Mobile Progress now separates Screen time from Learning history. Optional Androi
 `python3 mac-companion/build.py` produces a universal macOS 15+ menu-bar app. It records foreground app names and time while running and writes private local files, excluding idle/sleep time. The local Wi-Fi server ingests approved category summaries even with its browser closed. It does not import historical Apple Screen Time. See `mac-companion/README.md`, `offline/COMPUTER_SETUP.md`, and `COACH_STRATEGY.md`.
 
 Release packaging: `npm run build:offline`, `python3 mac-companion/build.py`, `python3 android-companion/build-local.py`, then `python3 scripts/package-release.py`. Keep the existing Android signing key for in-place updates. Private user data and signing material are excluded from release archives.
+
+
+## Daily reviews (0.15)
+
+The phone runs a persisted, network-constrained midnight JobScheduler job using its existing encrypted key, with foreground catch-up and a notification. Review timing remains subject to Android delays. Daily results/checkpoints live in `coach.dailyReviews`, sync with v0.15, and are invalidated for context when their underlying learning records change. Successful results are receipted before library writes, and retries reuse them. Automatic context includes a bounded inventory of captures and learning data by default; per-field truncation and excluded sources are inspectable. `COACH_STRATEGY.md` describes the lifecycle and limits. This is a phone-first implementation; the hosted Worker backend remains available for manual web AI requests, without an unattended cloud schedule.
