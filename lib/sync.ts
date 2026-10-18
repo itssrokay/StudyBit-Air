@@ -5,11 +5,12 @@ export function mergeLearningStates(base:LearningState|null,phone:LearningState,
  base=base?parseLibrary(base):null;phone=parseLibrary(phone);computer=parseLibrary(computer);
  const conflicts:SyncConflict[]=[];
  function merge(b:any,l:any,r:any,path:string,label:string):any{
+  if(path.startsWith('screenTime.')&&l?.capturedAt&&r?.capturedAt)return l.capturedAt>=r.capturedAt?l:r;
   if(equal(l,r))return l;if(equal(l,b))return r;if(equal(r,b))return l;
   if(path.endsWith('.studiedMinutes')&&typeof l==='number'&&typeof r==='number')return Math.max(l,r);
   if(path.startsWith('activityRemovals.')&&path.endsWith('.at')&&typeof l==='string'&&typeof r==='string')return l>r?l:r;
   if(path.endsWith('.createdAt')&&typeof l==='string'&&typeof r==='string')return l<r?l:r;
-  if(Array.isArray(l)&&Array.isArray(r)&&['resources','goals','studyLog','lessons','conversations','messages','sessions','activityRemovals','todos','rewards','inbox','memories'].includes(path.split('.').at(-1)||'')){
+  if(Array.isArray(l)&&Array.isArray(r)&&['screenTime','resources','goals','studyLog','lessons','conversations','messages','sessions','activityRemovals','todos','rewards','inbox','memories'].includes(path.split('.').at(-1)||'')){
    const bm=new Map((Array.isArray(b)?b:[]).map((x:any)=>[x.id,x])),lm=new Map(l.map(x=>[x.id,x])),rm=new Map(r.map(x=>[x.id,x]));
    const ids=[...new Set([...bm.keys(),...l.map(x=>x.id),...r.map(x=>x.id)])];
    const items=ids.map(id=>merge(bm.get(id),lm.get(id),rm.get(id),path+'.'+id,lm.get(id)?.title||rm.get(id)?.title||label)).filter(x=>x!==undefined);

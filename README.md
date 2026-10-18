@@ -138,3 +138,12 @@ Use **Add → File** for a nested chapter JSON file, a `.txt` / `.md` outline, o
 Lessons need titles; minutes default to 15 and links are optional. `format` can be `video`, `reading`, or `exercise`. Nested chapters preserve source order (up to eight levels, 500 lessons). In **Course outline**, use `# Chapter` / `## Subchapter` headings, then `Lesson title | minutes | optional URL | optional done`. The editable preview validates errors before saving. Imported completion never invents study time or streaks.
 
 Use **Progress / Activity → Study history** or **Delete session** on a review to remove a recorded block. Use resource **Details → Reset resource progress** to start a course again, keeping notes and its outline. Unmarking a finished lesson resets its study history. Deleting a resource removes its linked records. Cleanup also repairs dangling history from older versions. Removal records persist through backup/restore and Wi-Fi merges, so stale copies do not silently resurrect removed time. Sync still asks you to resolve a delete-versus-edit conflict that contains an offline course edit. Existing API credentials are unchanged.
+
+
+## Screen time and direct coaching (0.14)
+
+Mobile Progress now separates Screen time from Learning history. Optional Android foreground estimates refresh on open/resume and every two minutes while visible. Classify Leisure apps to compare usage with a chosen budget. Daily summaries sync through the paired Wi-Fi library only after explicit opt-in; app names and coach usage each have separate switches. No AI call is made simply because usage refreshes. The Direct coach uses actual numeric gaps and one concrete next step, while qualifying missing data, mixed use, partial days, and device overlap.
+
+`python3 mac-companion/build.py` produces a universal macOS 15+ menu-bar app. It records foreground app names and time while running and writes private local files, excluding idle/sleep time. The local Wi-Fi server ingests approved category summaries even with its browser closed. It does not import historical Apple Screen Time. See `mac-companion/README.md`, `offline/COMPUTER_SETUP.md`, and `COACH_STRATEGY.md`.
+
+Release packaging: `npm run build:offline`, `python3 mac-companion/build.py`, `python3 android-companion/build-local.py`, then `python3 scripts/package-release.py`. Keep the existing Android signing key for in-place updates. Private user data and signing material are excluded from release archives.

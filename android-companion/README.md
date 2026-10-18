@@ -1,4 +1,4 @@
-# Learning Space for Android · 0.13.0
+# Learning Space for Android · 0.14.0
 
 The Android app now contains the full dashboard and saves its library on the phone. It opens without login, internet, or a computer. The private hosted website remains an optional, separate account-backed copy.
 
@@ -80,7 +80,7 @@ Today has a quick checklist and the next unredeemed reward. Progress → Goals &
 
 Rewards count learning days or the best consecutive run since a chosen start date, using their own saved minimum minutes. New challenges start today by default. Real dated study across the library counts; sample completions without dates and future-dated activity do not. Removing activity recalculates eligibility. Redeem records the personal treat once; a redeemed receipt stays if history later changes. Nothing is purchased or awarded externally. Photos, tasks, rules and redemption receipts travel in backups and Wi-Fi sync. Update both app and computer setup to 0.11 to sync these fields.
 
-## Capture, Work and share (0.13.0)
+## Capture, Work and share (0.14.0)
 
 The app uses a neutral paper/slate and iris palette. Today includes Log learning and Share my day. Inbox accepts natural-language notes and up to 20 detected links per capture. Import each link through the existing reviewed importer; make a to-do or topic from the text, then file the original. Saving and link detection are local and do not require AI.
 
@@ -94,8 +94,11 @@ The Android app registers for text/plain ACTION_SEND. In X, YouTube, a browser, 
 
 Every resource has Edit → Resource cover, accepting a locally resized JPEG/PNG/WebP. Covers travel with metadata backups and Wi-Fi sync. The native share queue, content-provider URI grants, save picker, and X share delivery still require verification on the physical Samsung device.
 
-## Focus & Balance and coach memory (0.13.0)
+## Focus & Balance and coach memory (0.14.0)
 
-Open Progress → Focus & Balance. Phone usage is optional: enable it, open Android Usage access, and allow Learning Space. Choose which recently used apps count as Leisure and set a daily budget. Neutral, Learning, and Mixed apps are excluded from that budget. YouTube is never automatically treated as studying. Usage estimates are read locally while the view is open; they are not synced or added to social cards. Disable the feature or revoke Usage access to stop reads.
+Open Progress → Focus & Balance. Phone usage is optional: enable it, open Android Usage access, and allow Learning Space. Choose which recently used apps count as Leisure and set a daily budget. Neutral, Learning, and Mixed apps are excluded from that budget. YouTube is never automatically treated as studying. Usage estimates refresh locally on app open/resume and every two minutes while visible, from any page. Daily category summaries sync through the paired Wi-Fi library only after enabling automatic summary sync. App names require a separate opt-in, and coach use is a separate switch. Raw usage is not synced or added to social cards. Disable the feature or revoke Usage access to stop reads. This does not run a background Android monitoring service.
 
 Coach → Memory lets you edit your learning profile and add, edit, or forget lasting memories. AI memory proposals need approval. Use the context button to choose Personal, Work, or both and attach selected inbox captures. Saving a dump alone does not send it to AI. “Think with coach” opens a reviewed draft. The existing encrypted AI key setup remains unchanged.
+
+
+Version 0.14 adds a dedicated Screen time / Learning switch in mobile Progress, device/day/category filters, leisure budget overruns, and a direct reality check. Coach → Context has Direct/Balanced and usage consent controls. Your existing phone key still works; installing this signed APK over 0.13 preserves it and your local library. Update the computer setup to 0.14 for automatic summary sync. The optional Mac companion requires macOS 15+ and tracks only while running. See its download README for setup.
