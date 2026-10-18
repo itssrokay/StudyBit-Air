@@ -57,3 +57,6 @@ run('java','-cp',str(build)+os.pathsep+checkpath,'com.learningspace.YouTubeMetad
 
 run('javac','-cp',checkpath,'-d',build,root/'tools/ShareDraftsCheck.java')
 run('java','-cp',str(build)+os.pathsep+checkpath,'com.learningspace.ShareDraftsCheck')
+
+run('javac','-cp',checkpath,'-d',build,root/'tools/UsageTimelineCheck.java')
+run('java','-cp',str(build)+os.pathsep+checkpath,'UsageTimelineCheck')

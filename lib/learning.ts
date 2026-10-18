@@ -27,6 +27,8 @@ export type LearningState=z.infer<typeof stateSchema>;
 export const parseLibrary=(raw:unknown):LearningState=>normalizeActivity(stateSchema.parse(raw));
 // An already-open older client may omit fields introduced by the YouTube importer.
 export function preserveSourceMetadata(raw:LearningState,parsed:LearningState,previous:LearningState){
+ if(raw.coach?.memories===undefined)parsed.coach.memories=previous.coach.memories;
+ for(const c of parsed.coach.conversations)if(raw.coach?.conversations.find(x=>x.id===c.id)?.contextSelection===undefined)c.contextSelection=previous.coach.conversations.find(x=>x.id===c.id)?.contextSelection;
  if(raw.inbox===undefined)parsed.inbox=previous.inbox;if(raw.settings.workDailyMinutes===undefined)parsed.settings.workDailyMinutes=previous.settings.workDailyMinutes;if(raw.settings.workFocusGoal===undefined)parsed.settings.workFocusGoal=previous.settings.workFocusGoal;
  for(const key of ['goals','todos','rewards'] as const)for(const item of parsed[key]){const input=raw[key]?.find(x=>x.id===item.id);if(input&&input.workspace===undefined)item.workspace=previous[key].find(x=>x.id===item.id)?.workspace||'personal';}
  if(raw.todos===undefined)parsed.todos=previous.todos;if(raw.rewards===undefined)parsed.rewards=previous.rewards;
