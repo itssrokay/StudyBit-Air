@@ -16,4 +16,4 @@ Sync combines independent changes and asks which value to keep when both devices
 From the source project, use `npm run build:offline` followed by `npm run lan` instead. The standalone build already contains all browser assets and the Android APK at `/downloads/learning-space-android.apk`.
 
 
-Version 0.11: update the computer setup together with the Android app. This release adds to-dos, photo goals, and milestone rewards while preserving reading text and activity removal records. The app pauses sync with older computer servers to protect those fields. Keep the existing `.local-learning` folder when replacing server and www files; it contains your library and connection code.
+Version 0.12: update the computer setup together with the Android app. This release adds Personal/Work spaces, a capture inbox, resource covers, quick logs and daily progress cards while preserving earlier learning history. The app pauses sync with older computer servers to protect those fields. Keep the existing `.local-learning` folder when replacing server and www files; it contains your library and connection code.

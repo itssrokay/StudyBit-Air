@@ -1,10 +1,10 @@
-# Learning Space for Android · 0.11.0
+# Learning Space for Android · 0.12.0
 
 The Android app now contains the full dashboard and saves its library on the phone. It opens without login, internet, or a computer. The private hosted website remains an optional, separate account-backed copy.
 
 ## Update from 0.3 / 0.4
 
-Install the new APK over the existing app. Package name and signing certificate are unchanged, and version code increases to 12. Do not uninstall if you want to preserve existing app data and widget styles. This is a personal development build, not a Play Store release.
+Install the new APK over the existing app. Package name and signing certificate are unchanged, and version code increases to 13. Do not uninstall if you want to preserve existing app data and widget styles. This is a personal development build, not a Play Store release.
 
 ## Appearance
 
@@ -79,3 +79,17 @@ The service declares Android's `specialUse` foreground type with a study-stopwat
 Today has a quick checklist and the next unredeemed reward. Progress → Goals & rewards (or Settings → Goals, rewards & to-dos) manages the full collection. To-dos can have a date and a learning goal; checking them never adds study time. Learning goals and rewards accept JPEG/PNG/WebP photos, resized locally and saved with the library.
 
 Rewards count learning days or the best consecutive run since a chosen start date, using their own saved minimum minutes. New challenges start today by default. Real dated study across the library counts; sample completions without dates and future-dated activity do not. Removing activity recalculates eligibility. Redeem records the personal treat once; a redeemed receipt stays if history later changes. Nothing is purchased or awarded externally. Photos, tasks, rules and redemption receipts travel in backups and Wi-Fi sync. Update both app and computer setup to 0.11 to sync these fields.
+
+## Capture, Work and share (0.12.0)
+
+The app uses a neutral paper/slate and iris palette. Today includes Log learning and Share my day. Inbox accepts natural-language notes and up to 20 detected links per capture. Import each link through the existing reviewed importer; make a to-do or topic from the text, then file the original. Saving and link detection are local and do not require AI.
+
+Personal and Work partition resources, goals, to-dos, inbox, rewards and recorded progress. Work defaults to a 30-minute daily goal, independently editable in Settings. Existing items default to Personal. Edit resource moves an item between spaces without dropping lessons or recorded time. Appearance, weekly target and minimum streak minutes remain shared. The coach is a shared overview and can consider both spaces; the daily queue and progress follow the selected space. Widgets show Personal learning. Backups contain both spaces.
+
+Quick logs record an article, video, practice or other learning with self-reported minutes and optional reflection. They count in activity, streaks, rewards and daily cards. Unless kept active, the completed resource is archived. Remove the study session or resource to retract its contribution. This is a learning log, not passive watch tracking.
+
+Daily cards export an actual 1080×1350 PNG with the day’s minutes, finished steps, streak and extra discoveries. Personal is the default share scope, and titles are off by default. Work requires explicit selection. Notes, reflections, source URLs and account identifiers are excluded; an optional user-written thought is added to the caption. Share card opens Android’s Sharesheet with a temporary read-only content URI. Save PNG uses Android’s document picker. Draft for X opens a text composer; attach the saved image and publish yourself. No automatic social posting or social-account connection is configured. Receivers may handle image and caption differently.
+
+The Android app registers for text/plain ACTION_SEND. In X, YouTube, a browser, or another app, choose Share → Learning Space. The text/link is kept in a bounded, durable local draft queue. Review and choose Personal or Work before saving it to Inbox. Single article/post links also offer Save to read: this creates a reading resource from the link and supplied text, files the original capture, and does not mark it read or add study minutes. Existing reading links in the same space are reused. The queue entry is acknowledged only after the library containing it saves; duplicate delivery uses the same draft ID. Closing preserves a draft until a later app resume. X normally shares a URL; the app does not claim to download an authenticated full thread. Paste the thread text if it was not supplied.
+
+Every resource has Edit → Resource cover, accepting a locally resized JPEG/PNG/WebP. Covers travel with metadata backups and Wi-Fi sync. The native share queue, content-provider URI grants, save picker, and X share delivery still require verification on the physical Samsung device.

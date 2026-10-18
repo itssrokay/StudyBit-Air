@@ -1,0 +1,9 @@
+package com.learningspace;
+import java.io.*;import java.nio.file.*;import java.nio.charset.StandardCharsets;import java.time.Instant;import java.util.UUID;import org.json.*;
+/** Durable local queue. Receiving a share never changes the learning library. */
+public final class ShareDrafts {
+ public static synchronized JSONArray read(File file)throws Exception{if(!file.exists())return new JSONArray();if(file.length()>900000)throw new IOException("Draft queue too large");JSONArray a=new JSONArray(new String(Files.readAllBytes(file.toPath()),StandardCharsets.UTF_8));if(a.length()>20)throw new IOException("Draft queue too large");return a;}
+ private static void write(File file,JSONArray a)throws Exception{File tmp=new File(file.getPath()+".tmp");Files.write(tmp.toPath(),a.toString().getBytes(StandardCharsets.UTF_8));Files.move(tmp.toPath(),file.toPath(),StandardCopyOption.REPLACE_EXISTING);}
+ public static synchronized void add(File file,String id,String text)throws Exception{if(id==null||!id.matches("[a-zA-Z0-9-]{1,100}")||text==null||text.trim().isEmpty())throw new IllegalArgumentException();JSONArray a=read(file);for(int i=0;i<a.length();i++)if(a.getJSONObject(i).getString("id").equals(id))return;if(a.length()>=20)throw new IOException("Save your existing shared drafts before adding more.");String bounded=text.length()>10000?text.substring(0,9950)+"\n[Shared text shortened to fit the inbox.]":text;JSONObject j=new JSONObject().put("id",id).put("text",bounded).put("createdAt",Instant.now().toString());a.put(j);write(file,a);}
+ public static synchronized void acknowledge(File file,String id)throws Exception{JSONArray a=read(file),next=new JSONArray();for(int i=0;i<a.length();i++){JSONObject j=a.getJSONObject(i);if(!j.getString("id").equals(id))next.put(j);}write(file,next);}
+}

@@ -54,3 +54,6 @@ run('java','-cp',str(build)+os.pathsep+checkpath,'StudyTimerCheck')
 
 run('javac','-cp',checkpath,'-d',build,root/'tools/YouTubeMetadataCheck.java')
 run('java','-cp',str(build)+os.pathsep+checkpath,'com.learningspace.YouTubeMetadataCheck')
+
+run('javac','-cp',checkpath,'-d',build,root/'tools/ShareDraftsCheck.java')
+run('java','-cp',str(build)+os.pathsep+checkpath,'com.learningspace.ShareDraftsCheck')
