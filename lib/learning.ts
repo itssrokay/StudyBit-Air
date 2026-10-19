@@ -29,6 +29,7 @@ export const parseLibrary=(raw:unknown):LearningState=>normalizeActivity(stateSc
 // An already-open older client may omit fields introduced by the YouTube importer.
 export function preserveSourceMetadata(raw:LearningState,parsed:LearningState,previous:LearningState){
  if(raw.screenTime===undefined)parsed.screenTime=previous.screenTime;
+ else for(const row of parsed.screenTime){const input=raw.screenTime.find(x=>x.id===row.id),old=previous.screenTime.find(x=>x.id===row.id);if(!input||!old||input.capturedAt!==old.capturedAt)continue;if(input.measurement===undefined)row.measurement=old.measurement;if(input.topApps===undefined)row.topApps=old.topApps;}
  for(const key of ['tone','useScreenTime','contextVersion','contextMode','dailyEnabled','dailyReviews'] as const)if(raw.coach?.[key]===undefined)(parsed.coach as any)[key]=previous.coach[key];
  if(raw.coach?.memories===undefined)parsed.coach.memories=previous.coach.memories;
  for(const c of parsed.coach.conversations)if(raw.coach?.conversations.find(x=>x.id===c.id)?.contextSelection===undefined)c.contextSelection=previous.coach.conversations.find(x=>x.id===c.id)?.contextSelection;

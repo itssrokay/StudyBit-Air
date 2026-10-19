@@ -12,6 +12,10 @@ public final class DailyCoachContext {
   // The current job can run after several closed days. No records are invented for those days.
   context.remove("screenTime");body.put("input",input.toString());return body;
  }
+ public static JSONObject phoneUsage(JSONObject day,String capturedAt,int budget,boolean shareNames)throws Exception{
+  JSONArray apps=day.getJSONArray("apps"),names=new JSONArray();if(shareNames)for(int i=0;i<Math.min(5,apps.length());i++){JSONObject app=apps.getJSONObject(i);names.put(new JSONObject().put("name",app.getString("name")).put("minutes",app.getDouble("minutes")));}
+  return new JSONObject().put("device","Phone").put("platform","android").put("day",day.getString("day")).put("capturedAt",capturedAt).put("totalMinutes",day.getDouble("minutes")).put("measurement",day.getJSONObject("measurement")).put("budgetMinutes",budget).put("partial",true).put("topApps",names);
+ }
  public static JSONObject parseReply(JSONObject raw)throws Exception{
   JSONArray output=raw.optJSONArray("output");StringBuilder text=new StringBuilder();if(output!=null)for(int i=0;i<output.length();i++){JSONArray content=output.getJSONObject(i).optJSONArray("content");if(content!=null)for(int j=0;j<content.length();j++){JSONObject part=content.getJSONObject(j);if("output_text".equals(part.optString("type")))text.append(part.optString("text"));}}
   JSONObject reply=new JSONObject(text.toString());String[] fields={"headline","assessment","nextAction","checkpoint","question"};int[] limits={180,5000,1200,2400,500};for(int i=0;i<fields.length;i++){Object value=reply.get(fields[i]);if(!(value instanceof String)||((String)value).length()>limits[i]||(i<3&&((String)value).trim().isEmpty()))throw new Exception("Invalid coach review");}return reply;
