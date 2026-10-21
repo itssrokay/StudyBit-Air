@@ -1,4 +1,4 @@
-# Learning Space
+#StudyBit Air  
 
 A personal learning dashboard with a private hosted library and a login-free Android/local mode. Built with React, Vinext, Cloudflare Workers, D1, and a native Android companion.
 
