@@ -436,3 +436,19 @@ html:root[data-theme] .wb-measurements>div{display:grid;grid-template-columns:mi
 html:root[data-theme] .wb-measurements dt{color:var(--muted)}
 html:root[data-theme] .wb-measurements dd{margin:0;overflow-wrap:anywhere}
 html:root[data-theme] .wb-measurements small{display:block;color:var(--muted);margin-top:4px}
+
+/* Quick logging keeps validation and save feedback inside the dialog. */
+.quick-log-fields{border:0;padding:0;margin:0;min-width:0;display:flex;flex-direction:column;gap:10px}
+.quick-log-fields>.form-grid{margin-top:12px;gap:14px}
+.quick-log-fields .form-grid>div{min-width:0}
+.quick-log-fields label{line-height:1.6}
+.quick-log-fields .form-grid label{display:block;min-height:52px;margin-bottom:8px}
+.quick-log-fields .form-grid input{width:100%;min-width:0}
+.quick-log-fields .inline-check{margin-top:14px}
+.quick-log-fields textarea{margin-top:0}
+.quick-log-fields [aria-invalid=true]{border-color:#cf647d!important}
+.quick-log-form .field-error{font-size:12px;line-height:1.6;color:#cf647d;margin:2px 0 7px}
+.quick-log-form .field-hint{font-size:12px;line-height:1.7;color:var(--muted);margin:0 0 16px}
+.quick-log-form .quick-log-save-error{margin:14px 0;overflow-wrap:anywhere}
+.quick-log-form .modal-actions .primary{min-height:48px}
+@media(max-width:380px){.quick-log-fields>.form-grid{grid-template-columns:1fr}.quick-log-fields .form-grid label{min-height:0}}

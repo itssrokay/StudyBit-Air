@@ -37,3 +37,7 @@ Update this server alongside Android 0.15, preserving `.local-learning/`. Daily 
 ## Total screen time (0.16)
 
 All phone and Mac use counts against each device’s chosen screen-time budget; no categories are required. Phone totals use observed unlocked-screen intervals when available, and otherwise a labelled app activity estimate. Mac totals remain foreground app estimates. Keep the existing data folder when replacing this setup. Older backup totals are still readable; newly synced summaries preserve measurement details.
+
+## Quick logging (0.17)
+
+The dashboard accepts links with or without `https://` in quick logs, displays field errors, and waits for the local library write to complete. Replace the computer setup files while retaining the existing data folder.

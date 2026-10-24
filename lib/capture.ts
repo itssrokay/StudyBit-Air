@@ -1,3 +1,4 @@
+import {validateQuickLog} from './quick-log.ts';
 import {safeUrl,uid,makeResource,type LearningState,inboxSchema} from './learning.ts';
 import {makeReading,readingLink,readingMinutes} from './reading.ts';
 import {finishStudySession} from './session-review.ts';
@@ -13,8 +14,11 @@ export function captureInbox(state:LearningState,text:string,workspace:Workspace
 }
 export function logExtra(state:LearningState,input:{title:string;url:string;minutes:number;kind:'article'|'video'|'topic';reflection:string;workspace:Workspace;keep:boolean},now=new Date(),id=uid()):LearningState{
  if(state.resources.some(r=>r.id===id)||state.activityRemovals.some(e=>e.kind==='resource'&&e.targetId===id))return state;
- if(!input.title.trim()||!Number.isInteger(input.minutes)||input.minutes<1||input.minutes>600||input.url&&!safeUrl(input.url))throw Error('Add a title, valid link, and 1–600 whole minutes.');
- const r=makeResource({id,title:input.title.trim(),url:input.url,workspace:input.workspace,kind:input.kind,provider:'Quick log',quickLog:true,archived:!input.keep},[{id:id+'-lesson',title:input.title.trim(),url:input.url,minutes:input.minutes,format:input.kind==='article'?'reading':input.kind==='video'?'video':'exercise'}]);
+ const checked=validateQuickLog(input);if(!checked.valid)throw Error(Object.values(checked.errors)[0]);
+ if(state.resources.length>=300)throw Error('Your library has 300 resources. Export a backup and remove an unused resource before adding another log.');
+ if(state.studyLog.length>=20000)throw Error('Your activity history is full. Export a backup before adding more learning.');
+ const {title,url,minutes}=checked.value;
+ const r=makeResource({id,title,url,createdAt:now.toISOString(),workspace:input.workspace,kind:input.kind,provider:'Quick log',quickLog:true,archived:!input.keep},[{id:id+'-lesson',title,url,minutes,format:input.kind==='article'?'reading':input.kind==='video'?'video':'exercise'}]);
  return finishStudySession({...state,resources:[...state.resources,r]},r.id,r.lessons[0].id,input.minutes,{difficulty:'unknown',reflection:input.reflection,timerSeconds:0,timeSource:'logged',plannedMinutes:input.minutes},now,state,id+'-session');
 }
 

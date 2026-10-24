@@ -1,4 +1,4 @@
-# Learning Space for Android · 0.16.0
+# Learning Space for Android · 0.17.0
 
 The Android app now contains the full dashboard and saves its library on the phone. It opens without login, internet, or a computer. The private hosted website remains an optional, separate account-backed copy.
 
@@ -119,3 +119,9 @@ Coach-generated continuity notes are automatic, dated, editable by clearing, and
 Install this signed update over the existing app to keep the library and encrypted key. The phone total now uses observed screen-on/unlocked intervals, including home-screen time, when the events establish the day’s initial state. Lock-screen and screen-off time do not count. Incomplete screen events, or zero unlocked time contradicted by positive app activity, fall back to an activity estimate. Activity transitions now preserve the class name: an old screen’s pause or stop no longer closes a different active screen inside the same package. The public Android API does not expose activity instance IDs; app attribution remains an estimate for multiple instances/windows.
 
 Progress → Screen time → How this is measured shows the source, timezone, app activity estimate, observed unlocked time and number of events. These are Android UsageEvents measurements, not Samsung’s private Digital Wellbeing total; exact parity is not promised. Today is explicitly a partial day and is no longer compared with yesterday’s entire day. No categories or filters are needed: the budget, score and both chat/background coach use the total. App names still require a separate choice. Update the computer setup to preserve the measurement metadata during Wi-Fi sync.
+
+## Reliable quick logging (0.17.0)
+
+Quick logs now accept bare domains (for example `www.leetcode.com`) and normalize them to HTTPS. Optional blank links are allowed. Invalid titles, minutes or links show inline errors and focus the relevant field instead of silently disabling the button. A quick log waits for storage confirmation before closing. Concurrent writes drain in order, retrying the same pending log keeps a stable ID, and failed saves keep the entry visible for retry. While a save is pending, the dialog cannot dismiss accidentally.
+
+The same time remains consistent across progress, streaks, Work/Personal views and daily sharing. Reflections remain excluded from social share cards. This release preserves the existing phone signing key, local library and encrypted OpenAI key; install over the existing app. No permission changes are required.
