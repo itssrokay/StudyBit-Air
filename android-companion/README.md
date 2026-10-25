@@ -1,10 +1,10 @@
-# Learning Space for Android · 0.19.0
+# Learning Space for Android · 0.20.0
 
 The Android app now contains the full dashboard and saves its library on the phone. It opens without login, internet, or a computer. The private hosted website remains an optional, separate account-backed copy.
 
 ## Update from 0.3 / 0.4
 
-Install the new APK over the existing app. Package name and signing certificate are unchanged, and version code increases to 20. Do not uninstall if you want to preserve existing app data and widget styles. This is a personal development build, not a Play Store release.
+Install the new APK over the existing app. Package name and signing certificate are unchanged, and version code increases to 21. Do not uninstall if you want to preserve existing app data and widget styles. This is a personal development build, not a Play Store release.
 
 ## Appearance
 
@@ -126,7 +126,7 @@ Quick logs now accept bare domains (for example `www.leetcode.com`) and normaliz
 
 The same time remains consistent across progress, streaks, Work/Personal views and daily sharing. Reflections remain excluded from social share cards. This release preserves the existing phone signing key, local library and encrypted OpenAI key; install over the existing app. No permission changes are required.
 
-## Midnight date context (0.19.0)
+## Midnight date context (0.20.0)
 
 A persisted template prepared during October 24 could contain a nested request to review October 23; the midnight job previously updated only the outer review day to October 24. Both web and phone requests now use one completed-day identity, explicit snapshot/generation dates, and completed-day Personal/Work totals. Chat-only relative-day fields are removed before sending. The phone template keeps the current day’s inventory for the next midnight rather than filtering it prematurely; fresh usage is filtered by activity day after collection. Conversation messages retain their original timestamps.
 
@@ -136,3 +136,10 @@ The UI distinguishes the day reviewed from generation time in the selected timez
 ## Fast learning time entry (0.19)
 
 Log learning opens a compact Timer / Manual entry view. Type a description, optionally choose a course, then start, pause, resume, or stop to review actual minutes before saving. The same native notification timer survives app restarts. Recent entries are grouped by local day and can be repeated. Standalone logs are archived by default; course logs add an Extra study lesson. Saved entries use the existing activity, streak, share, and coach pipelines. Timers remain local to each device and do not synchronize as running timers.
+
+
+## Coach actions (0.20)
+
+In AI mode, ask the coach to create a goal, roadmap, task, daily target or Today plan; organize resources into folders; file an Inbox capture; or log explicitly reported learning with minutes. Structured proposal cards show the changes before Apply. Applying is one validated library transaction and waits for storage confirmation. The batch includes an Undo receipt saved in the conversation and synced with the library. Undo refuses to overwrite affected records changed since application. Current data and approved memories remain authoritative. Generated outlines are labelled AI study roadmaps and never presented as fetched course contents. URL-only playlists still use the existing Import flow. No API-key, permissions, deletion, reward redemption, or inferred-completion actions are exposed.
+
+The midnight review is collapsed on the coach screen so chat is immediately easier to reach. The arbitrary focus score is removed; recorded minutes and screen-time budgets remain visible.
