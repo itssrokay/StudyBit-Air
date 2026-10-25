@@ -1,10 +1,10 @@
-# Learning Space for Android · 0.18.0
+# Learning Space for Android · 0.19.0
 
 The Android app now contains the full dashboard and saves its library on the phone. It opens without login, internet, or a computer. The private hosted website remains an optional, separate account-backed copy.
 
 ## Update from 0.3 / 0.4
 
-Install the new APK over the existing app. Package name and signing certificate are unchanged, and version code increases to 13. Do not uninstall if you want to preserve existing app data and widget styles. This is a personal development build, not a Play Store release.
+Install the new APK over the existing app. Package name and signing certificate are unchanged, and version code increases to 20. Do not uninstall if you want to preserve existing app data and widget styles. This is a personal development build, not a Play Store release.
 
 ## Appearance
 
@@ -126,8 +126,13 @@ Quick logs now accept bare domains (for example `www.leetcode.com`) and normaliz
 
 The same time remains consistent across progress, streaks, Work/Personal views and daily sharing. Reflections remain excluded from social share cards. This release preserves the existing phone signing key, local library and encrypted OpenAI key; install over the existing app. No permission changes are required.
 
-## Midnight date context (0.18.0)
+## Midnight date context (0.19.0)
 
 A persisted template prepared during October 24 could contain a nested request to review October 23; the midnight job previously updated only the outer review day to October 24. Both web and phone requests now use one completed-day identity, explicit snapshot/generation dates, and completed-day Personal/Work totals. Chat-only relative-day fields are removed before sending. The phone template keeps the current day’s inventory for the next midnight rather than filtering it prematurely; fresh usage is filtered by activity day after collection. Conversation messages retain their original timestamps.
 
 The UI distinguishes the day reviewed from generation time in the selected timezone. Reviews from the older request format remain readable, but their checkpoints do not carry into new AI requests. For the latest completed day, tap Regenerate with corrected dates to replace the old review using your existing key. This is a new AI request and uses normal API credit. It is not triggered automatically merely by installing the update. Date-versioned cache receipts prevent recovery of an old date-confused answer; a newly generated review also updates the notification. API delivery can still be delayed by Android, and this update does not change the midnight scheduling policy.
+
+
+## Fast learning time entry (0.19)
+
+Log learning opens a compact Timer / Manual entry view. Type a description, optionally choose a course, then start, pause, resume, or stop to review actual minutes before saving. The same native notification timer survives app restarts. Recent entries are grouped by local day and can be repeated. Standalone logs are archived by default; course logs add an Extra study lesson. Saved entries use the existing activity, streak, share, and coach pipelines. Timers remain local to each device and do not synchronize as running timers.
