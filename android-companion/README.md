@@ -1,4 +1,4 @@
-# Learning Space for Android · 0.17.0
+# Learning Space for Android · 0.18.0
 
 The Android app now contains the full dashboard and saves its library on the phone. It opens without login, internet, or a computer. The private hosted website remains an optional, separate account-backed copy.
 
@@ -125,3 +125,9 @@ Progress → Screen time → How this is measured shows the source, timezone, ap
 Quick logs now accept bare domains (for example `www.leetcode.com`) and normalize them to HTTPS. Optional blank links are allowed. Invalid titles, minutes or links show inline errors and focus the relevant field instead of silently disabling the button. A quick log waits for storage confirmation before closing. Concurrent writes drain in order, retrying the same pending log keeps a stable ID, and failed saves keep the entry visible for retry. While a save is pending, the dialog cannot dismiss accidentally.
 
 The same time remains consistent across progress, streaks, Work/Personal views and daily sharing. Reflections remain excluded from social share cards. This release preserves the existing phone signing key, local library and encrypted OpenAI key; install over the existing app. No permission changes are required.
+
+## Midnight date context (0.18.0)
+
+A persisted template prepared during October 24 could contain a nested request to review October 23; the midnight job previously updated only the outer review day to October 24. Both web and phone requests now use one completed-day identity, explicit snapshot/generation dates, and completed-day Personal/Work totals. Chat-only relative-day fields are removed before sending. The phone template keeps the current day’s inventory for the next midnight rather than filtering it prematurely; fresh usage is filtered by activity day after collection. Conversation messages retain their original timestamps.
+
+The UI distinguishes the day reviewed from generation time in the selected timezone. Reviews from the older request format remain readable, but their checkpoints do not carry into new AI requests. For the latest completed day, tap Regenerate with corrected dates to replace the old review using your existing key. This is a new AI request and uses normal API credit. It is not triggered automatically merely by installing the update. Date-versioned cache receipts prevent recovery of an old date-confused answer; a newly generated review also updates the notification. API delivery can still be delayed by Android, and this update does not change the midnight scheduling policy.

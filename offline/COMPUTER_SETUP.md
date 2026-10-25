@@ -41,3 +41,7 @@ All phone and Mac use counts against each device’s chosen screen-time budget; 
 ## Quick logging (0.17)
 
 The dashboard accepts links with or without `https://` in quick logs, displays field errors, and waits for the local library write to complete. Replace the computer setup files while retaining the existing data folder.
+
+## Midnight review dates (0.18)
+
+Replace the server files while retaining the data folder to preserve review request-version metadata during Wi-Fi sync. The phone remains responsible for background generation. A review generated after midnight normally covers the preceding local date. Older request-format reviews can be regenerated from the phone using its existing key.

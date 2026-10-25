@@ -452,3 +452,5 @@ html:root[data-theme] .wb-measurements small{display:block;color:var(--muted);ma
 .quick-log-form .quick-log-save-error{margin:14px 0;overflow-wrap:anywhere}
 .quick-log-form .modal-actions .primary{min-height:48px}
 @media(max-width:380px){.quick-log-fields>.form-grid{grid-template-columns:1fr}.quick-log-fields .form-grid label{min-height:0}}
+
+html:root[data-theme] .daily-coach-legacy{font-size:12px;line-height:1.8;padding:12px 14px;border-radius:12px;background:var(--paper);border:1px solid var(--line);color:var(--muted)}

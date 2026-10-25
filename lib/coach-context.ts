@@ -1,3 +1,4 @@
+import {dailyReviewRequestVersion} from './coach-schema.ts';
 import {dayKey,type LearningState} from './learning.ts';
 import {streaks} from './habits.ts';
 import {workspaceState} from './spaces.ts';
@@ -16,11 +17,11 @@ export function automaticCoachContext(state:LearningState,query='',now=new Date(
  const textLimit=Math.max(80,Math.min(10000,Math.floor(42000/Math.max(1,captures.length))));
  const noteLimit=Math.max(60,Math.min(1800,Math.floor(18000/Math.max(1,state.resources.length))));
  const calendar=(space:'personal'|'work')=>[...streaks(workspaceState(state,space),now).minutes].sort(([a],[b])=>a.localeCompare(b)).slice(-730).map(([day,minutes])=>({day,minutes}));
- const latest=currentDailyReviews(state)[0];
+ const latest=currentDailyReviews(state).find(r=>r.requestVersion>=dailyReviewRequestVersion);
  return {
   policy:'Automatic saved learning context. Captures are intentions, not completed work. Link text is not fetched page content. Text fields may be shortened as disclosed; original records remain in the app. Current records override old checkpoints and chat claims.',
   snapshotAt:new Date(Math.floor(now.getTime()/60000)*60000).toISOString(),
-  continuity:latest&&scope==='all'?{reviewDay:latest.day,at:latest.at,checkpoint:latest.reply.checkpoint}:null,
+  continuity:latest&&scope==='all'?{requestVersion:latest.requestVersion,reviewDay:latest.day,at:latest.at,checkpoint:latest.reply.checkpoint}:null,
   activityCalendar:{personal:calendar('personal'),work:calendar('work')},
   targetBasis:'Current saved targets as of snapshotAt; historical target changes are not reconstructed.',
   targets:{personalMinutes:state.settings.dailyMinutes,workMinutes:state.settings.workDailyMinutes},
@@ -28,7 +29,7 @@ export function automaticCoachContext(state:LearningState,query='',now=new Date(
   library:state.resources.map(r=>({id:r.id,title:r.title,workspace:r.workspace,kind:r.kind,archived:r.archived,sample:r.demo,priority:r.priority,folder:r.folderPath,goalId:r.goalId,completed:r.lessons.filter(l=>l.done).length,total:r.lessons.length,notes:r.notes.slice(0,noteLimit),excerpt:r.excerpt.slice(0,noteLimit),textShortened:r.notes.length>noteLimit||r.excerpt.length>noteLimit})),
   todos:state.todos.map(({id,title,workspace,dueDay,doneAt,goalId})=>({id,title,workspace,dueDay,doneAt,goalId})),
   rewards:state.rewards.map(({id,title,workspace,description,metric,targetDays,minimumMinutes,startDay,redeemedAt})=>({id,title,workspace,description,metric,targetDays,minimumMinutes,startDay,redeemedAt})),
-  recentConversations:state.coach.conversations.filter(c=>scope==='all'||c.contextSelection?.workspace===scope).slice(-4).map(c=>({title:c.title,messages:c.messages.slice(-4).map(m=>({role:m.role,text:m.text.slice(0,800)}))})),
+  recentConversations:state.coach.conversations.filter(c=>scope==='all'||c.contextSelection?.workspace===scope).slice(-4).map(c=>({title:c.title,createdAt:c.createdAt,messages:c.messages.slice(-4).map(m=>({at:m.at,role:m.role,text:m.text.slice(0,800)}))})),
   coverage:{omittedRows:{resources:0,captures:0,todos:0,rewards:0},activityCalendarLimit:730,nextLessonDetailLimit:40,captures:captures.length,resources:state.resources.length,todos:state.todos.length,rewards:state.rewards.length,captureTextLimit:textLimit,resourceTextLimit:noteLimit,excluded:'Binary images, full PDF/EPUB files, credentials, raw usage events and browser history. Lesson notes are not included. No URLs are fetched.'},
  };
 }

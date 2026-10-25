@@ -31,6 +31,7 @@ export function preserveSourceMetadata(raw:LearningState,parsed:LearningState,pr
  if(raw.screenTime===undefined)parsed.screenTime=previous.screenTime;
  else for(const row of parsed.screenTime){const input=raw.screenTime.find(x=>x.id===row.id),old=previous.screenTime.find(x=>x.id===row.id);if(!input||!old||input.capturedAt!==old.capturedAt)continue;if(input.measurement===undefined)row.measurement=old.measurement;if(input.topApps===undefined)row.topApps=old.topApps;}
  for(const key of ['tone','useScreenTime','contextVersion','contextMode','dailyEnabled','dailyReviews'] as const)if(raw.coach?.[key]===undefined)(parsed.coach as any)[key]=previous.coach[key];
+ for(const row of parsed.coach.dailyReviews){const input=raw.coach?.dailyReviews?.find(x=>x.id===row.id),old=previous.coach.dailyReviews.find(x=>x.id===row.id);if(input&&old&&input.at===old.at&&input.requestVersion===undefined)row.requestVersion=old.requestVersion;}
  if(raw.coach?.memories===undefined)parsed.coach.memories=previous.coach.memories;
  for(const c of parsed.coach.conversations)if(raw.coach?.conversations.find(x=>x.id===c.id)?.contextSelection===undefined)c.contextSelection=previous.coach.conversations.find(x=>x.id===c.id)?.contextSelection;
  if(raw.inbox===undefined)parsed.inbox=previous.inbox;if(raw.settings.workDailyMinutes===undefined)parsed.settings.workDailyMinutes=previous.settings.workDailyMinutes;if(raw.settings.workFocusGoal===undefined)parsed.settings.workFocusGoal=previous.settings.workFocusGoal;

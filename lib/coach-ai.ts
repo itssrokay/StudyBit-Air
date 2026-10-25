@@ -3,9 +3,9 @@ import {stateSchema} from './learning.ts';
 import {coachMessageSchema} from './coach-schema.ts';
 import {coachContext,coachContextOptionsSchema,validateCoachReply} from './coach.ts';
 const object=(properties:Record<string,unknown>)=>({type:'object',properties,required:Object.keys(properties),additionalProperties:false});
-export function prepareCoachAI(data:unknown){
+export function prepareCoachAI(data:unknown,now=new Date()){
  const input=z.object({state:stateSchema,prompt:z.string().trim().min(1).max(6000),messages:z.array(coachMessageSchema).max(40).default([]),context:z.string().max(2000).default(''),contextOptions:coachContextOptionsSchema.optional(),sessionId:z.string().max(100).optional()}).parse(data);
- const context=coachContext(input.state,input.messages,input.context,new Date(),input.contextOptions,input.prompt);
+ const context=coachContext(input.state,input.messages,input.context,now,input.contextOptions,input.prompt);
  const session=input.sessionId?input.state.coach.sessions.find(s=>s.id===input.sessionId):undefined;if(input.sessionId&&!session)throw Error('This study session is no longer available.');
  const evidence=session?{...session,reply:undefined,aiError:undefined,summary:undefined,nextStep:undefined}:undefined;
  const suggestion=object({resourceId:{type:'string'},priority:{type:'integer',minimum:1,maximum:5},focusModule:{type:'string'},reason:{type:'string'}});
