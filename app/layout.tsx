@@ -3,6 +3,7 @@ import "./globals.css";
 import "./mobile.css";
 import "./goal-tools.css";
 import "./product.css";
+import "./time-log.css";
 import {themeBootstrap} from "../lib/theme";
 
 export const metadata: Metadata = {

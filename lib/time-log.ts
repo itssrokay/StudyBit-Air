@@ -6,8 +6,11 @@ import {validateQuickLog} from './quick-log.ts';
 import type {Workspace} from './spaces.ts';
 export const QUICK_TIMER_PREFIX='quick-log-';
 export function clockTime(ms:number){const seconds=Math.floor(Math.max(0,ms)/1000);return [Math.floor(seconds/3600),Math.floor(seconds/60)%60,seconds%60].map(n=>String(n).padStart(2,'0')).join(':');}
-export function saveTimeEntry(state:LearningState,input:{title:string;url:string;minutes:number;kind:'article'|'video'|'topic';reflection:string;workspace:Workspace;keep:boolean;resourceId:string;timerSeconds:number},now:Date,id:string):LearningState{
- if(state.coach.sessions.some(s=>s.id===id+'-session')||state.studyLog.some(l=>l.id===id+'-session')||state.activityRemovals.some(e=>e.targetId===id||e.targetId===id+'-session'))return state;
+export type TimeEntryInput={title:string;url:string;minutes:number;kind:'article'|'video'|'topic';reflection:string;workspace:Workspace;keep:boolean;resourceId:string;timerSeconds:number};
+/** True once this entry id is already part of the library (saved, or deliberately removed). */
+export function hasTimeEntry(state:LearningState,id:string){return state.coach.sessions.some(s=>s.id===id+'-session')||state.studyLog.some(l=>l.id===id+'-session')||state.activityRemovals.some(e=>e.targetId===id||e.targetId===id+'-session');}
+export function saveTimeEntry(state:LearningState,input:TimeEntryInput,now:Date,id:string):LearningState{
+ if(hasTimeEntry(state,id))return state;
  const checked=validateQuickLog(input);if(!checked.valid)throw Error(Object.values(checked.errors)[0]);
  if(!input.resourceId){const next=logExtra(state,input,now,id);return {...next,coach:{...next.coach,sessions:next.coach.sessions.map(s=>s.id===id+'-session'?{...s,timerSeconds:Math.min(86400,Math.max(0,input.timerSeconds))}:s)}};}
  const resource=state.resources.find(r=>r.id===input.resourceId&&r.workspace===input.workspace&&!r.demo);if(!resource)throw Error('That course is no longer available. Choose another course or Standalone learning.');
