@@ -1,4 +1,9 @@
-#StudyBit Air  
+# StudyBit Air
+
+### 📱 [Download the Android app (APK)](https://github.com/itssrokay/StudyBit-Air/raw/main/public/downloads/learning-space-android.apk)
+
+Always the latest build. On your phone: tap the link → download → open the file → **Install**. The first time, Android asks you to allow "Install unknown apps" for your browser. Installing over an older version keeps your library and progress (don't uninstall first).
+
 
 A personal learning dashboard with a private hosted library and a login-free Android/local mode. Built with React, Vinext, Cloudflare Workers, D1, and a native Android companion.
 
