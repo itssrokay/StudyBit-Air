@@ -152,3 +152,8 @@ Release packaging: `npm run build:offline`, `python3 mac-companion/build.py`, `p
 ## Daily reviews (0.15)
 
 The phone runs a persisted, network-constrained midnight JobScheduler job using its existing encrypted key, with foreground catch-up and a notification. Review timing remains subject to Android delays. Daily results/checkpoints live in `coach.dailyReviews`, sync with v0.15, and are invalidated for context when their underlying learning records change. Successful results are receipted before library writes, and retries reuse them. Automatic context includes a bounded inventory of captures and learning data by default; per-field truncation and excluded sources are inspectable. `COACH_STRATEGY.md` describes the lifecycle and limits. This is a phone-first implementation; the hosted Worker backend remains available for manual web AI requests, without an unattended cloud schedule.
+
+
+## Vercel browser-local deployment
+
+Vercel uses `npm run build:vercel` and serves `.vercel-dist` as a static website. This is the offline dashboard without login. Libraries, progress and drafts are stored in browser storage for that origin; export backups before clearing browser data. It does not connect to the existing Sites/Cloudflare account database, upload device usage automatically, or store an OpenAI key in the browser. Native AI, midnight reviews, notifications, widgets and phone usage remain in the Android app. YouTube URL extraction runs in Android or the computer server; the static website supports syllabus/JSON imports. GitHub pushes to main redeploy the Vercel project. Local runtime files, libraries, keys and Cloudflare account data are excluded from the build output.

@@ -14,7 +14,8 @@
     "db:generate": "drizzle-kit generate",
     "build:offline": "node scripts/build-offline.mjs",
     "dev:offline": "vite --config vite.offline.config.ts",
-    "lan": "node --experimental-strip-types scripts/lan-server.ts"
+    "lan": "node --experimental-strip-types scripts/lan-server.ts",
+    "build:vercel": "node scripts/build-vercel.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

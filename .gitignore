@@ -68,3 +68,6 @@ android-companion/assets/dashboard/
 android-companion/.gradle/
 android-companion/build/
 android-companion/local.properties
+
+# Static browser-local deployment output
+/.vercel-dist/
