@@ -4,4 +4,5 @@ import React from 'react';import {createRoot} from 'react-dom/client';import Das
 import '../app/product.css';
 import '../app/time-log.css';
 import '../app/phone.css';
+import '../app/coach.css';
 configureLocalMode();if(nativeBridge()||matchMedia('(max-width: 720px)').matches)document.documentElement.dataset.phone='true';await initializeComputerConnection();createRoot(document.getElementById('root')!).render(<React.StrictMode><Dashboard name="Learner" localMode/></React.StrictMode>);

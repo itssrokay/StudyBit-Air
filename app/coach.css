@@ -1,0 +1,86 @@
+/* Coach: chat-first layout. Shared pieces first, then the phone layout. */
+html:root[data-theme] .studio-phone-only{display:none}
+html:root[data-theme] .studio-count-button{position:relative}
+html:root[data-theme] .studio-count-button>b{position:absolute;top:2px;right:2px;min-width:16px;height:16px;padding:0 4px;border-radius:99px;background:var(--accent);color:var(--paper);font-size:9px;font-weight:700;line-height:16px;text-align:center}
+html:root[data-theme] .studio-mode{display:inline-grid;grid-template-columns:1fr 1fr;gap:2px;padding:2px;border:1px solid var(--line);border-radius:9px;background:var(--paper);flex-shrink:0}
+html:root[data-theme] .studio-mode button{min-height:28px;min-width:48px;padding:0 10px;border:0;border-radius:7px;background:transparent;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer}
+html:root[data-theme] .studio-mode button[aria-pressed=true]{background:var(--accent);color:var(--paper)}
+html:root[data-theme] .studio-mode button:disabled:not([aria-pressed=true]){opacity:.45;cursor:not-allowed}
+html:root[data-theme] .studio-starters>button>svg:first-child{color:var(--accent);flex-shrink:0}
+html:root[data-theme] .studio-starters>button>span{flex:1}
+html:root[data-theme] .studio-mini-avatar{width:20px;height:20px;border-radius:7px;display:inline-grid;place-items:center;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--paper))}
+html:root[data-theme] .coach-checkin-collapsed>summary>svg:first-child{color:var(--accent);flex-shrink:0}
+html:root[data-theme] .studio-proposal>.new-eyebrow{text-transform:uppercase;letter-spacing:.08em}
+.session-review-list{display:grid;gap:14px}
+
+/* ---------- Phone ---------- */
+html:root[data-phone=true] .studio-phone-only{display:grid}
+html:root[data-phone=true] .m-main.m-coach{padding:0;display:flex;flex-direction:column;height:calc(100dvh - 64px);min-height:0;padding-bottom:calc(70px + env(safe-area-inset-bottom,0px));animation:none}
+html:root[data-phone=true] .has-active-timer .m-main.m-coach{padding-bottom:calc(150px + env(safe-area-inset-bottom,0px))}
+html:root[data-phone=true] .m-coach .coach-studio{flex:1;min-height:0;display:flex;flex-direction:column;width:100%}
+html:root[data-phone=true] .m-coach .studio-page-header{display:none}
+
+/* Daily check-in: one slim row */
+html:root[data-phone=true] .m-coach .coach-checkin-collapsed{margin:10px 14px 0;border-radius:14px;background:var(--m-card);border:1px solid var(--m-line);flex-shrink:0;max-height:55dvh;overflow:auto}
+html:root[data-phone=true] .m-coach .coach-checkin-collapsed>summary{padding:10px 14px;gap:8px;min-height:44px}
+html:root[data-phone=true] .m-coach .coach-checkin-collapsed>summary>span{font-size:12px;font-weight:600}
+html:root[data-phone=true] .m-coach .coach-checkin-collapsed>summary>strong{font-size:13px;color:var(--m-muted)}
+
+/* Chat fills the screen */
+html:root[data-phone=true] .m-coach .studio-layout{flex:1;min-height:0;display:flex}
+html:root[data-phone=true] .m-coach .studio-history{display:none}
+html:root[data-phone=true] .m-coach .studio-chat{flex:1;height:auto;max-height:none;min-height:0;border:0;border-radius:0;background:transparent}
+html:root[data-phone=true] .m-coach .studio-chat-header{padding:8px 8px 8px 16px;gap:2px;border-bottom:0}
+html:root[data-phone=true] .m-coach .studio-avatar{display:none}
+html:root[data-phone=true] .m-coach .studio-chat-header>div:nth-child(2){margin-right:4px}
+html:root[data-phone=true] .m-coach .studio-chat-header strong{font-size:17px;font-weight:650;letter-spacing:-.2px}
+html:root[data-phone=true] .m-coach .studio-chat-header small{font-size:12px;margin-top:2px}
+html:root[data-phone=true] .m-coach .studio-chat-header .icon-button{width:42px;height:42px;min-width:42px;border-radius:12px;display:grid;place-items:center;color:var(--m-ink);flex-shrink:0}
+html:root[data-phone=true] .m-coach .studio-count-button>b{top:4px;right:3px;border:2px solid var(--m-bg)}
+html:root[data-phone=true][data-theme=dark] .m-coach .studio-count-button>b{color:#1a1733}
+
+html:root[data-phone=true] .m-coach .studio-context-bar{padding:2px 16px 8px;background:transparent;border-bottom:1px solid var(--m-line);gap:10px}
+html:root[data-phone=true] .m-coach .studio-context-bar>button{flex-wrap:nowrap;min-height:32px;padding:4px 10px;border:1px solid var(--m-line);border-radius:99px;font-size:12px;color:var(--m-muted);overflow:hidden;white-space:nowrap;max-width:100%}
+html:root[data-phone=true] .m-coach .studio-context-bar>button>span{overflow:hidden;text-overflow:ellipsis}
+html:root[data-phone=true] .m-coach .studio-mode{background:var(--m-soft);border-color:var(--m-line)}
+html:root[data-phone=true][data-theme=dark] .m-coach .studio-mode button[aria-pressed=true]{color:#1a1733}
+
+/* Messages */
+html:root[data-phone=true] .m-coach .studio-messages{padding:16px 16px 8px}
+html:root[data-phone=true] .m-coach .studio-welcome{margin:8px auto 6px;text-align:left;max-width:none}
+html:root[data-phone=true] .m-coach .studio-welcome h2{font-size:24px!important;line-height:1.2;letter-spacing:-.5px;margin:0 0 6px}
+html:root[data-phone=true] .m-coach .studio-welcome h2 br{display:none}
+html:root[data-phone=true] .m-coach .studio-welcome>p{margin:0;max-width:none;font-size:14px;color:var(--m-muted)}
+html:root[data-phone=true] .m-coach .studio-starters{grid-template-columns:1fr 1fr;gap:10px;margin:18px 0 8px;max-width:none}
+html:root[data-phone=true] .m-coach .studio-starters>button{flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:10px;min-height:92px;padding:14px;border-radius:16px;background:var(--m-card);border:1px solid var(--m-line);color:var(--m-ink);font-size:14px;font-weight:550;line-height:1.3;transform:none}
+html:root[data-phone=true] .m-coach .studio-starters>button>svg:last-child{display:none}
+html:root[data-phone=true] .m-coach .studio-starters>button:last-child:nth-child(odd){grid-column:1/-1;min-height:0;flex-direction:row;align-items:center}
+html:root[data-phone=true] .m-coach .studio-message{margin:0 0 18px;max-width:100%}
+html:root[data-phone=true] .m-coach .studio-message.user{max-width:86%;margin-left:auto}
+html:root[data-phone=true] .m-coach .studio-message-label{font-size:12px;margin-bottom:6px;gap:7px}
+html:root[data-phone=true] .m-coach .studio-message.user .studio-message-label{display:none}
+html:root[data-phone=true] .m-coach .studio-message-body{font-size:15px;line-height:1.65}
+html:root[data-phone=true] .m-coach .studio-message.user .studio-message-body{background:var(--teal);color:#fff;padding:11px 15px;border-radius:20px 20px 6px 20px}
+html:root[data-phone=true][data-theme=dark] .m-coach .studio-message.user .studio-message-body{color:#1a1733}
+html:root[data-phone=true] .m-coach .studio-message.assistant .studio-message-body{background:var(--m-card);border:1px solid var(--m-line);padding:13px 15px;border-radius:6px 20px 20px 20px}
+html:root[data-phone=true] .m-coach .studio-followup{margin-top:12px!important;padding-left:12px}
+html:root[data-phone=true] .m-coach .studio-message-tools{gap:4px;margin-top:4px}
+html:root[data-phone=true] .m-coach .studio-message-tools button,html:root[data-phone=true] .m-coach .studio-message-tools summary{min-height:32px;padding:4px 8px;font-size:11px;border-radius:8px}
+html:root[data-phone=true] .m-coach .studio-proposal{margin-top:10px;padding:14px;border-radius:16px;background:var(--m-card)}
+html:root[data-phone=true] .m-coach .studio-proposal>.new-eyebrow{font-size:11px;color:var(--teal);font-weight:700}
+html:root[data-phone=true] .m-coach .studio-proposal>div{margin:12px 0}
+html:root[data-phone=true] .m-coach .studio-proposal strong{font-size:14px}
+html:root[data-phone=true] .m-coach .studio-proposal p,html:root[data-phone=true] .m-coach .studio-proposal li{font-size:13px;line-height:1.6}
+html:root[data-phone=true] .m-coach .coach-action-footer{display:grid;gap:10px;margin:14px 0 0!important}
+html:root[data-phone=true] .m-coach .coach-action-footer .primary,html:root[data-phone=true] .m-coach .coach-action-footer .secondary{width:100%;min-height:46px;justify-content:center;border-radius:12px;font-size:14px}
+html:root[data-phone=true] .m-coach .studio-memory-proposal{padding:12px 14px;border-radius:14px}
+html:root[data-phone=true] .m-coach .studio-thinking{font-size:13px;margin:4px 0 12px}
+
+/* Composer */
+html:root[data-phone=true] .m-coach .studio-composer{padding:8px 12px 8px;background:var(--m-bg);border-top:1px solid var(--m-line)}
+html:root[data-phone=true] .m-coach .studio-compose-box{align-items:flex-end;padding:5px 5px 5px 16px;border-radius:24px;background:var(--m-card);border-color:var(--m-line)}
+html:root[data-phone=true] .m-coach .studio-compose-box textarea{min-height:40px!important;max-height:150px;padding:9px 0!important;font-size:16px!important;line-height:1.4;border:0!important;background:transparent!important;border-radius:0!important}
+html:root[data-phone=true] .m-coach .studio-compose-box>button{width:40px;height:40px;border-radius:50%;background:var(--teal);color:#fff}
+html:root[data-phone=true][data-theme=dark] .m-coach .studio-compose-box>button{color:#1a1733}
+html:root[data-phone=true] .m-coach .studio-composer>p{font-size:11px;margin:6px 4px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html:root[data-phone=true] .m-coach .studio-attachments button{min-height:30px;font-size:12px}

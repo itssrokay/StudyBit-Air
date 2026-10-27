@@ -5,6 +5,7 @@ import "./goal-tools.css";
 import "./product.css";
 import "./time-log.css";
 import "./phone.css";
+import "./coach.css";
 import {themeBootstrap} from "../lib/theme";
 
 export const metadata: Metadata = {
