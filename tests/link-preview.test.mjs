@@ -28,3 +28,18 @@ test('helpers',()=>{
  assert.equal(snippet('word '.repeat(60)).length<=100,true);
  assert.equal(captureTitle('https://x.com/naval/status/123456'),'Post by @naval');
 });
+import {resolvePreview,fullPostRequest,looksTruncated} from '../lib/link-preview.ts';
+test('cut-off long posts are upgraded to the full text',async()=>{
+ const url='https://x.com/fardeentwt/status/2115416659884441711';
+ assert.equal(fullPostRequest(url).endpoint,'https://api.fxtwitter.com/fardeentwt/status/2115416659884441711');
+ assert.ok(looksTruncated('how do people even live like this, if i…'));
+ const full='i cant imagine living with a person who has no purpose in life\n\nhow do people even live like this, if i wake up and i dont have a purpose\n\nblessed are those who wake up every day and have a goal to work toward';
+ const seen=[];
+ const p=await resolvePreview({url,kind:'x',endpoint:'oembed'},async r=>{seen.push(r.kind);return r.kind==='x'?{text:JSON.stringify({author_name:'fardeen',author_url:'https://twitter.com/fardeentwt',html:'<blockquote><p>i cant imagine living with a person who has no purpose in life<br><br>how do people even live like this, if i…</p>&mdash; fardeen</blockquote>'})}:{text:JSON.stringify({tweet:{text:full,author:{name:'fardeen',screen_name:'fardeentwt'}}})};});
+ assert.deepEqual(seen,['x','x-full']);assert.equal(p.excerpt,full);assert.equal(p.author,'fardeen');
+ assert.equal(p.title,'@fardeentwt: i cant imagine living with a person who has no purpose in life');
+});
+test('short posts make one request only',async()=>{
+ const seen=[];await resolvePreview({url:'https://x.com/a/status/12345',kind:'x',endpoint:''},async r=>{seen.push(r.kind);return {text:JSON.stringify({author_name:'A',author_url:'https://twitter.com/a',html:'<blockquote><p>Short and complete.</p></blockquote>'})};});
+ assert.deepEqual(seen,['x']);
+});

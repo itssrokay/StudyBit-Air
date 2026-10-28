@@ -53,19 +53,21 @@ export function startLanServer(options:{port?:number;host?:string;dataDir?:strin
 }
 if(process.argv[1]&&existsSync(process.argv[1])&&import.meta.url===pathToFileURL(realpathSync(process.argv[1])).href){const server=startLanServer({port:Number(process.env.LEARNING_LAN_PORT||5180)});server.on('listening',()=>console.log('Learning Space Wi-Fi server: http://localhost:'+(server.address() as {port:number}).port+' · Open Settings to pair your phone.'));server.on('error',e=>{console.error('Could not start Wi-Fi server:',e.message);process.exitCode=1;});}
 
-/** Fetch a shared link's title on the computer (X via public oEmbed, pages via <head>). */
+/** Fetch a shared link's title on the computer (X via public oEmbed, full long posts via fxtwitter, pages via <head>). */
 async function serverLinkPreview(value:string){
- const {previewRequest,parsePreview}=await import('../lib/link-preview.ts');const {lookup}=await import('node:dns/promises');
- const request=previewRequest(value);let target=request.endpoint;
- for(let hop=0;hop<4;hop++){
-  const u=new URL(target);if(!['http:','https:'].includes(u.protocol))return null;
-  const addresses=await lookup(u.hostname,{all:true});if(!addresses.length||addresses.some(a=>/^(?:::ffff:)?(?:10\.|192\.168\.|172\.(?:1[6-9]|2\d|3[01])\.|0\.)/.test(a.address)||a.address.startsWith('127.')||a.address==='::1'||a.address.startsWith('169.254.')||/^f[cd]/i.test(a.address)))return null;
-  const response=await fetch(target,{redirect:'manual',signal:AbortSignal.timeout(10000),headers:{'User-Agent':'Mozilla/5.0 LearningSpace','Accept':'text/html,application/json;q=0.9,*/*;q=0.5','Accept-Language':'en-US,en;q=0.9'}});
-  if(response.status>=300&&response.status<400){const next=response.headers.get('location');if(!next)return null;target=new URL(next,target).href;continue;}
-  if(!response.ok)return null;
-  const reader=response.body?.getReader();let text='';const decoder=new TextDecoder();
-  while(reader){const {done,value}=await reader.read();if(done)break;text+=decoder.decode(value,{stream:true});if(text.length>600000||/<\/head>/i.test(text)){await reader.cancel();break;}}
-  return parsePreview(request.kind,text,target);
- }
- return null;
+ const {previewRequest,resolvePreview}=await import('../lib/link-preview.ts');const {lookup}=await import('node:dns/promises');
+ return resolvePreview(previewRequest(value),async r=>{
+  let target=r.endpoint;
+  for(let hop=0;hop<4;hop++){
+   const u=new URL(target);if(!['http:','https:'].includes(u.protocol))return null;
+   const addresses=await lookup(u.hostname,{all:true});if(!addresses.length||addresses.some(a=>/^(?:::ffff:)?(?:10\.|192\.168\.|172\.(?:1[6-9]|2\d|3[01])\.|0\.|127\.|169\.254\.)/.test(a.address)||a.address==='::1'||/^f[cd]/i.test(a.address)))return null;
+   const response=await fetch(target,{redirect:'manual',signal:AbortSignal.timeout(10000),headers:{'User-Agent':'Mozilla/5.0 LearningSpace','Accept':'text/html,application/json;q=0.9,*/*;q=0.5','Accept-Language':'en-US,en;q=0.9'}});
+   if(response.status>=300&&response.status<400){const next=response.headers.get('location');if(!next)return null;target=new URL(next,target).href;continue;}
+   if(!response.ok)return null;
+   const reader=response.body?.getReader();let text='';const decoder=new TextDecoder();
+   while(reader){const {done,value}=await reader.read();if(done)break;text+=decoder.decode(value,{stream:true});if(text.length>600000||/<\/head>/i.test(text)){await reader.cancel();break;}}
+   return {text,url:target};
+  }
+  return null;
+ });
 }

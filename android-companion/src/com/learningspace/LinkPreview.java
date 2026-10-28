@@ -2,7 +2,8 @@ package com.learningspace;
 import java.io.*;import java.net.*;import org.json.*;
 /**
  * Fetches just enough of a shared link to name it: X posts through the public
- * oEmbed endpoint, other pages up to the end of <head>. No cookies or login;
+ * oEmbed endpoint (full text of long posts via api.fxtwitter.com), other pages
+ * up to the end of <head>. No cookies or login;
  * private-network addresses are refused. Parsing happens in the dashboard.
  */
 public final class LinkPreview {
@@ -16,7 +17,10 @@ public final class LinkPreview {
  static String endpoint(JSONObject j)throws Exception{
   String url=j.getString("url"),kind=j.getString("kind");
   if(url.length()>2000)throw new Exception("Link too long");
-  if(kind.equals("x")){if(!url.matches("https://x\\.com/(?:[A-Za-z0-9_]{1,15}|i/web)/status/\\d{5,25}"))throw new Exception("Invalid X link");return "https://publish.twitter.com/oembed?omit_script=1&dnt=true&url="+URLEncoder.encode(url,"UTF-8");}
+  if(kind.equals("x")||kind.equals("x-full")){java.util.regex.Matcher m=java.util.regex.Pattern.compile("https://x\\.com/([A-Za-z0-9_]{1,15}|i/web)/status/(\\d{5,25})").matcher(url);if(!m.matches())throw new Exception("Invalid X link");
+   // Long posts are cut off by oEmbed; the open FixTweet API returns their full public text.
+   if(kind.equals("x-full"))return "https://api.fxtwitter.com/"+(m.group(1).equals("i/web")?"i":m.group(1))+"/status/"+m.group(2);
+   return "https://publish.twitter.com/oembed?omit_script=1&dnt=true&url="+URLEncoder.encode(url,"UTF-8");}
   if(!kind.equals("page")||!url.matches("https?://.+"))throw new Exception("Invalid link");
   return url;
  }

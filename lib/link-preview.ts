@@ -6,7 +6,7 @@ import {nativeBridge,nativeRequest} from './local-store.ts';
  * happens on the phone or the computer server; parsing is shared and pure.
  */
 export type LinkPreview={title:string;excerpt:string;author:string;site:string};
-export type PreviewRequest={url:string;kind:'x'|'page';endpoint:string};
+export type PreviewRequest={url:string;kind:'x'|'x-full'|'page';endpoint:string};
 
 export function previewRequest(value:string):PreviewRequest{
  const link=readingLink(value);
@@ -45,15 +45,30 @@ export function parseHtmlPreview(html:string,url:string):LinkPreview|null{
  const site=meta(head,['og:site_name'])||new URL(url).hostname.replace(/^www\./,'');
  return {title:title.slice(0,250),excerpt:'',author:meta(head,['author','article:author']),site};
 }
-export function parsePreview(kind:PreviewRequest['kind'],body:string,url:string){return kind==='x'?parseXOembed(body,url):parseHtmlPreview(body,url);}
+/** Long X posts ("note tweets") come back cut off from oEmbed; this endpoint returns the whole text. */
+export function fullPostRequest(url:string):PreviewRequest|null{const m=url.match(/^https:\/\/x\.com\/([A-Za-z0-9_]{1,15}|i\/web)\/status\/(\d{5,25})$/);return m?{url,kind:'x-full',endpoint:`https://api.fxtwitter.com/${m[1]==='i/web'?'i':m[1]}/status/${m[2]}`}:null;}
+export const looksTruncated=(text:string)=>/(…|\.\.\.)\s*$/.test(text);
+export function parseFullPost(body:string):LinkPreview|null{
+ let data:{tweet?:{text?:unknown;author?:{name?:unknown;screen_name?:unknown}}};try{data=JSON.parse(body);}catch{return null;}
+ const t=data.tweet;if(!t||typeof t.text!=='string'||!t.text.trim())return null;
+ const text=t.text.replace(/\s*https?:\/\/t\.co\/\S+/g,'').trim(),handle=typeof t.author?.screen_name==='string'?t.author.screen_name:'',name=typeof t.author?.name==='string'?t.author.name:'';
+ return {title:`${handle?'@'+handle:name||'X'}: ${snippet(text)}`.slice(0,250),excerpt:text.slice(0,20000),author:name||'@'+handle,site:'X / Twitter'};
+}
+export function parsePreview(kind:PreviewRequest['kind'],body:string,url:string){return kind==='x'?parseXOembed(body,url):kind==='x-full'?parseFullPost(body):parseHtmlPreview(body,url);}
+/** Fetch with any transport, then upgrade a cut-off X post to its full text. */
+export async function resolvePreview(request:PreviewRequest,get:(r:PreviewRequest)=>Promise<{text:string;url?:string}|null>):Promise<LinkPreview|null>{
+ const first=await get(request).catch(()=>null);let preview=first?parsePreview(request.kind,first.text,first.url||request.url):null;
+ if(request.kind==='x'&&(!preview||looksTruncated(preview.excerpt))){const full=fullPostRequest(request.url);const second=full?await get(full).catch(()=>null):null;const better=second?parseFullPost(second.text):null;if(better)preview={...better,author:preview?.author||better.author};}
+ return preview;
+}
 
 /** Fetch a preview from the phone app or the computer server. Returns null when neither is available or the site refuses. */
 export async function fetchLinkPreview(value:string):Promise<LinkPreview|null>{
  let request:PreviewRequest;try{request=previewRequest(value);}catch{return null;}
  try{
   const bridge=nativeBridge() as unknown as {requestLinkPreview?:unknown}|undefined;
-  if(bridge?.requestLinkPreview){const r=await nativeRequest('requestLinkPreview',{url:request.url,kind:request.kind,endpoint:request.endpoint});if(!r.ok)return null;const d=await r.json() as {text?:string;url?:string};return typeof d.text==='string'?parsePreview(request.kind,d.text,d.url||request.url):null;}
-  if(typeof location!=='undefined'&&/^(localhost|127\.0\.0\.1|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/.test(location.hostname)){const r=await fetch('/api/link-preview',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:request.url}),signal:AbortSignal.timeout(12000)});if(!r.ok)return null;const d=await r.json() as LinkPreview;return typeof d.title==='string'?d:null;}
+  if(bridge?.requestLinkPreview)return await resolvePreview(request,async r=>{const res=await nativeRequest('requestLinkPreview',{url:r.url,kind:r.kind});if(!res.ok)return null;const d=await res.json() as {text?:string;url?:string};return typeof d.text==='string'?{text:d.text,url:d.url}:null;});
+  if(typeof location!=='undefined'&&/^(localhost|127\.0\.0\.1|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/.test(location.hostname)){const r=await fetch('/api/link-preview',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:request.url}),signal:AbortSignal.timeout(15000)});if(!r.ok)return null;const d=await r.json() as LinkPreview;return typeof d.title==='string'?d:null;}
  }catch{return null;}
  return null;
 }
