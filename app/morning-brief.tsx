@@ -35,8 +35,8 @@ export function useTodayBrief(state:LearningState,clock:Date):MorningBrief{
  return useMemo(()=>morningBrief(state,new Date()),[state,day]);
 }
 
-export function BriefCard({brief,onStart,onAsk,dismissible=false,variant='today'}:{brief:MorningBrief;onStart?:(rid:string,lid:string)=>void;onAsk?:(prompt:string)=>void;dismissible?:boolean;variant?:'today'|'coach'}){
- const [dismissedDay,setDismissedDay]=useState(()=>{try{return localStorage.getItem(DISMISSED)||'';}catch{return '';}}),[open,setOpen]=useState(variant==='coach');
+export function BriefCard({brief,onStart,onAsk,dismissible=false,variant='today',expanded=false}:{expanded?:boolean;brief:MorningBrief;onStart?:(rid:string,lid:string)=>void;onAsk?:(prompt:string)=>void;dismissible?:boolean;variant?:'today'|'coach'}){
+ const [dismissedDay,setDismissedDay]=useState(()=>{try{return localStorage.getItem(DISMISSED)||'';}catch{return '';}}),[open,setOpen]=useState(variant==='coach'||expanded);
  if(dismissible&&dismissedDay===brief.day)return null;
  return <section className={'brief-card brief-'+brief.tone+' brief-'+variant} aria-label="Morning brief">
   <div className="brief-top"><span className="brief-eyebrow"><Sparkles size={14}/>Morning brief</span><span className="brief-score" title="Momentum score: consistency this week, yesterday vs your goal, streak and recency">{brief.score}<small>{brief.label}</small></span>{dismissible&&<button className="brief-close" aria-label="Hide today’s brief" onClick={()=>{try{localStorage.setItem(DISMISSED,brief.day);}catch{/* ignore */}setDismissedDay(brief.day);}}><X size={16}/></button>}</div>

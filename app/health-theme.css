@@ -1,0 +1,126 @@
+/*
+ * Phone theme modelled on the Google Health (Fitbit) app redesign:
+ * Material 3 Expressive tonal colours, one accent per section, a coloured
+ * stats layer with a rounded sheet on top, a floating pill navigation bar
+ * with a separate coach button, and charts that animate in left to right.
+ * Loaded last; everything is scoped to the phone layout.
+ */
+html:root[data-phone=true]{
+ --h-surface:#f6f8fc;--h-sheet:#ffffff;--h-card:#eef1f7;--h-card-strong:#ffffff;--h-line:#dfe3eb;--h-ink:#1b1c20;--h-muted:#5c6170;
+ --h-pri:#0b57d0;--h-con:#d3e3fd;--h-onc:#041e49;--h-layer:#e5eefc;
+ --h-coach:#6b4fbb;--h-coach-con:#e9ddff;--h-coach-onc:#22005d;
+ --t-orange:#c25700;--t-purple:#6b4fbb;--t-teal:#00796b;--t-blue:#0b57d0;--t-pink:#b3265e;--t-green:#1b6c39;
+ --m-bg:var(--h-surface);--m-card:var(--h-sheet);--m-soft:var(--h-card);--m-line:var(--h-line);--m-ink:var(--h-ink);--m-muted:var(--h-muted);
+ --teal:var(--h-pri);--accent:var(--h-pri);--m-accent:var(--h-con);
+}
+html:root[data-phone=true][data-theme=dark]{
+ --h-surface:#111318;--h-sheet:#1a1c22;--h-card:#24272e;--h-card-strong:#2a2d35;--h-line:#353944;--h-ink:#e3e3e8;--h-muted:#a7acb9;
+ --h-pri:#a8c7fa;--h-con:#0842a0;--h-onc:#d3e3fd;--h-layer:#0f1f3a;
+ --h-coach:#d0bcff;--h-coach-con:#4f378b;--h-coach-onc:#e9ddff;
+ --t-orange:#ffb77a;--t-purple:#d0bcff;--t-teal:#80d4c8;--t-blue:#a8c7fa;--t-pink:#ffb1c8;--t-green:#8bd79f;
+}
+/* One accent per section, like Fitness = teal and Sleep = purple. */
+html:root[data-phone=true] .mobile-app[data-section=library]{--h-pri:#00696c;--h-con:#a6f0f1;--h-onc:#002021;--h-layer:#e0f5f5}
+html:root[data-phone=true] .mobile-app[data-section=inbox]{--h-pri:#1b6c39;--h-con:#b9f0c4;--h-onc:#00210c;--h-layer:#e3f5e8}
+html:root[data-phone=true] .mobile-app[data-section=coach]{--h-pri:var(--h-coach);--h-con:var(--h-coach-con);--h-onc:var(--h-coach-onc);--h-layer:#efe8ff}
+html:root[data-phone=true] .mobile-app[data-section=progress]{--h-pri:#8f4c00;--h-con:#ffdcbf;--h-onc:#2e1500;--h-layer:#fff0e2}
+html:root[data-phone=true][data-theme=dark] .mobile-app[data-section=library]{--h-pri:#80d4d6;--h-con:#004f52;--h-onc:#a6f0f1;--h-layer:#0c2829}
+html:root[data-phone=true][data-theme=dark] .mobile-app[data-section=inbox]{--h-pri:#8bd79f;--h-con:#005226;--h-onc:#b9f0c4;--h-layer:#0e2816}
+html:root[data-phone=true][data-theme=dark] .mobile-app[data-section=coach]{--h-layer:#21193a}
+html:root[data-phone=true][data-theme=dark] .mobile-app[data-section=progress]{--h-pri:#ffb77a;--h-con:#6d3900;--h-onc:#ffdcbf;--h-layer:#30200e}
+html:root[data-phone=true] .mobile-app{--teal:var(--h-pri);--accent:var(--h-pri);--m-accent:var(--h-con)}
+
+/* Primary actions use the section colour with readable text. */
+html:root[data-phone=true] .mobile-app .m-cta,html:root[data-phone=true] .mobile-app .m-next .m-play,html:root[data-phone=true] .mobile-app .brief-primary,html:root[data-phone=true] .mobile-app .m-page-head .m-icon.filled,html:root[data-phone=true] .mobile-app .studio-compose-box>button,html:root[data-phone=true] .mobile-app .m-badge{background:var(--h-pri);border-color:var(--h-pri);color:var(--h-sheet)}
+html:root[data-phone=true] .mobile-app .m-cta-secondary{background:var(--h-con);border-color:transparent;color:var(--h-onc)}
+html:root[data-phone=true] .mobile-app .m-coach .studio-message.user .studio-message-body{background:var(--h-pri);color:var(--h-sheet)}
+html:root[data-phone=true] .mobile-app .studio-mode button[aria-pressed=true],html:root[data-phone=true] .mobile-app .m-progress-tabs button[aria-pressed=true]{background:var(--h-con);color:var(--h-onc)}
+
+/* Coloured stats layer + rounded sheet (Today and Progress). */
+html:root[data-phone=true] .mobile-app:is([data-section=today],[data-section=progress]) .m-header,html:root[data-phone=true] .mobile-app:is([data-section=today],[data-section=progress]) .m-main{background:var(--h-layer);border-bottom-color:transparent}
+html:root[data-phone=true] .mobile-app:is([data-section=today],[data-section=progress]) .m-main{padding-bottom:0}
+html:root[data-phone=true] .m-layer{padding:0 0 30px}
+html:root[data-phone=true] .m-layer-slim{padding-bottom:22px}
+html:root[data-phone=true] .m-layer .m-page-head{margin-top:6px}
+html:root[data-phone=true] .m-layer .m-page-head .m-icon{background:color-mix(in srgb,var(--h-sheet) 70%,transparent);border-color:transparent}
+html:root[data-phone=true] .m-sheet{margin:0 calc(-1*var(--p-gap));padding:20px var(--p-gap) 130px;background:var(--h-surface);border-radius:28px 28px 0 0;min-height:60dvh;box-shadow:0 -1px 0 var(--h-line)}
+html:root[data-phone=true] .has-active-timer .m-sheet{padding-bottom:210px}
+html:root[data-phone=true] .m-sheet>.m-hero-actions{margin-top:0}
+html:root[data-phone=true] .m-sheet>.brief-card{margin-top:14px}
+
+/* Goal ring → M3E cookie with a check when the goal is met. */
+html:root[data-phone=true] .h-hero{display:flex;align-items:center;gap:18px;margin:2px 0 16px}
+html:root[data-phone=true] .h-hero strong{display:block;font-size:46px;line-height:1;font-weight:650;letter-spacing:-1.5px;color:var(--h-onc);font-variant-numeric:tabular-nums}
+html:root[data-phone=true][data-theme=dark] .h-hero strong{color:var(--h-ink)}
+html:root[data-phone=true] .h-hero strong span{font-size:17px;font-weight:500;letter-spacing:0;color:var(--h-muted)}
+html:root[data-phone=true] .h-hero p{margin-top:6px;font-size:14px;color:var(--h-muted)}
+.h-ring{position:relative;flex-shrink:0;display:grid;place-items:center}
+.h-ring>svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.h-ring-base{fill:none;stroke:color-mix(in srgb,var(--h-pri) 18%,transparent);stroke-width:11}
+.h-ring-fill{fill:none;stroke:var(--h-pri);stroke-width:11;stroke-linecap:round;transform:rotate(-90deg);transform-origin:60px 60px;transition:stroke-dasharray .6s cubic-bezier(.2,0,0,1)}
+.h-ring>span{position:relative;font-size:20px;font-weight:700;color:var(--h-ink);font-variant-numeric:tabular-nums}
+.h-ring>span small{font-size:12px;font-weight:600;margin-left:1px}
+.h-cookie{fill:var(--h-pri);transform-origin:60px 60px;animation:h-spin-in .7s cubic-bezier(.2,0,0,1)}
+.h-check{stroke:var(--h-sheet);stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:70;stroke-dashoffset:0;animation:h-draw .5s .3s both cubic-bezier(.2,0,0,1)}
+@keyframes h-spin-in{from{transform:rotate(-90deg) scale(.6);opacity:0}}
+@keyframes h-draw{from{stroke-dashoffset:70}}
+
+/* Stat tiles: numbers first, chosen by the learner. */
+html:root[data-phone=true] .h-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) 34px;gap:8px}
+html:root[data-phone=true] .h-tile{display:grid;grid-template-columns:auto 1fr;align-items:baseline;column-gap:4px;padding:12px;min-height:92px;border:0;border-radius:20px;background:var(--h-sheet);color:var(--h-ink);text-align:left;animation:h-rise .4s both cubic-bezier(.2,0,0,1)}
+html:root[data-phone=true] .h-tile>svg{grid-column:1/-1;margin-bottom:6px;color:var(--tone)}
+html:root[data-phone=true] .h-tile strong{font-size:22px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums;white-space:nowrap}
+html:root[data-phone=true] .h-tile small{font-size:11px;color:var(--h-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html:root[data-phone=true] .h-tile span{grid-column:1/-1;margin-top:4px;font-size:12px;font-weight:600;color:var(--h-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.h-tile.tone-orange{--tone:var(--t-orange)}.h-tile.tone-purple{--tone:var(--t-purple)}.h-tile.tone-teal{--tone:var(--t-teal)}.h-tile.tone-blue{--tone:var(--t-blue)}.h-tile.tone-pink{--tone:var(--t-pink)}.h-tile.tone-green{--tone:var(--t-green)}
+html:root[data-phone=true] .h-tiles-edit{display:grid;place-items:center;border:0;border-radius:17px;background:color-mix(in srgb,var(--h-sheet) 55%,transparent);color:var(--h-muted);min-height:44px}
+@keyframes h-rise{from{opacity:0;transform:translateY(8px)}}
+.h-tile-editor ol{list-style:none;padding:0;margin:0 0 6px;display:grid;gap:6px}
+.h-tile-editor li{display:flex;align-items:center;gap:6px;padding:6px 6px 6px 14px;border-radius:14px;background:var(--m-soft,var(--soft))}
+.h-tile-editor li span{flex:1;font-weight:600}
+.h-tile-options{display:flex;flex-wrap:wrap;gap:8px}
+.h-tile-options label{display:inline-flex!important;flex-direction:row!important;align-items:center;gap:6px;min-height:40px;margin:0!important;padding:0 14px;border-radius:12px;border:1px solid var(--m-line,var(--line));font-size:14px;cursor:pointer}
+.h-tile-options label.on{background:var(--m-accent,var(--soft));border-color:transparent}
+.h-tile-options input{position:absolute;opacity:0;width:1px;height:1px}
+
+/* Progress chart with a floating time-range toolbar. */
+html:root[data-phone=true] .h-chart{background:var(--h-sheet);border:1px solid var(--h-line);border-radius:24px;padding:16px 16px 12px;margin:0 0 12px}
+html:root[data-phone=true] .h-chart-head span{font-size:13px;font-weight:600;color:var(--h-muted)}
+html:root[data-phone=true] .h-chart-head strong{display:block;font-size:32px;font-weight:700;letter-spacing:-.8px;margin:2px 0}
+html:root[data-phone=true] .h-chart-head small{font-size:12px;color:var(--h-muted)}
+.h-bars{position:relative;display:flex;align-items:stretch;gap:6px;height:170px;margin-top:16px}
+.h-bars.r-M{gap:2px}
+.h-bars>div{flex:1;display:flex;flex-direction:column;min-width:0}
+.h-bars>div>span{flex:1;display:flex;align-items:flex-end;border-radius:8px;background:color-mix(in srgb,var(--h-pri) 8%,transparent)}
+.h-bars.r-M>div>span{border-radius:3px}
+.h-bars i{display:block;width:100%;border-radius:8px;background:color-mix(in srgb,var(--h-pri) 60%,var(--h-sheet));transform-origin:bottom;animation:h-grow .5s both cubic-bezier(.2,0,0,1)}
+.h-bars.r-M i{border-radius:3px}
+.h-bars i.current{background:var(--h-pri)}
+.h-bars small{height:18px;margin-top:6px;font-size:11px;text-align:center;color:var(--h-muted);white-space:nowrap;overflow:visible}
+.h-goal-line{position:absolute;left:0;right:0;height:0;border-top:1.5px dashed color-mix(in srgb,var(--h-pri) 70%,transparent);pointer-events:none;z-index:1}
+.h-goal-line b{position:absolute;right:0;top:-18px;font-size:10px;font-weight:600;color:var(--h-pri)}
+@keyframes h-grow{from{transform:scaleY(0)}}
+.h-range{display:flex;gap:4px;width:fit-content;margin:14px auto 2px;padding:4px;border-radius:99px;background:var(--h-card);box-shadow:0 2px 8px rgb(0 0 0/.08)}
+.h-range button{min-width:48px;min-height:38px;border:0;border-radius:99px;background:transparent;color:var(--h-muted);font-size:13px;font-weight:700;cursor:pointer}
+.h-range button[aria-pressed=true]{background:var(--h-pri);color:var(--h-sheet)}
+
+/* Floating pill navigation + coach button. */
+html:root[data-phone=true] .m-dock{position:fixed;z-index:30;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom,0px));max-width:576px;margin:0 auto;display:flex;align-items:center;gap:10px;pointer-events:none}
+html:root[data-phone=true] .m-dock>*{pointer-events:auto}
+html:root[data-phone=true] .m-dock .m-bottom-nav{position:static;transform:none;left:auto;width:auto;max-width:none;flex:1;min-width:0;min-height:0;padding:6px;border:0;border-radius:34px;background:var(--h-card-strong);box-shadow:0 6px 24px rgb(0 0 0/.16),0 0 0 1px var(--h-line)}
+html:root[data-phone=true] .m-dock .m-bottom-nav>button{min-height:56px;gap:2px;font-size:11px!important;color:var(--h-muted)}
+html:root[data-phone=true] .m-dock .m-bottom-nav>button>span{width:56px;height:30px;border-radius:99px;transition:background .25s cubic-bezier(.2,0,0,1)}
+html:root[data-phone=true] .m-dock .m-bottom-nav>button.active{color:var(--h-ink)}
+html:root[data-phone=true] .m-dock .m-bottom-nav>button.active>span{background:var(--h-con);color:var(--h-onc)}
+html:root[data-phone=true] .m-coach-fab{flex:0 0 64px;width:64px;height:64px;display:grid;place-items:center;border:0;border-radius:22px;background:var(--h-coach-con);color:var(--h-coach-onc);box-shadow:0 6px 20px rgb(0 0 0/.2);transition:border-radius .3s cubic-bezier(.2,0,0,1),transform .2s}
+html:root[data-phone=true] .m-coach-fab.active{background:var(--h-coach);color:var(--h-sheet);border-radius:32px}
+html:root[data-phone=true] .m-coach-fab:active{transform:scale(.94)}
+html:root[data-phone=true] .active-focus{bottom:calc(88px + env(safe-area-inset-bottom,0px))}
+html:root[data-phone=true] .m-main.m-coach{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+html:root[data-phone=true] .has-active-timer .m-main.m-coach{padding-bottom:calc(158px + env(safe-area-inset-bottom,0px))}
+
+/* Softer, rounder cards everywhere (Expressive shapes). */
+html:root[data-phone=true] .m-next,html:root[data-phone=true] .m-empty-card,html:root[data-phone=true] .m-main .todo-panel,html:root[data-phone=true] .m-stat-pair>div,html:root[data-phone=true] .m-add-grid>button,html:root[data-phone=true] .m-link-row{border-radius:24px}
+html:root[data-phone=true] .m-next{background:var(--h-sheet);border-color:var(--h-line)}
+html:root[data-phone=true] .brief-card{--b1:var(--h-pri);--paper:var(--h-sheet)}
+@media (prefers-reduced-motion:reduce){.h-tile,.h-bars i,.h-cookie,.h-check{animation:none}}
