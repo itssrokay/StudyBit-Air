@@ -6,6 +6,7 @@ import "./product.css";
 import "./time-log.css";
 import "./phone.css";
 import "./coach.css";
+import "./brief.css";
 import {themeBootstrap} from "../lib/theme";
 
 export const metadata: Metadata = {

@@ -52,7 +52,7 @@ html:root[data-theme] .studio-orbit{width:80px;height:80px;position:relative;bor
 html:root[data-theme] .studio-orbit svg{transform:rotate(8deg)}
 html:root[data-theme] .studio-orbit span{position:absolute;right:-7px;top:7px;width:10px;height:10px;border-radius:50%;background:#d9b672;border:3px solid var(--paper)}
 html:root[data-theme] .studio-welcome>.new-eyebrow{font-size:9px;letter-spacing:1.6px}
-html:root[data-theme] .studio-welcome h2{font-size:clamp(25px,3vw,34px);line-height:1.25;letter-spacing:-1px;font-weight:550;margin:12px 0}
+html:root[data-theme] .studio-welcome>h2{font-size:clamp(25px,3vw,34px);line-height:1.25;letter-spacing:-1px;font-weight:550;margin:12px 0}
 html:root[data-theme] .studio-welcome>p{color:var(--muted);font-size:13px;line-height:1.8;max-width:340px;margin:0 auto}
 html:root[data-theme] .studio-starters{display:grid;gap:8px;margin:25px auto 10px;max-width:360px}
 html:root[data-theme] .studio-starters>button{display:flex;align-items:center;justify-content:space-between;text-align:left;gap:10px;padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font-size:12px;transition:background .15s,transform .15s}
@@ -203,7 +203,7 @@ html:root[data-theme] .balance-privacy{display:block;margin-top:18px;font-size:1
  html:root[data-theme] .studio-orbit{width:61px;height:61px;border-radius:21px;margin-bottom:23px}
  html:root[data-theme] .studio-orbit svg{width:27px}
  html:root[data-theme] .studio-welcome>.new-eyebrow{font-size:7px;letter-spacing:1.1px}
- html:root[data-theme] .studio-welcome h2{font-size:26px;margin:12px 0}
+ html:root[data-theme] .studio-welcome>h2{font-size:26px;margin:12px 0}
  html:root[data-theme] .studio-welcome>p{font-size:11px;line-height:1.8;max-width:235px}
  html:root[data-theme] .studio-starters{margin-top:23px;gap:7px}
  html:root[data-theme] .studio-starters>button{padding:12px;font-size:11px}
@@ -246,7 +246,7 @@ html:root[data-theme] .balance-week-row strong{font-weight:500;font-size:11px}
  html:root[data-theme] .m-coach .studio-chat{height:calc(100dvh - 310px);min-height:320px}
  html:root[data-theme] .m-coach .studio-orbit{display:none}
  html:root[data-theme] .m-coach .studio-welcome{margin:4px 0 14px}
- html:root[data-theme] .m-coach .studio-welcome h2{font-size:25px;margin:11px 0}
+ html:root[data-theme] .m-coach .studio-welcome>h2{font-size:25px;margin:11px 0}
  html:root[data-theme] .m-coach .studio-starters{margin-top:18px}
 }
 

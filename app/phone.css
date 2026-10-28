@@ -132,7 +132,7 @@ html:root[data-phone=true] .m-goal-row{padding:12px 0}
 /* Coach welcome */
 html:root[data-phone=true] .studio-welcome{margin:6px auto 14px}
 html:root[data-phone=true] .studio-welcome .studio-orbit{display:none}
-html:root[data-phone=true] .studio-welcome h2{font-size:22px!important;letter-spacing:-.4px;margin:4px 0 8px}
+html:root[data-phone=true] .studio-welcome>h2{font-size:22px!important;letter-spacing:-.4px;margin:4px 0 8px}
 html:root[data-phone=true] .studio-welcome>p{font-size:13px;line-height:1.6}
 
 /* Inbox */

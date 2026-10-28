@@ -6,6 +6,7 @@ import {WorkspaceSwitch} from './capture-inbox';
 import type {Workspace} from '../lib/spaces';
 import {useEffect,useState,type ReactNode} from 'react';
 import {useStudyTimer} from './use-study-timer';
+import {BriefCard,useTodayBrief} from './morning-brief';
 import {ArrowLeft,ArrowRight,BookOpen,Check,ChevronRight,Clock3,Flame,Headphones,Layers,MoreHorizontal,Play,Plus,Search,Settings,Sparkles,Target,TrendingUp,X,Home,StickyNote,Compass,Inbox,Share2,Pencil,FileText,Upload,Link2,Timer} from 'lucide-react';
 import {dailyBudget,dailyPlan,doneMinutes,progress,rankResource,type LearningState,type Resource} from '../lib/learning';
 import {coachActivity} from '../lib/coach';
@@ -19,6 +20,7 @@ export default function MobileApp(p:Props){
  useEffect(()=>{setFilter('all');setQuery('');setArea('');},[p.workspace]);
  const timer=useStudyTimer(false).timer,quickTimer=timer?.resourceId==='quick-log-'+p.workspace;
  const waiting=state.inbox.filter(i=>i.status==='inbox').length;
+ const brief=useTodayBrief(state,now);
  const plan=dailyPlan(state,now),first=plan[0],minutes=doneMinutes(state,now),budget=dailyBudget(state,now),habit=streaks(state,now),activity=coachActivity(state,now);
  const resources=state.resources.filter(r=>filter==='archived'?r.archived:!r.archived).filter(r=>(filter==='all'||filter==='archived'||r.kind===filter)&&(!area||r.folderPath===area||r.folderPath.startsWith(area+'/'))&&(!query||[r.title,r.provider,r.folderPath,...r.lessons.map(l=>l.title)].join(' ').toLowerCase().includes(query.toLowerCase()))).sort((a,b)=>rankResource(b,state,now)-rankResource(a,state,now));
  const review=(s:StudySession)=><SessionReviewCard key={s.id} session={s} state={state} connected={p.connected} update={p.update} onDiscuss={p.onDiscuss} onSettings={()=>go('settings')} notify={p.notify}/>;
@@ -28,6 +30,7 @@ export default function MobileApp(p:Props){
  {page==='inbox'&&p.inbox}
  {page==='today'&&<>
  <div className="m-page-head"><div><p>{new Intl.DateTimeFormat('en',{timeZone:state.settings.timezone,weekday:'long',month:'short',day:'numeric'}).format(now)}</p><h1>{p.workspace==='work'?'Work learning':'Today'}</h1></div><button className="m-icon" aria-label="Share my day" onClick={p.onShare}><Share2 size={19}/></button></div>
+ <BriefCard brief={brief} dismissible onStart={p.onStart} onAsk={prompt=>p.onAsk(prompt)}/>
  <section className="m-hero">
   <div className="m-hero-top"><div className="m-hero-copy"><div className="m-minutes">{minutes}<span> / {budget} min</span></div><p>{minutes>=budget?'Daily goal reached. Nice work.':minutes?`${Math.max(0,budget-minutes)} min to your daily goal`:'Nothing logged yet today'}</p><button className="m-streak" onClick={()=>go('activity')}><Flame size={15}/>{habit.current} day streak<ChevronRight size={14}/></button></div>
    <div className="m-dial" role="img" aria-label={`${minutes} of ${budget} minutes logged`}><svg viewBox="0 0 120 120"><circle className="dial-base" cx="60" cy="60" r="49"/><circle className="dial-fill" cx="60" cy="60" r="49" pathLength="100" style={{opacity:minutes?1:0}} strokeDasharray={`${Math.min(100,minutes/budget*100)} 100`}/></svg><span><strong>{Math.min(100,Math.round(minutes/Math.max(1,budget)*100))}%</strong></span></div></div>
@@ -39,7 +42,6 @@ export default function MobileApp(p:Props){
  {state.coach.sessions[0]&&<section className="m-section"><div className="m-section-heading"><h2>Last session</h2><button onClick={()=>go('coach')}>All reviews<ArrowRight size={15}/></button></div>{review(state.coach.sessions[0])}</section>}
  <TodoPanel state={state} now={now} update={p.update} notify={p.notify} compact onManage={()=>go('goals')}/>
  {state.resources.some(r=>!r.archived&&progress(r)>0&&progress(r)<100)&&<section className="m-section"><div className="m-section-heading"><h2>Continue</h2><button onClick={()=>go('library')}>Library<ArrowRight size={15}/></button></div><div className="m-course-list">{state.resources.filter(r=>!r.archived&&progress(r)>0&&progress(r)<100).slice(0,3).map(course)}</div></section>}
- <button className="m-link-row" onClick={()=>p.onAsk('Is today’s plan the best use of my time? Be honest about what I should prioritize.')}><Sparkles size={19}/>Ask the coach about today’s plan<ChevronRight size={17}/></button>
  </>}
  {page==='library'&&<><div className="m-page-head"><div><p>{resources.length} item{resources.length===1?'':'s'}</p><h1>Library</h1></div><button className="m-icon filled" aria-label="Add learning material" onClick={p.onAdd}><Plus/></button></div>
  <label className="m-search"><Search size={19}/><input aria-label="Search your library" placeholder="Search courses, books, lessons" value={query} onChange={e=>setQuery(e.target.value)}/>{query&&<button aria-label="Clear search" onClick={()=>setQuery('')}><X size={18}/></button>}</label>

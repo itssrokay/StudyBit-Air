@@ -1,0 +1,27 @@
+/* Morning brief: a highlight card in the style of a readiness notification. */
+.brief-card{--b1:var(--teal);--b2:#4fb3a9;position:relative;overflow:hidden;border-radius:24px;padding:18px 18px 16px;border:1px solid color-mix(in srgb,var(--b1) 30%,var(--line));background:linear-gradient(140deg,color-mix(in srgb,var(--b1) 22%,var(--paper)) 0%,color-mix(in srgb,var(--b2) 12%,var(--paper)) 100%);color:var(--ink)}
+.brief-card::after{content:"";position:absolute;inset:auto -40px -60px auto;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--b2) 30%,transparent),transparent 70%);pointer-events:none}
+.brief-card.brief-low,.brief-card.brief-building{--b2:#e0a46b}
+.brief-card.brief-high{--b2:#5cc49a}
+.brief-top{display:flex;align-items:center;gap:10px;position:relative;z-index:1}
+.brief-eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:650;letter-spacing:.02em;color:var(--b1)}
+.brief-score{margin-left:auto;display:inline-flex;align-items:baseline;gap:6px;padding:4px 10px;border-radius:99px;background:color-mix(in srgb,var(--paper) 70%,transparent);border:1px solid color-mix(in srgb,var(--b1) 25%,var(--line));font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+.brief-score small{font-size:11px;font-weight:600;color:var(--muted)}
+.brief-close{display:grid;place-items:center;width:32px;height:32px;margin-right:-6px;border:0;border-radius:50%;background:transparent;color:var(--muted);cursor:pointer}
+.brief-card h2{position:relative;z-index:1;margin:12px 0 8px;font-size:20px;line-height:1.3;font-weight:650;letter-spacing:-.3px;text-wrap:balance}
+.brief-card>p{position:relative;z-index:1;margin:0;font-size:14px;line-height:1.6;color:color-mix(in srgb,var(--ink) 82%,transparent)}
+.brief-actions{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.brief-actions button{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:0 16px;border-radius:14px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
+.brief-primary{background:var(--b1);border:1px solid var(--b1);color:#fff}
+html:root[data-theme=dark] .brief-primary{color:#1a1733}
+.brief-secondary{background:color-mix(in srgb,var(--paper) 75%,transparent);border:1px solid color-mix(in srgb,var(--b1) 25%,var(--line));color:var(--ink)}
+.brief-coach{text-align:left;margin:18px 0 4px}
+.brief-coach h2{font-size:18px}
+.brief-settings input[type=time]{max-width:160px}
+.brief-settings .secondary{display:inline-flex;align-items:center;gap:8px;width:fit-content}
+html:root[data-phone=true] .brief-card{--paper:var(--m-card);--ink:var(--m-ink);--muted:var(--m-muted);--line:var(--m-line);margin:0 0 14px}
+html:root[data-phone=true] .brief-actions button{flex:1}
+@media (prefers-reduced-motion:no-preference){.brief-card{animation:brief-in .35s ease-out}@keyframes brief-in{from{opacity:0;transform:translateY(6px)}}}
+.brief-clamp{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.brief-more{position:relative;z-index:1;border:0;background:none;padding:6px 0 0;min-height:32px;color:var(--b1);font-size:13px;font-weight:600;cursor:pointer}
+html:root[data-phone=true] .brief-actions button{flex:1 1 0;min-width:0;padding:0 10px}
