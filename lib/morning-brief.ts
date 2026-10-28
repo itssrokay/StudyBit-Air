@@ -63,7 +63,8 @@ export function morningBrief(state:LearningState,now=new Date()):MorningBrief{
  const reward=state.rewards.filter(r=>!r.redeemedAt).map(r=>({r,p:rewardProgress(state,r,now,habit.minutes)})).filter(x=>!x.p.eligible).map(x=>({...x,left:x.r.targetDays-x.p.value})).filter(x=>x.left>0&&x.left<=3).sort((a,b)=>a.left-b.left)[0];
  const todosDue=state.todos.filter(t=>!t.doneAt&&t.dueDay&&t.dueDay<=today).length;
  const inbox=state.inbox.filter(i=>i.status==='inbox').length;
- const nudge=due?`${due.r.title} is due ${due.days===0?'today':due.days===1?'tomorrow':`in ${due.days} days`}, with ${plural(due.r.lessons.filter(l=>!l.done).length,'lesson')} left.`
+ const when=(d:number)=>d===0?'today':d===1?'tomorrow':`in ${d} days`;
+ const nudge=due?(due.r.kind==='article'?`Read ASAP: “${short(due.r.title,60)}” is due ${when(due.days)}.`:`${due.r.title} is due ${when(due.days)}, with ${plural(due.r.lessons.filter(l=>!l.done).length,'lesson')} left.`)
   :reward?`Your reward “${reward.r.title}” is ${plural(reward.left,reward.r.metric==='streak'?'streak day':'learning day')} away.`
   :todosDue?`${plural(todosDue,'to-do')} ${todosDue===1?'is':'are'} due today.`
   :inbox>=3?`${plural(inbox,'capture')} ${inbox===1?'is':'are'} waiting in your inbox.`:'';

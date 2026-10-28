@@ -28,9 +28,25 @@ export function readingCategories(resources:Resource[]){
 }
 /** A gentle first guess from the post text; the learner can always change it. */
 export function suggestCategory(text:string){let best='',score=0;for(const [name,re] of Object.entries(HINTS)){const n=(text.match(new RegExp(re.source,'gi'))||[]).length;if(n>score){best=name;score=n;}}return best;}
-/** "Read ASAP" = the reading is pinned to the top of today's plan and marked essential. */
-export const isAsap=(r:Resource)=>r.kind==='article'&&r.lessons.some(l=>!l.done&&l.pinned);
-export function setAsap(r:Resource,on:boolean):Resource{
- const target=r.lessons.find(l=>!l.done)?.id;
- return {...r,priority:on?5:r.priority===5?3:r.priority,lessons:r.lessons.map(l=>({...l,pinned:on?l.id===target||l.pinned&&!l.done:false}))};
+/** "Read ASAP" = must be read by the end of this week. Stored as the reading's deadline
+ *  (end of the coming Sunday), so it climbs the plan as the week runs out instead of
+ *  taking over today. Older builds pinned the lesson instead; that still counts. */
+const DAY=86400000;
+function localDay(now:Date,timezone:string){return new Intl.DateTimeFormat('en-CA',{timeZone:timezone,year:'numeric',month:'2-digit',day:'2-digit'}).format(now);}
+export function weekDeadline(timezone:string,now=new Date()){
+ const today=localDay(now,timezone),dow=new Date(today+'T12:00:00Z').getUTCDay();// 0 = Sunday
+ let ahead=(7-dow)%7;if(ahead<2)ahead+=7;// Marked on Sat/Sun: give it next week
+ return new Date(Date.parse(today+'T12:00:00Z')+ahead*DAY).toISOString().slice(0,10);
+}
+export const isAsap=(r:Resource)=>r.kind==='article'&&r.lessons.some(l=>!l.done)&&(!!r.deadline||r.lessons.some(l=>!l.done&&l.pinned));
+export function setAsap(r:Resource,on:boolean,timezone='UTC',now=new Date()):Resource{
+ return {...r,deadline:on?(r.deadline||weekDeadline(timezone,now)):'',priority:on?5:r.priority===5?3:r.priority,lessons:r.lessons.map(l=>({...l,pinned:false}))};
+}
+export const dayLabel=(day:string)=>new Intl.DateTimeFormat('en',{weekday:'short',month:'short',day:'numeric',timeZone:'UTC'}).format(new Date(day+'T12:00:00Z'));
+/** "Read by Sun, Nov 1", "Due today", "Overdue by 2 days". */
+export function asapDue(r:Resource,timezone:string,now=new Date()){
+ if(!r.deadline)return 'Read this week';
+ const days=Math.round((Date.parse(r.deadline+'T12:00:00Z')-Date.parse(localDay(now,timezone)+'T12:00:00Z'))/DAY);
+ if(days<0)return `Overdue by ${days===-1?'1 day':-days+' days'}`;if(days===0)return 'Due today';if(days===1)return 'Due tomorrow';
+ return 'Read by '+new Intl.DateTimeFormat('en',{weekday:'short',month:'short',day:'numeric',timeZone:'UTC'}).format(new Date(r.deadline+'T12:00:00Z'));
 }

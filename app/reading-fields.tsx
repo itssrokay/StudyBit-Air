@@ -16,6 +16,6 @@ export function CategoryPicker({value,onChange,categories,suggested=''}:{value:s
  </div>;
 }
 
-export function AsapToggle({checked,onChange}:{checked:boolean;onChange:(v:boolean)=>void}){
- return <label className={'rf-asap'+(checked?' on':'')}><input type="checkbox" checked={checked} onChange={e=>onChange(e.target.checked)}/><span className="rf-asap-icon"><Zap size={17} fill={checked?'currentColor':'none'}/></span><span><strong>Read ASAP</strong><small>Puts it at the top of today’s plan</small></span><i aria-hidden="true"/></label>;
+export function AsapToggle({checked,onChange,due}:{checked:boolean;onChange:(v:boolean)=>void;due?:string}){
+ return <label className={'rf-asap'+(checked?' on':'')}><input type="checkbox" checked={checked} onChange={e=>onChange(e.target.checked)}/><span className="rf-asap-icon"><Zap size={17} fill={checked?'currentColor':'none'}/></span><span><strong>Read ASAP</strong><small>{due?`Must read by ${due}`:'Must read by the end of this week'}</small></span><i aria-hidden="true"/></label>;
 }

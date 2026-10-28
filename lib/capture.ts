@@ -30,6 +30,6 @@ export function saveSharedReading(state:LearningState,input:{id:string;text:stri
  const next=captureInbox(state,input.text,input.workspace,'shared',input.id,now);
  const existing=state.resources.find(r=>r.workspace===input.workspace&&r.kind==='article'&&r.url===link.url);
  const resource=existing?null:makeReading({url:link.url,title:input.title.trim()||link.title,excerpt,minutes:excerpt?readingMinutes(excerpt):5,goalId:input.workspace==='work'?state.settings.workFocusGoal:state.settings.focusGoal,priority:3,folderPath:normalizePath(input.category||'')});
- const tune=(r:typeof resource&{})=>input.asap===undefined?r:setAsap(r,input.asap);
+ const tune=(r:typeof resource&{})=>input.asap===undefined?r:setAsap(r,input.asap,state.settings.timezone,now);
  return {...next,inbox:next.inbox.map(i=>i.id===input.id?{...i,status:'filed'}:i),resources:resource?[tune({...resource,workspace:input.workspace}),...state.resources]:state.resources.map(r=>r.id===existing?.id?tune({...r,archived:false,folderPath:input.category?normalizePath(input.category):r.folderPath,title:input.title.trim()||r.title}):r)};
 }
