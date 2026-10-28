@@ -10,6 +10,7 @@ import "./brief.css";
 import "./health-theme.css";
 import "./reading-list.css";
 import "./week.css";
+import "./hero.css";
 import {themeBootstrap} from "../lib/theme";
 
 export const metadata: Metadata = {

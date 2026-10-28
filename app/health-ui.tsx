@@ -1,6 +1,6 @@
 'use client';
 import {useState} from 'react';
-import {Flame,Gauge,CalendarCheck,Clock3,Smartphone,Inbox,Trophy,SlidersHorizontal,ChevronUp,ChevronDown,Check} from 'lucide-react';
+import {Timer,Flame,Gauge,CalendarCheck,Clock3,Smartphone,Inbox,Trophy,SlidersHorizontal,ChevronUp,ChevronDown,Check} from 'lucide-react';
 import ModalFrame from './modal';
 import type {LearningState} from '../lib/learning';
 import {progressSeries,type ProgressRange} from '../lib/progress-series';
@@ -18,14 +18,15 @@ export function GoalRing({minutes,goal,size=96}:{minutes:number;goal:number;size
  </div>;
 }
 
-export type TileId='streak'|'momentum'|'week'|'minutes7'|'screen'|'inbox'|'best';
-const TILE_KEY='learning-space-tiles-v1',DEFAULT_TILES:TileId[]=['streak','momentum','week'];
-const TILE_NAMES:Record<TileId,string>={streak:'Streak',momentum:'Momentum score',week:'Active days this week',minutes7:'Minutes, last 7 days',screen:'Screen time yesterday',inbox:'Inbox captures',best:'Best streak'};
+export type TileId='today'|'streak'|'momentum'|'week'|'minutes7'|'screen'|'inbox'|'best';
+const TILE_KEY='learning-space-tiles-v1',DEFAULT_TILES:TileId[]=['today','streak','momentum'];
+export const TILE_NAMES:Record<TileId,string>={today:'Learning today',streak:'Streak',momentum:'Momentum score',week:'Active days this week',minutes7:'Minutes, last 7 days',screen:'Screen time yesterday',inbox:'Inbox captures',best:'Best streak'};
 export function readTiles():TileId[]{try{const v=JSON.parse(localStorage.getItem(TILE_KEY)||'null');if(Array.isArray(v)&&v.every(t=>t in TILE_NAMES))return v.slice(0,3);}catch{/* defaults */}return DEFAULT_TILES;}
 
-type TileData={streak:number;best:number;daysWeek:number;weeklyDays:number;minutesWeek:number;screen:number|null;inbox:number;brief:MorningBrief};
-function tile(id:TileId,d:TileData){
+export type TileData={today:number;goal:number;streak:number;best:number;daysWeek:number;weeklyDays:number;minutesWeek:number;screen:number|null;inbox:number;brief:MorningBrief};
+export function tile(id:TileId,d:TileData){
  switch(id){
+  case 'today':return {icon:Timer,label:'Today',value:String(d.today),unit:`of ${d.goal} min`,tone:'blue'};
   case 'streak':return {icon:Flame,label:'Streak',value:String(d.streak),unit:d.streak===1?'day':'days',tone:'orange'};
   case 'momentum':return {icon:Gauge,label:'Momentum',value:String(d.brief.score),unit:d.brief.label.replace(' momentum',''),tone:'purple'};
   case 'week':return {icon:CalendarCheck,label:'This week',value:`${d.daysWeek}/${d.weeklyDays}`,unit:'days',tone:'teal'};
