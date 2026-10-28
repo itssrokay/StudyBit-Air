@@ -2,6 +2,8 @@ import {dailyPlan,dayKey,progress,type LearningState} from './learning.ts';
 import {streaks} from './habits.ts';
 import {liveStudyLogs} from './activity.ts';
 import {rewardProgress} from './milestones.ts';
+import {currentPlan,planProgress} from './weekly-plan.ts';
+import {voiceLine,type Tone} from './coach-voice.ts';
 
 /**
  * A short, data-backed morning note in the style of a fitness readiness brief:
@@ -70,7 +72,10 @@ export function morningBrief(state:LearningState,now=new Date()):MorningBrief{
   :inbox>=3?`${plural(inbox,'capture')} ${inbox===1?'is':'are'} waiting in your inbox.`:'';
 
  const lesson=action?short(action.title):'';
- const headline=!action&&!lastActive?'Set up your first learning session today'
+ const brutal=state.coach.tone==='brutal';
+ const plan=currentPlan(state,now),week=plan?planProgress(state,plan):null,daysLeftInWeek=7-((weekday(today)+6)%7);
+ const headline=brutal&&tone==='low'&&lastActive?`Momentum ${score}. Today is a rescue mission`
+  :!action&&!lastActive?'Set up your first learning session today'
   :due&&due.days<=3?`${short(due.r.title,34)} is due ${due.days===0?'today':due.days===1?'tomorrow':`in ${due.days} days`}. Make today count`
   :tone==='high'&&action?`High momentum sets up today for ${lesson}`
   :streak>=2?`Keep your ${streak}-day streak going today`
@@ -83,7 +88,9 @@ export function morningBrief(state:LearningState,now=new Date()):MorningBrief{
   :yesterday>0?`, with ${briefDuration(yesterday)} of your ${goal}-minute goal yesterday`
   :`, but nothing was logged yesterday`;
  const facts=[`Your momentum score is ${score}: you learned on ${activeDays} of ${target} target days this week${yClause}.`];
- if(screen>=30)facts.push(yesterday>0&&screen>=yesterday*2?`Phone time was ${briefDuration(screen)} yesterday, ${Math.round(screen/yesterday)}× your learning time.`:yesterday>0?`Phone time was ${briefDuration(screen)} yesterday.`:`Phone time was ${briefDuration(screen)} yesterday, with no learning logged.`);
+ const roast=voiceLine(state.coach.tone as Tone,{yesterday,goal,screen:screen>=30?screen:null,score},today);if(roast)facts.push(roast);
+ if(week&&plan)facts.push(`This week (“${short(plan.title,50)}”): ${week.pct}% of your plan done, ${daysLeftInWeek} day${daysLeftInWeek===1?'':'s'} left.`);
+ if(screen>=30&&!roast)facts.push(yesterday>0&&screen>=yesterday*2?`Phone time was ${briefDuration(screen)} yesterday, ${Math.round(screen/yesterday)}× your learning time.`:yesterday>0?`Phone time was ${briefDuration(screen)} yesterday.`:`Phone time was ${briefDuration(screen)} yesterday, with no learning logged.`);
  facts.push(action?`Today is a good chance to do “${action.title}” (${action.minutes} min) in ${action.course}${firstOnCourse&&!firstOfWeek?', your first session on it this week':firstOfWeek?', your first session of the week':''}.`:'Add a course, book or topic so your coach can plan the next step.');
  if(nudge)facts.push(nudge);
  const body=facts.join(' ');

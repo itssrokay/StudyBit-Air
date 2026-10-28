@@ -9,6 +9,7 @@ import "./coach.css";
 import "./brief.css";
 import "./health-theme.css";
 import "./reading-list.css";
+import "./week.css";
 import {themeBootstrap} from "../lib/theme";
 
 export const metadata: Metadata = {
