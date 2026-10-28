@@ -1,6 +1,7 @@
 'use client';
 import {useMemo,useRef,useState,type PointerEvent as RPointerEvent} from 'react';
-import {Sparkles,Plus,History,Flag,ChevronDown,ChevronUp,GripVertical,Share2,Send,Check,Loader2,ArrowRight,Lightbulb,X,RotateCcw,Minus} from 'lucide-react';
+import {Sparkles,Plus,History,Flag,ChevronDown,ChevronUp,GripVertical,Share2,Send,Check,Loader2,ArrowRight,Lightbulb,X,RotateCcw,Minus,CalendarClock} from 'lucide-react';
+import {goalForecast,forecastLine} from '../lib/forecast';
 import ModalFrame from './modal';
 import {progress,rankResource,dayKey,type LearningState} from '../lib/learning';
 import {planProgress,weekLabel,buildRulePlan,fmtMinutes,weekStartOf,type WeeklyPlan,type WeekAnswers} from '../lib/weekly-plan';
@@ -17,11 +18,12 @@ const endLabel=(start:string)=>weekLabel(new Date(Date.parse(start+'T12:00:00Z')
 export function WeekCard({state,plan,onPlan,onChange,onLog,onHistory,onGoals,full=false}:{state:LearningState;plan:WeeklyPlan|null;onPlan:()=>void;onChange:()=>void;onLog:()=>void;onHistory:()=>void;onGoals:()=>void;full?:boolean}){
  const [more,setMore]=useState(full);
  if(!plan)return <section className="wk-empty"><div className="wk-empty-icon"><Flag size={20}/></div><div><strong>Coaching is tailored to your goals</strong><p>Tell your coach what you’re working toward. It builds this week’s plan and tracks it with you.</p></div><div className="wk-empty-actions"><button className="wk-primary" onClick={onPlan}><Sparkles size={16}/>Plan my week</button><button className="wk-ghost" onClick={onGoals}><Flag size={15}/>See goals</button></div></section>;
- const pr=planProgress(state,plan);
+ const pr=planProgress(state,plan),fc=goalForecast(state),left=Math.max(1,Math.round((Date.parse(plan.weekStart+'T12:00:00Z')+7*86400000-Date.parse(dayKey(new Date(),state.settings.timezone)+'T12:00:00Z'))/86400000));
  return <section className="wk-card" aria-label="This week">
-  <div className="wk-head"><span className="wk-eyebrow">This week · {weekLabel(plan.weekStart)} – {endLabel(plan.weekStart)}</span><span className="wk-pct">{pr.pct}%</span></div>
+  <div className="wk-head"><span className="wk-eyebrow">This week · {weekLabel(plan.weekStart)} – {endLabel(plan.weekStart)} · {left===1?'last day':`${left} days left`}</span><span className="wk-pct">{pr.pct}%</span></div>
   <h2>{plan.title}</h2>
   {plan.summary&&<p className={more?'':'wk-clamp'} onClick={()=>setMore(true)}>{plan.summary}</p>}
+  {fc&&<p className={'wk-forecast'+(fc.onTrack===false||!fc.eta?' behind':'')}><CalendarClock size={15}/>{forecastLine(fc,state.coach.tone==='brutal')}</p>}
   <div className="wk-chips"><button onClick={onChange}><Sparkles size={15}/>Make changes</button><button onClick={onLog}><Plus size={15}/>Log</button><button onClick={onHistory}><History size={15}/>History</button></div>
   <div className="wk-targets">{pr.rows.map(({t,p})=><div key={t.id} className={'wk-target'+(p.complete?' done':'')}>
    <div><strong>{t.label}</strong><small>{p.complete?<><Check size={13}/>Done</>:p.remaining}</small></div>
@@ -35,12 +37,14 @@ export function WeekCard({state,plan,onPlan,onChange,onLog,onHistory,onGoals,ful
 /* ---------------- Coach interview → weekly plan ---------------- */
 type Step='goal'|'why'|'hours'|'days'|'level'|'focus'|'style'|'build';
 const STEPS:Step[]=['goal','why','hours','days','level','focus','style','build'];
-const ASK:Record<Step,string>={goal:'What’s the one thing you want to get better at right now?',why:'Why does it matter, and is there a deadline? (Optional, but it makes me sharper.)',hours:'Honestly — how many hours can you give it this week?',days:'On how many days?',level:'Where are you starting from?',focus:'Which of your saved resources should carry this week?',style:'How should I talk to you?',build:'Got it. Here’s your week.'};
+const ASK:Record<Step,string>={goal:'What’s the one thing you want to get better at right now?',why:'Why does it matter, and is there a deadline? (Optional, but it makes me sharper.)',hours:'Honestly — in a normal week, how many hours can you give it?',days:'And in a normal week, on how many days?',level:'Where are you starting from?',focus:'Which of your saved resources should carry this week?',style:'How should I talk to you?',build:'Got it. Here’s your week.'};
 export function PlanInterview({state,workspace,aiConnected,onClose,onSave,notify}:{state:LearningState;workspace:Workspace;aiConnected:boolean;onClose:()=>void;onSave:(plan:WeeklyPlan,answers:WeekAnswers,tone:Tone)=>boolean|void;notify:(s:string)=>void}){
  const last=[...state.weeklyPlans].sort((a,b)=>b.weekStart.localeCompare(a.weekStart))[0]?.answers;
  const focusGoal=state.goals.find(g=>g.id===state.settings.focusGoal)?.title||'';
  const [a,setA]=useState<WeekAnswers>(()=>({goal:last?.goal||focusGoal,why:last?.why||'',deadline:last?.deadline||'',hoursPerWeek:last?.hoursPerWeek||Math.max(1,Math.round(state.settings.dailyMinutes*state.settings.weeklyDays/60)),days:last?.days||state.settings.weeklyDays,level:last?.level||'some',focusResourceId:last?.focusResourceId||''}));
  const [tone,setTone]=useState<Tone>(state.coach.tone as Tone),[step,setStep]=useState<Step>('goal'),[plan,setPlan]=useState<WeeklyPlan|null>(null),[busy,setBusy]=useState(false),[note,setNote]=useState('');
+ const dow=(new Date(dayKey(new Date(),state.settings.timezone)+'T12:00:00Z').getUTCDay()+6)%7,daysLeft=7-dow,dayName=(d:number)=>['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][d];
+ const scaleNote=daysLeft<7?`This week only has ${daysLeft} day${daysLeft===1?'':'s'} left (${daysLeft===1?'today':dayName(dow)+'–Sun'}), so I’ll scale this week down. From Monday you get the full plan.`:'';
  const idx=STEPS.indexOf(step),set=<K extends keyof WeekAnswers>(k:K,v:WeekAnswers[K])=>setA(x=>({...x,[k]:v}));
  const resources=useMemo(()=>state.resources.filter(r=>!r.archived&&progress(r)<100&&r.kind!=='article').sort((x,y)=>rankResource(y,state)-rankResource(x,state)).slice(0,12),[state]);
  const next=()=>{const n=STEPS[idx+1];setStep(n);if(n==='build')void build();};
@@ -60,7 +64,7 @@ export function PlanInterview({state,workspace,aiConnected,onClose,onSave,notify
   <div className="wk-answer">
    {step==='goal'&&<><textarea autoFocus rows={2} maxLength={200} value={a.goal} onChange={e=>set('goal',e.target.value)} placeholder="e.g. Crack DSA interviews, learn system design, read more"/>{state.goals.length>0&&<div className="wk-pills">{state.goals.slice(0,5).map(g=><button key={g.id} aria-pressed={a.goal===g.title} onClick={()=>set('goal',g.title)}>{g.title}</button>)}</div>}<button className="wk-primary" disabled={!a.goal.trim()} onClick={next}>Next<ArrowRight size={16}/></button></>}
    {step==='why'&&<><textarea rows={2} maxLength={400} value={a.why} onChange={e=>set('why',e.target.value)} placeholder="e.g. switching jobs, interviews in January"/><label className="wk-date">Deadline (optional)<input type="date" value={a.deadline} onChange={e=>set('deadline',e.target.value)}/></label><div className="wk-row"><button className="wk-ghost" onClick={()=>{set('why','');set('deadline','');next();}}>Skip</button><button className="wk-primary" onClick={next}>Next<ArrowRight size={16}/></button></div></>}
-   {step==='hours'&&<div className="wk-pills">{[1,2,3,5,7,10,14].map(h=><button key={h} aria-pressed={a.hoursPerWeek===h} onClick={()=>{set('hoursPerWeek',h);setTimeout(next,120);}}>{h} h</button>)}</div>}
+   {(step==='hours'||step==='days')&&scaleNote&&<p className="wk-scale">{scaleNote}</p>}{step==='hours'&&<div className="wk-pills">{[1,2,3,5,7,10,14].map(h=><button key={h} aria-pressed={a.hoursPerWeek===h} onClick={()=>{set('hoursPerWeek',h);setTimeout(next,120);}}>{h} h</button>)}</div>}
    {step==='days'&&<div className="wk-pills">{[2,3,4,5,6,7].map(d=><button key={d} aria-pressed={a.days===d} onClick={()=>{set('days',d);setTimeout(next,120);}}>{d} days</button>)}</div>}
    {step==='level'&&<div className="wk-pills">{([['new','Just starting'],['some','Some basics'],['solid','Pretty solid']] as const).map(([v,l])=><button key={v} aria-pressed={a.level===v} onClick={()=>{set('level',v);setTimeout(next,120);}}>{l}</button>)}</div>}
    {step==='focus'&&<><div className="wk-options">{resources.map(r=><button key={r.id} aria-pressed={a.focusResourceId===r.id} onClick={()=>set('focusResourceId',r.id)}><strong>{r.title}</strong><small>{r.kind} · {progress(r)}% done{r.demo?' · sample':''}</small></button>)}<button aria-pressed={!a.focusResourceId} onClick={()=>set('focusResourceId','')}><strong>You pick for me</strong><small>Based on your priorities and goal</small></button></div><button className="wk-primary" onClick={next}>Next<ArrowRight size={16}/></button></>}

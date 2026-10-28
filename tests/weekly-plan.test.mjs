@@ -58,3 +58,31 @@ test('coach context carries this week plan with progress and custom instructions
  const ctx=coachContext(s,[],'',new Date('2026-10-27T10:00:00Z'),{workspace:'personal'});
  assert.equal(ctx.weekPlan.title,plan.title);assert.ok(ctx.weekPlan.targets.length>=2);assert.equal(ctx.remembered.instructions,'Roast my phone use.');assert.equal(ctx.coachingStyle,'brutal');
 });
+
+test('goal forecast: finish date at current pace vs deadline',async()=>{
+ const {goalForecast,forecastLine}=await import('../lib/forecast.ts');
+ const now=new Date('2026-10-29T10:00:00Z');
+ // 10 lessons × 30 min = 300 min on the focus course; 140 min studied in the last 14 days → 10 min/day
+ let s=lib([['2026-10-20',70],['2026-10-27',70]]);
+ s=applyWeekPlan(s,buildRulePlan(s,{...answers,deadline:'2026-11-10'},now),{...answers,deadline:'2026-11-10'});
+ const f=goalForecast(s,now);
+ assert.equal(f.pace,10);assert.ok(f.remaining>0);assert.ok(f.eta>'2026-11-10');assert.ok(f.late>0);assert.ok(f.needed>f.pace);
+ assert.match(forecastLine(f,true),/days after your/);
+ const idle=goalForecast(lib(),now);assert.equal(idle.eta,null);assert.match(forecastLine(idle,true),/never/);
+});
+
+test('unhinged offline coach roasts with real numbers',async()=>{
+ const {smartCoachReply}=await import('../lib/coach.ts');
+ const s=lib();const brutal={...s,coach:{...s.coach,tone:'brutal'}};
+ const r=smartCoachReply(brutal,'What should I do next?',new Date('2026-10-29T10:00:00Z'));
+ assert.match(r.message,/never|Zero minutes|osmosis|warm-up/);
+ const calm=smartCoachReply({...s,coach:{...s.coach,tone:'balanced'}},'What should I do next?',new Date('2026-10-29T10:00:00Z'));
+ assert.doesNotMatch(calm.message,/osmosis|never”/);
+});
+
+test('add sheet helpers route links and build topic sessions',async()=>{
+ const {linkRoute,topicLessons}=await import('../lib/library-add.ts');
+ assert.equal(linkRoute('https://youtube.com/playlist?list=abc'),'link');
+ assert.equal(linkRoute('https://x.com/a/status/1'),'article');
+ assert.deepEqual(topicLessons('Arrays\n- Trees\n\n',5,30).map(l=>l.title),['Arrays','Trees']);assert.equal(topicLessons('',4,25).length,4);assert.ok(linkRoute('https://www.udemy.com/course/x')==='link');
+});

@@ -1,6 +1,9 @@
 import {progress,type LearningState} from './learning.ts';
 import {planProgress,weekGrade,weekDays,fmtMinutes,type WeeklyPlan} from './weekly-plan.ts';
 import {factOfDay} from './brain-facts.ts';
+import {dayKey} from './learning.ts';
+import {streaks} from './habits.ts';
+import {goalForecast,shortDate} from './forecast.ts';
 export type Tone='direct'|'balanced'|'brutal';
 export const TONE_LABEL:Record<Tone,string>={balanced:'Gentle',direct:'Direct',brutal:'Unhinged'};
 
@@ -64,4 +67,17 @@ export function voiceLine(tone:Tone,ctx:{yesterday:number;goal:number;screen:num
  if(!ctx.yesterday)return pick(['Zero minutes yesterday. Bold strategy. Let’s see if it pays off.','Nothing logged yesterday. The course didn’t miss you, but your goals did.'],seed);
  if(ctx.yesterday<ctx.goal/2)return pick([`${fmtMinutes(ctx.yesterday)} yesterday. That’s a warm-up, not a session.`,`${fmtMinutes(ctx.yesterday)}? Your goal is ${ctx.goal}. Math is not on your side yet.`],seed);
  return ctx.score>=75?pick(['Good. Keep doing it before you remember to be lazy.','Momentum is real. Don’t waste it on reels.'],seed):'';
+}
+
+/** A roast grounded in today's numbers, for the offline coach in Unhinged mode. */
+export function roastOpener(state:LearningState,now=new Date()){
+ const tz=state.settings.timezone,today=dayKey(now,tz),h=streaks(state,now),mins=h.minutes.get(today)||0,goal=state.settings.dailyMinutes;
+ const rows=state.coach.useScreenTime?state.screenTime.filter(s=>s.day===today):[],phone=rows.length?rows.reduce((n,r)=>n+r.totalMinutes,0):null;
+ const f=goalForecast(state,now),seed=today+mins;
+ if(phone!==null&&phone>Math.max(60,mins*4))return pick([`Reality check: ${hours(phone)} on your phone today, ${fmtMinutes(mins)} learning. Your attention span is on life support.`,`${hours(phone)} of scrolling vs ${fmtMinutes(mins)} of learning. The algorithm is winning and it doesn’t even know your name.`],seed);
+ if(f&&f.late!==null&&f.late>0)return `At this rate “${f.title}” lands around ${shortDate(f.eta!)}, ${f.late} days late. You need ${f.needed} min a day. You’re doing ${f.pace}. Do the math, then do the work.`;
+ if(f&&!f.eta&&f.remaining>0)return `Your pace on “${f.title}” is zero, so the finish date is “never”. Bold. Let’s change that.`;
+ if(!mins)return pick(['Zero minutes today so far. Your goals called. You left them on read.','Nothing logged today. Planning to learn by osmosis?'],seed);
+ if(mins<goal/2)return `${fmtMinutes(mins)} today. That’s a warm-up, not a session.`;
+ return mins>=goal?'Goal hit. Fine, I’ll stop roasting you. For now.':'';
 }

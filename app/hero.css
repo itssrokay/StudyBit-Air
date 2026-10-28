@@ -37,7 +37,7 @@ html:root[data-phone=true] .mobile-app:not([data-section=today]) .hp{--hp-arc:va
 .hp-pill-copy strong{font-size:20px;line-height:1.15;font-weight:500;color:var(--pt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
 .hp-pill-copy strong small{font-size:12px;font-weight:500;opacity:.8}
 .hp-pill.is-empty strong{font-size:16px;opacity:.8}
-.hp-pill-copy strong.long{font-size:16px}
+.hp-pill-copy strong.long{font-size:14px;line-height:1.2;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 html:root[data-phone=true][data-theme=dark] .mobile-app[data-section=today]{--h-layer:#1d1e21}
 /* Tonal containers per colour (Material 3): container, icon well, text. */
 .hp-pill{--pc:#d3e3fd;--pi:#a8c7fa;--pt:#041e49}

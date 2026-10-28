@@ -1,6 +1,6 @@
 'use client';
 import {useRef,useState,type ComponentType} from 'react';
-import {BookOpen,Target,Flag,Check,ListChecks} from 'lucide-react';
+import {BookOpen,Target,Flag,Check,ListChecks,CircleCheck,ClipboardList,Mountain,CalendarClock,Hourglass,Gauge} from 'lucide-react';
 import {tile,type TileData,type TileId} from './health-ui';
 
 /**
@@ -51,4 +51,4 @@ export function HeroPager({pages,actions}:{pages:HeroPage[];actions:React.ReactN
 export function tilePill(id:TileId,data:TileData,onClick:()=>void):HeroPill{
  const t=tile(id,data);return {id,icon:t.icon as IconType,label:t.label,value:t.value==='—'?'No data':t.value,unit:t.value==='—'?'':t.unit,tone:t.value==='—'?'grey':t.tone,empty:t.value==='—',onClick};
 }
-export const HERO_ICONS={week:BookOpen,today:Target,plan:Flag,targets:ListChecks};
+export const HERO_ICONS={week:BookOpen,today:Target,plan:Flag,targets:ListChecks,todo:ClipboardList,check:CircleCheck,goal:Mountain,eta:CalendarClock,deadline:Hourglass,pace:Gauge};

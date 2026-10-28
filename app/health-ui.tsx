@@ -23,7 +23,7 @@ const TILE_KEY='learning-space-tiles-v1',DEFAULT_TILES:TileId[]=['today','streak
 export const TILE_NAMES:Record<TileId,string>={today:'Learning today',streak:'Streak',momentum:'Momentum score',week:'Active days this week',minutes7:'Minutes, last 7 days',screen:'Screen time yesterday',inbox:'Inbox captures',best:'Best streak'};
 export function readTiles():TileId[]{try{const v=JSON.parse(localStorage.getItem(TILE_KEY)||'null');if(Array.isArray(v)&&v.every(t=>t in TILE_NAMES))return v.slice(0,3);}catch{/* defaults */}return DEFAULT_TILES;}
 
-export type TileData={today:number;goal:number;streak:number;best:number;daysWeek:number;weeklyDays:number;minutesWeek:number;screen:number|null;inbox:number;brief:MorningBrief};
+export type TileData={today:number;goal:number;streak:number;best:number;daysWeek:number;weeklyDays:number;minutesWeek:number;screen:number|null;screenWhen?:string;inbox:number;brief:MorningBrief};
 export function tile(id:TileId,d:TileData){
  switch(id){
   case 'today':return {icon:Timer,label:'Today',value:String(d.today),unit:`of ${d.goal} min`,tone:'blue'};
@@ -31,7 +31,7 @@ export function tile(id:TileId,d:TileData){
   case 'momentum':return {icon:Gauge,label:'Momentum',value:String(d.brief.score),unit:d.brief.label.replace(' momentum',''),tone:'purple'};
   case 'week':return {icon:CalendarCheck,label:'This week',value:`${d.daysWeek}/${d.weeklyDays}`,unit:'days',tone:'teal'};
   case 'minutes7':return {icon:Clock3,label:'Last 7 days',value:String(d.minutesWeek),unit:'min',tone:'blue'};
-  case 'screen':return {icon:Smartphone,label:'Screen time',value:d.screen==null?'—':briefDuration(d.screen),unit:d.screen==null?'not shared':'yesterday',tone:'pink'};
+  case 'screen':return {icon:Smartphone,label:'Screen time',value:d.screen==null?'—':briefDuration(d.screen),unit:d.screen==null?'not shared':(d.screenWhen||'yesterday'),tone:'pink'};
   case 'inbox':return {icon:Inbox,label:'Inbox',value:String(d.inbox),unit:d.inbox===1?'capture':'captures',tone:'green'};
   case 'best':return {icon:Trophy,label:'Best streak',value:String(d.best),unit:'days',tone:'orange'};
  }
