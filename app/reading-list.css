@@ -1,0 +1,44 @@
+/* Reading list: title, category chips and Read ASAP (share sheet, Add article, edit). */
+.rf-field{display:grid;gap:8px}
+html:root .rf-label{display:flex!important;flex-direction:row!important;align-items:center;justify-content:flex-start;text-align:left;gap:8px;font-size:13px;font-weight:650;color:var(--ink);margin:0!important}
+.rf-label small{font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--soft);color:var(--muted)}
+.rf-title{position:relative}
+html:root .rf-title textarea{width:100%;min-height:92px!important;resize:none;padding:12px 44px 12px 14px!important;font-size:17px!important;font-weight:600;line-height:1.35;border-radius:14px}
+.rf-title button{position:absolute;top:8px;right:8px;width:36px;height:36px;display:grid;place-items:center;border:0;border-radius:50%;background:var(--soft);color:var(--muted);cursor:pointer}
+.share-lookup{font-size:12px;color:var(--muted)}
+.rf-chips{display:flex;flex-wrap:wrap;gap:8px}
+.rf-chips>button,.rf-new{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--ink);font-size:14px;font-weight:550;cursor:pointer}
+.rf-chips>button[aria-pressed=true]{background:var(--soft);border-color:var(--teal);color:var(--teal)}
+.rf-add{color:var(--muted)!important;border-style:dashed!important}
+.rf-new{padding:0 4px 0 10px;gap:2px}
+html:root .rf-new input{width:130px;min-height:34px!important;padding:4px!important;border:0!important;background:transparent!important;font-size:14px!important;box-shadow:none!important}
+.rf-new button{width:32px;height:32px;display:grid;place-items:center;border:0;border-radius:8px;background:transparent;color:var(--muted);cursor:pointer}
+html:root label.rf-asap{display:flex!important;flex-direction:row!important;align-items:center;gap:12px;margin:0!important;padding:12px 14px;border-radius:16px;border:1px solid var(--line);cursor:pointer;color:var(--ink)}
+.rf-asap input{position:absolute;opacity:0;width:1px;height:1px}
+.rf-asap-icon{width:36px;height:36px;flex-shrink:0;display:grid;place-items:center;border-radius:12px;background:var(--soft);color:var(--muted)}
+.rf-asap>span:nth-of-type(2){flex:1;min-width:0}
+.rf-asap strong{display:block;font-size:15px}
+.rf-asap small{display:block;font-size:12px;color:var(--muted);margin-top:1px}
+.rf-asap>i{width:46px;height:28px;flex-shrink:0;border-radius:99px;background:var(--line);position:relative;transition:background .2s}
+.rf-asap>i::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px #0003;transition:transform .2s cubic-bezier(.2,0,0,1)}
+.rf-asap.on{border-color:#e8a23a;background:color-mix(in srgb,#e8a23a 10%,transparent)}
+.rf-asap.on .rf-asap-icon{background:#e8a23a;color:#2b1700}
+.rf-asap.on>i{background:#e8a23a}
+.rf-asap.on>i::after{transform:translateX(18px)}
+.rf-asap:focus-within{outline:2px solid var(--teal);outline-offset:2px}
+.rf-details{border:1px solid var(--line);border-radius:14px;padding:0 14px}
+.rf-details>summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-size:14px;color:var(--muted)}
+.rf-details[open]{padding-bottom:12px}
+html:root .rf-details textarea{width:100%;font-size:15px!important;line-height:1.5}
+.incoming-share{display:flex;flex-direction:column;gap:16px}
+.reading-import .rf-field,.reading-import .rf-asap,.resource-quick-editor .rf-field,.resource-quick-editor .rf-asap{margin-top:14px!important}
+
+/* Library: Read ASAP chip, category sub-chips, row toggle */
+html:root[data-phone=true] .m-chips>button.m-chip-asap{display:inline-flex;align-items:center;gap:5px;border-color:#e8a23a;color:#b26a00}
+html:root[data-phone=true][data-theme=dark] .m-chips>button.m-chip-asap{color:#ffc56b}
+html:root[data-phone=true] .m-chips>button.m-chip-asap.active{background:#e8a23a;border-color:#e8a23a;color:#2b1700}
+html:root[data-phone=true] .m-subchips{margin-top:2px}
+html:root[data-phone=true] .m-subchips>button{min-height:34px;padding:5px 12px;font-size:12px!important;display:inline-flex;align-items:center;gap:6px}
+html:root[data-phone=true] .m-subchips>button small{font-size:11px;opacity:.7}
+html:root[data-phone=true] .m-asap{flex:0 0 40px;width:40px;height:40px;display:grid;place-items:center;border:0;border-radius:12px;background:transparent;color:var(--m-muted)}
+html:root[data-phone=true] .m-asap.on{color:#e8a23a;background:color-mix(in srgb,#e8a23a 14%,transparent)}

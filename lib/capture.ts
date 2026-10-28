@@ -1,6 +1,7 @@
 import {validateQuickLog} from './quick-log.ts';
 import {safeUrl,uid,makeResource,type LearningState,inboxSchema} from './learning.ts';
-import {makeReading,readingLink,readingMinutes} from './reading.ts';
+import {makeReading,readingLink,readingMinutes,setAsap} from './reading.ts';
+import {normalizePath} from './course-tools.ts';
 import {finishStudySession} from './session-review.ts';
 import type {Workspace} from './spaces.ts';
 export function captureLinks(text:string){
@@ -22,12 +23,13 @@ export function logExtra(state:LearningState,input:{title:string;url:string;minu
  return finishStudySession({...state,resources:[...state.resources,r]},r.id,r.lessons[0].id,input.minutes,{difficulty:'unknown',reflection:input.reflection,timerSeconds:0,timeSource:'logged',plannedMinutes:input.minutes},now,state,id+'-session');
 }
 
-export function saveSharedReading(state:LearningState,input:{id:string;text:string;title:string;workspace:Workspace},now=new Date()):LearningState{
+export function saveSharedReading(state:LearningState,input:{id:string;text:string;title:string;workspace:Workspace;category?:string;asap?:boolean},now=new Date()):LearningState{
  if(state.inbox.some(i=>i.id===input.id))return state;
  const links=captureLinks(input.text);if(links.length!==1||links[0].kind.startsWith('YouTube'))throw Error('Save this capture to the inbox, then import its links.');
  const link=readingLink(links[0].url),excerpt=input.text.replace(/https?:\/\/[^\s<>"']+/gi,'').trim();
  const next=captureInbox(state,input.text,input.workspace,'shared',input.id,now);
  const existing=state.resources.find(r=>r.workspace===input.workspace&&r.kind==='article'&&r.url===link.url);
- const resource=existing?null:makeReading({url:link.url,title:input.title.trim()||link.title,excerpt,minutes:excerpt?readingMinutes(excerpt):5,goalId:input.workspace==='work'?state.settings.workFocusGoal:state.settings.focusGoal,priority:3,folderPath:''});
- return {...next,inbox:next.inbox.map(i=>i.id===input.id?{...i,status:'filed'}:i),resources:resource?[{...resource,workspace:input.workspace},...state.resources]:state.resources.map(r=>r.id===existing?.id?{...r,archived:false}:r)};
+ const resource=existing?null:makeReading({url:link.url,title:input.title.trim()||link.title,excerpt,minutes:excerpt?readingMinutes(excerpt):5,goalId:input.workspace==='work'?state.settings.workFocusGoal:state.settings.focusGoal,priority:3,folderPath:normalizePath(input.category||'')});
+ const tune=(r:typeof resource&{})=>input.asap===undefined?r:setAsap(r,input.asap);
+ return {...next,inbox:next.inbox.map(i=>i.id===input.id?{...i,status:'filed'}:i),resources:resource?[tune({...resource,workspace:input.workspace}),...state.resources]:state.resources.map(r=>r.id===existing?.id?tune({...r,archived:false,folderPath:input.category?normalizePath(input.category):r.folderPath,title:input.title.trim()||r.title}):r)};
 }

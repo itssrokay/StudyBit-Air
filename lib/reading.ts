@@ -11,3 +11,26 @@ export function makeReading(input:{url:string;title:string;excerpt:string;minute
  const link=readingLink(input.url);const title=input.title.trim();if(!title)throw Error('Give this article or post a title.');
  return makeResource({title,url:link.url,provider:link.provider,excerpt:input.excerpt.trim(),kind:'article',goalId:input.goalId,priority:input.priority,folderPath:input.folderPath,color:'orange',captureScope:'page',captureNote:input.excerpt.trim()?'Saved link with text you provided. Reading time is an editable estimate.':'Saved reading link. Open the original to read; its text has not been downloaded.'},[{title,minutes:input.minutes,url:link.url,sourceId:link.sourceId,format:'reading',durationEstimated:true}]);
 }
+
+/* ---------- Reading list: categories and "Read ASAP" ---------- */
+export const DEFAULT_CATEGORIES=['Tech','Productivity','Career','Ideas','Health','Money'];
+const HINTS:Record<string,RegExp>={
+ Tech:/\b(code|coding|program|developer|software|engineer|api|ai|llm|gpt|model|react|java(script)?|python|rust|docker|kubernetes|cloud|database|sql|system design|backend|frontend|startup|tech|open ?source|github|algorithm|dsa|leetcode)\b/i,
+ Productivity:/\b(productiv|focus|habit|routine|discipline|deep work|time management|procrastinat|morning|schedule|goal|notion|workflow|purpose|motivation)\w*/i,
+ Career:/\b(career|job|interview|resume|cv|hiring|salary|promotion|manager|leadership|founder|freelanc|internship|offer)\w*/i,
+ Health:/\b(health|fitness|gym|workout|sleep|diet|nutrition|mental|run|running|yoga|meditat)\w*/i,
+ Money:/\b(money|invest|stock|finance|financial|crypto|wealth|budget|saving|tax|income|market)\w*/i,
+};
+/** Category names for this space: your existing ones first, then the defaults. */
+export function readingCategories(resources:Resource[]){
+ const used=resources.filter(r=>r.kind==='article'&&r.folderPath).map(r=>r.folderPath.split('/')[0]);
+ return [...new Set([...used,...DEFAULT_CATEGORIES])].slice(0,20);
+}
+/** A gentle first guess from the post text; the learner can always change it. */
+export function suggestCategory(text:string){let best='',score=0;for(const [name,re] of Object.entries(HINTS)){const n=(text.match(new RegExp(re.source,'gi'))||[]).length;if(n>score){best=name;score=n;}}return best;}
+/** "Read ASAP" = the reading is pinned to the top of today's plan and marked essential. */
+export const isAsap=(r:Resource)=>r.kind==='article'&&r.lessons.some(l=>!l.done&&l.pinned);
+export function setAsap(r:Resource,on:boolean):Resource{
+ const target=r.lessons.find(l=>!l.done)?.id;
+ return {...r,priority:on?5:r.priority===5?3:r.priority,lessons:r.lessons.map(l=>({...l,pinned:on?l.id===target||l.pinned&&!l.done:false}))};
+}
