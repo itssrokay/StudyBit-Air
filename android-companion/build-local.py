@@ -19,6 +19,9 @@ for name,(url,checksum) in artifacts.items():
  if hashlib.sha256(path.read_bytes()).hexdigest()!=checksum:raise SystemExit('Toolchain checksum mismatch: '+name)
  paths[name]=path
 aapt=build/'aapt2'
+# Replace the binary with a new file (new inode). Overwriting a signed Mach-O in place
+# makes macOS kill it with SIGKILL because the cached code signature no longer matches.
+aapt.unlink(missing_ok=True)
 with ZipFile(paths['aapt2']) as z:aapt.write_bytes(z.read('aapt2'))
 aapt.chmod(0o755)
 def run(*cmd):subprocess.run([str(x) for x in cmd],check=True,cwd=root)
