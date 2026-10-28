@@ -7,7 +7,7 @@ export function captureLinks(text:string){
  const matches=text.match(/https?:\/\/[^\s<>"']+/gi)||[];const seen=new Set<string>();
  return matches.map(raw=>raw.replace(/[.,;!?\])}]+$/,'')).flatMap(raw=>{const url=safeUrl(raw);if(!url||seen.has(url))return [];seen.add(url);const u=new URL(url),host=u.hostname.replace(/^www\./,'');let kind='Article';if(['youtube.com','m.youtube.com','youtu.be'].includes(host))kind=u.searchParams.has('list')?'YouTube playlist':'YouTube video';else if(['x.com','twitter.com','mobile.twitter.com'].includes(host))kind='X post / thread';return [{url,kind,host}];}).slice(0,20);
 }
-export function captureTitle(text:string){const first=text.split('\n').find(s=>s.trim())||text;return first.trim().replace(/https?:\/\/\S+/g,'').replace(/^(todo|idea|learn|read)\s*:\s*/i,'').trim().slice(0,160)||captureLinks(text)[0]?.host||'A new idea';}
+export function captureTitle(text:string){const bare=captureLinks(text);if(bare.length===1&&text.trim()===bare[0].url){try{return readingLink(bare[0].url).title;}catch{/* fall through */}}const first=text.split('\n').find(s=>s.trim())||text;return first.trim().replace(/https?:\/\/\S+/g,'').replace(/^(todo|idea|learn|read)\s*:\s*/i,'').trim().slice(0,160)||captureLinks(text)[0]?.host||'A new idea';}
 export function captureInbox(state:LearningState,text:string,workspace:Workspace,source:'typed'|'shared'='typed',id=uid(),now=new Date()){
  if(state.inbox.some(i=>i.id===id))return state;
  const item=inboxSchema.parse({id,text,workspace,source,createdAt:now.toISOString(),status:'inbox'});return {...state,inbox:[item,...state.inbox]};

@@ -21,6 +21,12 @@ export function startLanServer(options:{port?:number;host?:string;dataDir?:strin
     let raw='';for await(const chunk of req){raw+=chunk.toString();if(Buffer.byteLength(raw)>150000)return json(res,{error:'Settings too large.'},413);}
     try{return json(res,{settings:saveMacScreenSettings(JSON.parse(raw).settings,options.macUsageDir)});}catch{return json(res,{error:'Invalid screen-time settings.'},400);}
    }
+   if(path==='/api/link-preview'){
+    if(req.method!=='POST')return json(res,{error:'Method not allowed.'},405);
+    if(!origin||new URL(origin).origin!==url.origin)return json(res,{error:'Open this on the computer’s learning dashboard.'},403);
+    let raw='';for await(const chunk of req){raw+=chunk.toString();if(Buffer.byteLength(raw)>4000)return json(res,{error:'Link is too long.'},413);}
+    try{const input=JSON.parse(raw);const preview=await serverLinkPreview(String(input.url||''));return preview?json(res,preview):json(res,{error:'No title found.'},404);}catch{return json(res,{error:'Could not get details for this link.'},502);}
+   }
    if(path==='/api/import'){
     if(req.method!=='POST')return json(res,{error:'Method not allowed.'},405);
     if(!origin||new URL(origin).origin!==url.origin)return json(res,{error:'Open imports on this computer’s learning dashboard.'},403);
@@ -46,3 +52,20 @@ export function startLanServer(options:{port?:number;host?:string;dataDir?:strin
  });server.listen(options.port??5180,options.host||'0.0.0.0');return server;
 }
 if(process.argv[1]&&existsSync(process.argv[1])&&import.meta.url===pathToFileURL(realpathSync(process.argv[1])).href){const server=startLanServer({port:Number(process.env.LEARNING_LAN_PORT||5180)});server.on('listening',()=>console.log('Learning Space Wi-Fi server: http://localhost:'+(server.address() as {port:number}).port+' · Open Settings to pair your phone.'));server.on('error',e=>{console.error('Could not start Wi-Fi server:',e.message);process.exitCode=1;});}
+
+/** Fetch a shared link's title on the computer (X via public oEmbed, pages via <head>). */
+async function serverLinkPreview(value:string){
+ const {previewRequest,parsePreview}=await import('../lib/link-preview.ts');const {lookup}=await import('node:dns/promises');
+ const request=previewRequest(value);let target=request.endpoint;
+ for(let hop=0;hop<4;hop++){
+  const u=new URL(target);if(!['http:','https:'].includes(u.protocol))return null;
+  const addresses=await lookup(u.hostname,{all:true});if(!addresses.length||addresses.some(a=>/^(?:::ffff:)?(?:10\.|192\.168\.|172\.(?:1[6-9]|2\d|3[01])\.|0\.)/.test(a.address)||a.address.startsWith('127.')||a.address==='::1'||a.address.startsWith('169.254.')||/^f[cd]/i.test(a.address)))return null;
+  const response=await fetch(target,{redirect:'manual',signal:AbortSignal.timeout(10000),headers:{'User-Agent':'Mozilla/5.0 LearningSpace','Accept':'text/html,application/json;q=0.9,*/*;q=0.5','Accept-Language':'en-US,en;q=0.9'}});
+  if(response.status>=300&&response.status<400){const next=response.headers.get('location');if(!next)return null;target=new URL(next,target).href;continue;}
+  if(!response.ok)return null;
+  const reader=response.body?.getReader();let text='';const decoder=new TextDecoder();
+  while(reader){const {done,value}=await reader.read();if(done)break;text+=decoder.decode(value,{stream:true});if(text.length>600000||/<\/head>/i.test(text)){await reader.cancel();break;}}
+  return parsePreview(request.kind,text,target);
+ }
+ return null;
+}
