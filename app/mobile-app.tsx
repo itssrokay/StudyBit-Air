@@ -12,6 +12,7 @@ import {HeroPager,tilePill,HERO_ICONS,type HeroPage} from './hero-pager';
 import {planProgress} from '../lib/weekly-plan';
 import {goalForecast,shortDate} from '../lib/forecast';
 import AddSheet from './add-sheet';
+import ModalFrame from './modal';
 import {dayKey} from '../lib/learning';
 import {isAsap,setAsap,asapDue} from '../lib/reading';
 import {ArrowLeft,ArrowRight,BookOpen,Check,ChevronRight,Clock3,Flame,Headphones,Layers,MoreHorizontal,Play,Plus,Search,Settings,Sparkles,Target,TrendingUp,X,Home,StickyNote,Compass,Inbox,Share2,Pencil,FileText,Upload,Link2,Timer,Zap,GripVertical} from 'lucide-react';
@@ -31,7 +32,7 @@ export default function MobileApp(p:Props){
  const timer=useStudyTimer(false).timer,quickTimer=timer?.resourceId==='quick-log-'+p.workspace;
  const waiting=state.inbox.filter(i=>i.status==='inbox').length;
  const brief=useTodayBrief(state,now);
- const [tiles,setTiles]=useState<TileId[]>(readTiles),[editTiles,setEditTiles]=useState(false),[metric,setMetric]=useState<MetricId|null>(null),[reorder,setReorder]=useState(false),[adding,setAdding]=useState(false),[fcOpen,setFcOpen]=useState(false);
+ const [tiles,setTiles]=useState<TileId[]>(readTiles),[editTiles,setEditTiles]=useState(false),[metric,setMetric]=useState<MetricId|null>(null),[reorder,setReorder]=useState(false),[adding,setAdding]=useState(false),[fcOpen,setFcOpen]=useState(false),[todoSheet,setTodoSheet]=useState(false);
  const week=currentPlan(state,now),lastWeek=previousPlan(state,now),tone=state.coach.tone as Tone;
  const dow=(new Date(dayKey(now,state.settings.timezone)+'T12:00:00Z').getUTCDay()+6)%7;
  const [hiddenReport,setHiddenReport]=useState(()=>{try{return localStorage.getItem('learning-space-week-report-hidden')||'';}catch{return '';}});
@@ -56,7 +57,10 @@ export default function MobileApp(p:Props){
  const weekStartIso=week?.weekStart||new Date(now.getTime()-6*86400000).toISOString().slice(0,10),todosDone=state.todos.filter(t=>t.doneAt&&dayKey(new Date(t.doneAt),state.settings.timezone)>=weekStartIso).length;
  const toggleTodo=(id:string,title:string)=>{p.update(s=>({...s,todos:s.todos.map(t=>t.id===id?{...t,doneAt:new Date().toISOString()}:t)}));p.notify(`Done: ${title}`);};
  const fc=goalForecast(state,now),brutalTone=tone==='brutal';
- const todoPage:HeroPage={id:'todos',title:'To-dos',value:todosDone,goal:Math.max(1,todosDone+todosOpen.length),bottom:todosOpen.length?`${todosOpen.length} open`:'All clear',icon:HERO_ICONS.todo,onRing:()=>go('goals'),pills:todosOpen.length?todosOpen.slice(0,3).map((t,i)=>({id:t.id,icon:HERO_ICONS.check,label:t.dueDay?(t.dueDay<todayKey?'Overdue':t.dueDay===todayKey?'Due today':'Due '+shortDate(t.dueDay,false)):'To-do',value:t.title,tone:t.dueDay&&t.dueDay<=todayKey?'pink':['blue','teal','purple'][i],onClick:()=>toggleTodo(t.id,t.title)})):[{id:'none',icon:HERO_ICONS.check,label:'Nothing open',value:'Add one',tone:'green',onClick:()=>go('goals')}]};
+ const todoPill=(t:typeof todosOpen[number],i:number)=>({id:t.id,icon:HERO_ICONS.check,label:t.dueDay?(t.dueDay<todayKey?'Overdue':t.dueDay===todayKey?'Due today':'Due '+shortDate(t.dueDay,false)):'To-do',value:t.title,tone:t.dueDay&&t.dueDay<=todayKey?'pink':['blue','teal','purple'][i],onClick:()=>toggleTodo(t.id,t.title)});
+ const todoPills=todosOpen.length>3?[...todosOpen.slice(0,2).map(todoPill),{id:'more',icon:HERO_ICONS.todo,label:`${todosOpen.length-2} more`,value:'See all · Add',tone:'grey',onClick:()=>setTodoSheet(true)}]
+  :[...todosOpen.map(todoPill),{id:'add',icon:HERO_ICONS.add,label:todosOpen.length?'Something else?':'Nothing open',value:'Add to-do',tone:'green',onClick:()=>setTodoSheet(true)}];
+ const todoPage:HeroPage={id:'todos',title:'To-dos',value:todosDone,goal:Math.max(1,todosDone+todosOpen.length),bottom:todosOpen.length?`${todosOpen.length} open`:'All clear',icon:HERO_ICONS.todo,onRing:()=>setTodoSheet(true),pills:todoPills};
  const goalPage:HeroPage|null=fc?{id:'goal',title:'Goal progress',value:fc.pct,goal:100,bottom:fc.eta?'ETA '+shortDate(fc.eta):'No pace yet',icon:HERO_ICONS.goal,onRing:()=>setFcOpen(true),pills:[
   {id:'eta',icon:HERO_ICONS.eta,label:'At your pace',value:fc.remaining<=0?'Done':fc.eta?shortDate(fc.eta,fc.eta.slice(0,4)!==todayKey.slice(0,4)):(brutalTone?'Never':'Not yet'),tone:fc.onTrack===false||!fc.eta?'pink':'teal',onClick:()=>setFcOpen(true)},
   {id:'deadline',icon:HERO_ICONS.deadline,label:'Deadline',value:fc.deadline?shortDate(fc.deadline,false):'Not set',unit:fc.daysToDeadline?`${fc.daysToDeadline}d`:'',tone:fc.deadline?'orange':'grey',empty:!fc.deadline,onClick:()=>setFcOpen(true)},
@@ -87,6 +91,7 @@ export default function MobileApp(p:Props){
  {state.resources.some(r=>!r.archived&&progress(r)>0&&progress(r)<100)&&<section className="m-section"><div className="m-section-heading"><h2>Continue</h2><button onClick={()=>go('library')}>Library<ArrowRight size={15}/></button></div><div className="m-course-list">{state.resources.filter(r=>!r.archived&&progress(r)>0&&progress(r)<100).slice(0,2).map(course)}</div></section>}
  <DailyFact day={dayKey(now,state.settings.timezone)}/>
  </div>
+ {todoSheet&&<ModalFrame title="To-dos" subtitle="Tick things off, add new ones, or tap one to edit." onClose={()=>setTodoSheet(false)}><div className="modal-content hp-todo-sheet"><TodoPanel state={state} now={now} update={p.update} notify={p.notify}/></div></ModalFrame>}
  {fcOpen&&fc&&<ForecastSheet forecast={fc} onClose={()=>setFcOpen(false)} onGoals={()=>go('goals')} onPlan={p.onPlanWeek}/>}
  {metric&&<MetricHistory metric={metric} state={state} now={now} onClose={()=>setMetric(null)} series={series(metric)}/>}
  {editTiles&&<TileEditor tiles={tiles} onClose={()=>setEditTiles(false)} onSave={setTiles}/>}

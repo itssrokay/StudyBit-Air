@@ -29,7 +29,8 @@ html:root[data-phone=true][data-theme=dark]{--hp-arc:#a8c7fa;--hp-badge:#0b57d0;
 html:root[data-phone=true] .mobile-app:not([data-section=today]) .hp{--hp-arc:var(--h-pri)}
 
 /* Pills */
-.hp-pills{display:grid;grid-template-rows:repeat(3,minmax(0,1fr));gap:8px;align-self:stretch;min-width:0}
+.hp-pills{display:flex;flex-direction:column;justify-content:center;gap:8px;min-width:0}
+.hp-pills>.hp-pill{flex:0 0 auto}
 .hp-pill{--tone:var(--t-blue);display:flex;align-items:center;gap:10px;min-width:0;min-height:52px;padding:5px 10px 5px 5px;border:0;border-radius:999px;background:var(--pc);color:var(--pt);text-align:left;font-family:inherit;cursor:pointer;animation:hp-slide .45s both cubic-bezier(.2,0,0,1)}
 .hp-pill-icon{display:grid;place-items:center;align-self:stretch;width:42px;flex-shrink:0;border-radius:999px;background:var(--pi);color:var(--pt)}
 .hp-pill-copy{display:flex;flex-direction:column;min-width:0}
@@ -60,3 +61,6 @@ html:root[data-theme=dark] .hp-act.hp-edit{background:#2f3136;color:var(--h-ink)
 html:root[data-phone=true] .m-layer .hp{padding-bottom:4px}
 @media (max-width:350px){.hp-pill-icon{width:38px}.hp-pill-copy strong{font-size:19px}.hp-pct{font-size:40px}}
 @media (prefers-reduced-motion:reduce){.hp-ring,.hp-fill,.hp-badge,.hp-pill{animation:none}.hp-pager{scroll-behavior:auto}}
+
+.hp-todo-sheet .todo-panel{margin:0;padding:0;background:none;box-shadow:none}
+.hp-todo-sheet .motivation-panel-heading{display:none}
