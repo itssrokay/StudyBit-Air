@@ -17,4 +17,5 @@ git add -A public/downloads android-companion/assets app lib offline scripts and
 git diff --cached --quiet || git commit -m "Build Android $version"
 git push origin HEAD
 echo "✔ Published. Install on your phone from:"
-echo "  https://github.com/itssrokay/StudyBit-Air/raw/main/public/downloads/learning-space-android.apk"
+echo "  https://raw.githubusercontent.com/itssrokay/StudyBit-Air/main/public/downloads/learning-space-android.apk?v=$version"
+echo "  (the ?v= part skips GitHub's 5-minute download cache; check Settings → Apps → Learning Space shows $version)"
