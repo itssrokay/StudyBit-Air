@@ -1,7 +1,7 @@
 'use client';
 import {useEffect,useRef,useState,type FormEvent} from 'react';
-import {Play,Pause,Square,Check,Loader2,RotateCcw,Timer,PenLine,Trash2,CloudOff} from 'lucide-react';
-import {uid,dayKey,type LearningState} from '../lib/learning';
+import {Play,Pause,Square,Check,Loader2,RotateCcw,Timer,PenLine,Trash2,CloudOff,Sparkles,Layers,Minus,Plus,MonitorPlay,BookOpen} from 'lucide-react';
+import {uid,dayKey,dailyPlan,type LearningState} from '../lib/learning';
 import {validateQuickLog,type QuickLogErrors} from '../lib/quick-log';
 import {clockTime,saveTimeEntry,QUICK_TIMER_PREFIX,type TimeEntryInput} from '../lib/time-log';
 import {queueTimeEntry,dropTimeEntry,readOutbox} from '../lib/time-outbox';
@@ -25,7 +25,7 @@ export default function QuickLog({state,workspace,onSave,onClose,notify,initialM
  const identity=useRef<{id:string;at:Date|null}>({id:draft?.id||'',at:null});
  const entryId=()=>{if(!identity.current.id)identity.current.id=uid();return identity.current.id;};
  const [title,setTitle]=useState<string>(draft?.title||''),[url,setUrl]=useState<string>(draft?.url||''),[minutes,setMinutes]=useState<string>(draft?.minutes||(!draft&&initialMode==='manual'?'25':'')),[kind,setKind]=useState<'article'|'video'|'topic'>(draft?.kind||'topic'),[reflection,setReflection]=useState<string>(draft?.reflection||''),[keep,setKeep]=useState(!!draft?.keep),[resourceId,setResourceId]=useState<string>(draft?.resourceId||'');
- const [mode,setMode]=useState<'timer'|'manual'>(draft?(draft.mode==='manual'?'manual':'timer'):initialMode||'timer'),[when,setWhen]=useState(()=>localInput(new Date())),[errors,setErrors]=useState<Errors>({}),[error,setError]=useState(''),[busy,setBusy]=useState(false),[limit,setLimit]=useState(8);
+ const [mode,setMode]=useState<'timer'|'manual'>(draft?(draft.mode==='manual'?'manual':'timer'):initialMode||'timer'),[when,setWhen]=useState(()=>localInput(new Date())),[errors,setErrors]=useState<Errors>({}),[whenChoice,setWhenPick]=useState<'now'|'1h'|'morning'|'yesterday'|'custom'>('now'),[error,setError]=useState(''),[busy,setBusy]=useState(false),[limit,setLimit]=useState(8);
  const packet=useStudyTimer(),timer=packet.timer,own=timer?.resourceId===QUICK_TIMER_PREFIX+workspace?timer:null,other=timer&&!own;
  const saving=useRef(false),mounted=useRef(true),form=useRef<HTMLFormElement>(null);
  useEffect(()=>{mounted.current=true;return()=>{mounted.current=false;};},[]);
@@ -74,52 +74,68 @@ export default function QuickLog({state,workspace,onSave,onClose,notify,initialM
 
  function repeat(row:(typeof entries)[number]){setTitle(row.title);setUrl(row.url);setResourceId(row.resource.quickLog?'':row.resource.id);setMode('timer');setReflection('');setErrors({});setError('');identity.current={id:uid(),at:null};form.current?.scrollIntoView({behavior:'smooth',block:'start'});}
 
- return <ModalFrame title="Track your learning" subtitle={(workspace==='work'?'Work':'Personal')+' · '+(todayMinutes?`${todayMinutes} min logged today`:'Make your time count')} onClose={onClose} busy={busy} wide>
- <div className="tl">
+ const plan=dailyPlan(state,new Date(openedAt)),next=plan[0];
+ const recentTitles=[...new Map(entries.map(e=>[e.title.toLowerCase(),e])).values()].slice(0,4);
+ const courses=state.resources.filter(r=>!r.demo&&!r.quickLog&&!r.archived);
+ const linked=courses.find(r=>r.id===resourceId);
+ const pick=(t:string,rid:string)=>{setTitle(t);setResourceId(rid);clear('title');};
+ const mins=Number(minutes)||0,bump=(by:number)=>{setMinutes(String(Math.max(1,Math.min(600,(mins||0)+by))));clear('minutes');};
+ const setWhenChoice=(c:typeof whenChoice)=>{setWhenPick(c);const now=new Date(),d=new Date(now);if(c==='1h')d.setTime(now.getTime()-3600000);else if(c==='morning'){d.setHours(10,0,0,0);if(d>now)d.setTime(now.getTime());}else if(c==='yesterday'){d.setDate(d.getDate()-1);d.setHours(21,0,0,0);}if(c!=='custom')setWhen(localInput(d));clear('when');};
+ const goal=state.settings.dailyMinutes,pctToday=Math.min(100,Math.round(todayMinutes/Math.max(1,goal)*100));
+ const elapsed=own?.elapsedMs||0,ringPct=((elapsed/60000)%60)/60*100;
+ const KINDS=[['topic','Practice',PenLine],['video','Watched',MonitorPlay],['article','Read',BookOpen]] as const;
+ return <ModalFrame title="Log learning" subtitle={(workspace==='work'?'Work':'Personal')+' · '+(todayMinutes?`${todayMinutes} of ${goal} min today`:`Goal ${goal} min today`)} onClose={onClose} busy={busy} wide>
+ <div className="tl tl2">
+  <div className="tl2-today" aria-label={`${todayMinutes} of ${goal} minutes today`}><span style={{width:pctToday+'%'}}/></div>
   {!own&&<div className="tl-modes" role="group" aria-label="Logging mode">
    <button type="button" disabled={busy} aria-pressed={mode==='timer'} onClick={()=>{setMode('timer');setErrors({});}}><Timer size={16}/><span>Timer</span></button>
-   <button type="button" disabled={busy} aria-pressed={mode==='manual'} onClick={()=>{setMode('manual');if(!minutes)setMinutes('25');setWhen(localInput(new Date()));setErrors({});}}><PenLine size={16}/><span>Add manually</span></button>
+   <button type="button" disabled={busy} aria-pressed={mode==='manual'} onClick={()=>{setMode('manual');if(!minutes)setMinutes('25');setWhenChoice('now');setErrors({});}}><PenLine size={16}/><span>Already done</span></button>
   </div>}
   <form ref={form} noValidate onSubmit={submit} className="tl-form">
-   <div className={'tl-card'+(own?.running?' is-running':own?' is-paused':'')}>
+   <div className={'tl-card tl2-what'+(own?.running?' is-running':own?' is-paused':'')}>
     <label htmlFor="time-entry-title" className="tl-eyebrow">What are you learning?</label>
     <input id="time-entry-title" name="title" className="tl-title" value={title} disabled={!!own||busy} maxLength={250} onChange={e=>{setTitle(e.target.value);clear('title');}} placeholder="e.g. Binary search practice" aria-invalid={!!errors.title} autoComplete="off" enterKeyHint="done"/>
     {errors.title&&<p className="field-error" role="alert">{errors.title}</p>}
-    <select aria-label="Course or project" className="tl-project" value={resourceId} disabled={!!own||busy} onChange={e=>setResourceId(e.target.value)}><option value="">Standalone learning</option>{state.resources.filter(r=>!r.demo&&!r.quickLog&&!r.archived).map(r=><option key={r.id} value={r.id}>{r.title}</option>)}</select>
-    {(mode==='timer'||own)&&<>
-     <div className="tl-clock-row">
-      <output className="tl-clock" aria-label="Elapsed learning time">{clockTime(own?.elapsedMs||0)}</output>
-      {own&&<span className={'tl-state'+(own.running?' live':'')}>{own.running?'Recording':'Paused'}</span>}
+    {!own&&<div className="tl2-suggest" role="group" aria-label="Suggestions">
+     {next&&<button type="button" className={title===next.lesson.title?'on':''} onClick={()=>pick(next.lesson.title,next.resource.id)}><Sparkles size={14}/><span><small>Up next</small>{next.lesson.title}</span></button>}
+     {recentTitles.filter(r=>r.title!==next?.lesson.title).map(r=><button type="button" key={r.id} className={title===r.title?'on':''} onClick={()=>pick(r.title,r.resource.quickLog?'':r.resource.id)}><RotateCcw size={14}/><span><small>Recent</small>{r.title}</span></button>)}
+    </div>}
+    <label className="tl2-course"><Layers size={15}/><select aria-label="Course or project" value={resourceId} disabled={!!own||busy} onChange={e=>setResourceId(e.target.value)}><option value="">No course · standalone</option>{courses.map(r=><option key={r.id} value={r.id}>{r.title}</option>)}</select></label>
+    {(mode==='timer'||own)&&<div className="tl2-timer">
+     <div className={'tl2-ring'+(own?.running?' live':'')}><svg viewBox="0 0 120 120" aria-hidden="true"><circle className="tl2-base" cx="60" cy="60" r="52"/>{own&&<circle className="tl2-fill" cx="60" cy="60" r="52" pathLength="100" strokeDasharray={`${ringPct} 100`} transform="rotate(-90 60 60)"/>}</svg>
+      <div><output className="tl-clock" aria-label="Elapsed learning time">{clockTime(elapsed)}</output><span className={'tl-state'+(own?.running?' live':'')}>{own?(own.running?'Recording':'Paused'):'Ready'}</span></div></div>
+     <div className="tl-controls tl2-controls">
+      {!own&&<button type="button" className="tl2-big" disabled={busy||!!other||!!packet.error} onClick={()=>timerAction('start')}><Play size={22} fill="currentColor"/>Start</button>}
+      {own?.running&&<><button type="button" className="tl2-round" disabled={busy} onClick={()=>timerAction('pause')} aria-label="Pause"><Pause size={22}/></button><button type="button" className="tl2-big tl2-stop" disabled={busy} onClick={()=>timerAction('stop')}><Square size={18} fill="currentColor"/>Stop & review</button></>}
+      {own&&!own.running&&<><button type="button" className="tl2-round" disabled={busy} onClick={()=>timerAction('discard')} aria-label="Discard timer"><Trash2 size={20}/></button><button type="button" className="tl2-big" disabled={busy} onClick={()=>timerAction('resume')}><Play size={20} fill="currentColor"/>Resume</button></>}
      </div>
-     <div className="tl-controls">
-      {!own&&<button type="button" className="primary tl-start" disabled={busy||!!other||!!packet.error} onClick={()=>timerAction('start')}><Play size={18} fill="currentColor"/>Start timer</button>}
-      {own?.running&&<><button type="button" className="secondary" disabled={busy} onClick={()=>timerAction('pause')}><Pause size={18}/>Pause</button><button type="button" className="tl-stop" disabled={busy} onClick={()=>timerAction('stop')}><Square size={16} fill="currentColor"/>Stop</button></>}
-      {own&&!own.running&&<><button type="button" className="secondary" disabled={busy} onClick={()=>timerAction('resume')}><Play size={18}/>Resume</button><button type="button" className="secondary tl-discard" disabled={busy} onClick={()=>timerAction('discard')} aria-label="Discard timer"><Trash2 size={17}/>Discard</button></>}
-     </div>
-    </>}
+    </div>}
    </div>
    {other&&<p className="form-error">A lesson timer is already running. Finish it from the active timer bar first.</p>}
    {packet.error&&<p role="alert" className="form-error">{packet.error}</p>}
-   {mode==='timer'&&!own&&<p className="tl-hint">You can close this screen — the timer keeps running on this device.</p>}
-   {own?.running&&<p className="tl-hint"><i/>Timing your learning. Stop when you’re done to review and save.</p>}
-   {reviewing&&<div className="tl-review">
-    {own&&<p className="tl-hint tl-timed">Timed {duration(own.elapsedMs)}. Adjust the minutes if needed.</p>}
-    <div className="tl-field"><label htmlFor="tl-minutes">Minutes</label>
-     <div className="tl-minutes"><input id="tl-minutes" name="minutes" type="number" inputMode="numeric" min="1" max="600" value={minutes} disabled={busy} onChange={e=>{setMinutes(e.target.value);clear('minutes');}} aria-invalid={!!errors.minutes}/>
-      <div className="tl-chips" role="group" aria-label="Quick durations">{PRESETS.map(n=><button type="button" key={n} aria-pressed={Number(minutes)===n} disabled={busy} onClick={()=>{setMinutes(String(n));clear('minutes');}}>{n}</button>)}</div></div>
+   {mode==='timer'&&!own&&<p className="tl-hint">You can close this screen. The timer keeps running, with a notification.</p>}
+   {reviewing&&<div className="tl-review tl2-review">
+    {own&&<p className="tl-hint tl-timed">Timed {duration(own.elapsedMs)}. Adjust if needed.</p>}
+    <div className="tl2-section"><span className="tl2-label">How long?</span>
+     <div className="tl2-stepper"><button type="button" aria-label="5 minutes less" disabled={busy||mins<=1} onClick={()=>bump(-5)}><Minus size={20}/></button>
+      <label><input id="tl-minutes" name="minutes" type="number" inputMode="numeric" min="1" max="600" value={minutes} disabled={busy} onChange={e=>{setMinutes(e.target.value);clear('minutes');}} aria-invalid={!!errors.minutes} aria-label="Minutes"/><small>min</small></label>
+      <button type="button" aria-label="5 minutes more" disabled={busy} onClick={()=>bump(5)}><Plus size={20}/></button></div>
+     <div className="tl-chips tl2-chips" role="group" aria-label="Quick durations">{PRESETS.map(n=><button type="button" key={n} aria-pressed={mins===n} disabled={busy} onClick={()=>{setMinutes(String(n));clear('minutes');}}>{n<60?n+'m':n===60?'1h':'1h 30'}</button>)}</div>
      {errors.minutes&&<span className="field-error" role="alert">{errors.minutes}</span>}
     </div>
-    <div className="tl-grid">
-     <div className="tl-field"><label htmlFor="tl-kind">Activity</label><select id="tl-kind" value={kind} disabled={busy} onChange={e=>setKind(e.target.value as typeof kind)}><option value="topic">Practice / study</option><option value="video">Watched</option><option value="article">Read</option></select></div>
-     {!own&&mode==='manual'&&<div className="tl-field"><label htmlFor="tl-when">Finished at</label><input id="tl-when" name="when" type="datetime-local" value={when} max={localInput(new Date(openedAt+24*3600000))} disabled={busy} onChange={e=>{setWhen(e.target.value);clear('when');}} aria-invalid={!!errors.when}/>{errors.when&&<span className="field-error" role="alert">{errors.when}</span>}</div>}
-    </div>
-    <details className="tl-more" open={!!errors.url||undefined}><summary>Add a link or reflection</summary>
+    <div className="tl2-section"><span className="tl2-label">What kind?</span><div className="tl2-seg" role="group" aria-label="Activity">{KINDS.map(([v,l,Icon])=><button type="button" key={v} aria-pressed={kind===v} disabled={busy} onClick={()=>setKind(v)}><Icon size={17}/>{l}</button>)}</div></div>
+    {!own&&mode==='manual'&&<div className="tl2-section"><span className="tl2-label">When did you finish?</span>
+     <div className="tl-chips tl2-chips" role="group" aria-label="When">{([['now','Just now'],['1h','1 hour ago'],['morning','This morning'],['yesterday','Last night'],['custom','Pick time']] as const).map(([v,l])=><button type="button" key={v} aria-pressed={whenChoice===v} disabled={busy} onClick={()=>setWhenChoice(v)}>{l}</button>)}</div>
+     {whenChoice==='custom'&&<input id="tl-when" name="when" type="datetime-local" value={when} max={localInput(new Date(openedAt+24*3600000))} disabled={busy} onChange={e=>{setWhen(e.target.value);clear('when');}} aria-invalid={!!errors.when}/>}
+     {errors.when&&<span className="field-error" role="alert">{errors.when}</span>}
+    </div>}
+    <details className="tl-more" open={!!errors.url||undefined}><summary>Add a link or a note</summary>
      <div className="tl-field"><label htmlFor="tl-url">Source link</label><input id="tl-url" name="url" value={url} disabled={busy} inputMode="url" placeholder="leetcode.com (optional)" onChange={e=>{setUrl(e.target.value);clear('url');}}/>{errors.url&&<span className="field-error" role="alert">{errors.url}</span>}</div>
-     <div className="tl-field"><label htmlFor="tl-reflection">Reflection</label><textarea id="tl-reflection" value={reflection} disabled={busy} onChange={e=>setReflection(e.target.value)} maxLength={1000} placeholder="What clicked? What needs more practice?"/><small>Reflections stay out of social shares.</small></div>
+     <div className="tl-field"><label htmlFor="tl-reflection">What clicked?</label><textarea id="tl-reflection" value={reflection} disabled={busy} onChange={e=>setReflection(e.target.value)} maxLength={1000} placeholder="One thing you learned, or what needs more practice"/><small>Notes stay out of social shares.</small></div>
+     {!resourceId&&<label className="tl-check"><input type="checkbox" checked={keep} disabled={busy} onChange={e=>setKeep(e.target.checked)}/><span>Also keep it in my library</span></label>}
     </details>
-    {!resourceId&&<label className="tl-check"><input type="checkbox" checked={keep} disabled={busy} onChange={e=>setKeep(e.target.checked)}/><span>Keep this in my active library</span></label>}
-    <button type="submit" className="primary tl-save" disabled={busy||!!own?.running}>{busy?<Loader2 size={18} className="spin"/>:<Check size={18}/>}Save time</button>
-    <small className="tl-note">Counts toward your progress and streak.{resourceId?' Adds an “Extra study” lesson to the course.':''}</small>
+    <button type="submit" className="primary tl-save tl2-save" disabled={busy||!!own?.running}>{busy?<Loader2 size={18} className="spin"/>:<Check size={18}/>}{mins?`Log ${mins<60?mins+' min':Math.floor(mins/60)+'h'+(mins%60?' '+mins%60+'m':'')}`:'Log time'}</button>
+    <small className="tl-note">Counts toward your streak, goal and weekly plan{linked?` · adds an “Extra study” entry to ${linked.title}`:''}.</small>
    </div>}
    {error&&<p className="form-error" role="alert">{error}</p>}
   </form>
@@ -128,7 +144,7 @@ export default function QuickLog({state,workspace,onSave,onClose,notify,initialM
    {[...groups].map(([day,rows])=><section key={day}><header><strong>{day===today?'Today':new Intl.DateTimeFormat('en',{timeZone:state.settings.timezone,weekday:'short',month:'short',day:'numeric'}).format(new Date(rows[0].at))}</strong><span>{entries.filter(e=>dayKey(new Date(e.at),state.settings.timezone)===day).reduce((n,e)=>n+e.minutes,0)} min</span></header>
     {rows.map(row=><div className="tl-entry" key={row.id}><div><strong>{row.title}</strong><small>{row.resource.quickLog?'Standalone learning':row.resource.title} · {new Intl.DateTimeFormat('en',{timeZone:state.settings.timezone,hour:'numeric',minute:'2-digit'}).format(new Date(row.at))}</small></div><span className="tl-entry-min">{row.minutes}m</span><button type="button" className="icon-button" disabled={!!timer||busy} aria-label={'Track '+row.title+' again'} onClick={()=>repeat(row)}><RotateCcw size={17}/></button></div>)}
    </section>)}
-   {!entries.length&&<p className="tl-hint">Your first entry starts here. A chapter, a coding problem, or an article — all count.</p>}
+   {!entries.length&&<p className="tl-hint">Your first entry starts here. A chapter, a coding problem, or an article all count.</p>}
    {entries.length>limit&&<button type="button" className="text-button" onClick={()=>setLimit(n=>n+12)}>Show more entries</button>}
   </div>
  </div>
