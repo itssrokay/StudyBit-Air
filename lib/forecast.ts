@@ -15,7 +15,7 @@ export const shortDate=(day:string,withYear=true)=>new Intl.DateTimeFormat('en',
 export function goalForecast(state:LearningState,now=new Date()){
  const tz=state.settings.timezone,today=dayKey(now,tz),plan=currentPlan(state,now);
  const goal=state.goals.find(g=>g.id===state.settings.focusGoal)||null;
- const open=state.resources.filter(r=>!r.archived&&r.lessons.length>0);
+ const open=state.resources.filter(r=>!r.archived&&!r.demo&&r.lessons.length>0);
  let resources=goal?open.filter(r=>r.goalId===goal.id):[];
  const planFocus=plan?.targets.find(t=>t.resourceId)?.resourceId;
  if(!resources.length&&planFocus)resources=open.filter(r=>r.id===planFocus);
@@ -24,14 +24,14 @@ export function goalForecast(state:LearningState,now=new Date()){
  const ids=new Set(resources.map(r=>r.id)),remaining=resources.reduce((n,r)=>n+left(r),0),all=Math.max(1,resources.reduce((n,r)=>n+total(r),0));
  const since=now.getTime()-14*DAY,logs=liveStudyLogs(state).filter(l=>Date.parse(l.at)>=since);
  const focused=logs.filter(l=>ids.has(l.resourceId)).reduce((n,l)=>n+l.minutes,0),overall=logs.reduce((n,l)=>n+l.minutes,0);
- const pace=focused>0?focused/14:overall/14*0.5;// minutes per day
+ const paceSource:'goal'|'all'|'none'=focused>0?'goal':overall>0?'all':'none',pace=focused>0?focused/14:overall/14;// minutes per day
  const days=remaining<=0?0:pace>0?Math.ceil(remaining/pace):null;
  const eta=days===null?null:new Date(Date.parse(today+'T12:00:00Z')+days*DAY).toISOString().slice(0,10);
- const dated=[plan?.answers.deadline,...resources.map(r=>r.deadline)].filter((d):d is string=>!!d&&d>=today).sort();
- const deadline=dated[0]||null,daysToDeadline=deadline?Math.max(1,Math.round((Date.parse(deadline+'T12:00:00Z')-Date.parse(today+'T12:00:00Z'))/DAY)):null;
+ const dated=[{d:plan?.answers.deadline,from:'your weekly plan'},...resources.map(r=>({d:r.deadline,from:`“${r.title}”`}))].filter((x):x is {d:string;from:string}=>!!x.d&&x.d>=today).sort((a,b)=>a.d.localeCompare(b.d));
+ const deadline=dated[0]?.d||null,deadlineFrom=dated[0]?.from||'',daysToDeadline=deadline?Math.max(1,Math.round((Date.parse(deadline+'T12:00:00Z')-Date.parse(today+'T12:00:00Z'))/DAY)):null;
  const needed=daysToDeadline?Math.ceil(remaining/daysToDeadline):null;
  const late=eta&&deadline?Math.round((Date.parse(eta+'T12:00:00Z')-Date.parse(deadline+'T12:00:00Z'))/DAY):null;
- return {title:goal?.title||resources[0].title,resources,remaining,pct:Math.round((1-remaining/all)*100),pace:Math.round(pace),eta,days,deadline,daysToDeadline,needed,late,onTrack:late===null?null:late<=0};
+ return {title:goal?.title||resources[0].title,basis:goal&&resources.some(r=>r.goalId===goal.id)?'goal' as const:planFocus&&resources[0].id===planFocus?'plan' as const:'top' as const,paceSource,deadlineFrom,remainingBy:resources.map(r=>({id:r.id,title:r.title,minutes:left(r)})).sort((a,b)=>b.minutes-a.minutes),resources,remaining,pct:Math.round((1-remaining/all)*100),pace:Math.round(pace),eta,days,deadline,daysToDeadline,needed,late,onTrack:late===null?null:late<=0};
 }
 export type GoalForecast=NonNullable<ReturnType<typeof goalForecast>>;
 

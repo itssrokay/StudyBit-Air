@@ -1,7 +1,7 @@
 'use client';
 import {useMemo,useRef,useState,type PointerEvent as RPointerEvent} from 'react';
 import {Sparkles,Plus,History,Flag,ChevronDown,ChevronUp,GripVertical,Share2,Send,Check,Loader2,ArrowRight,Lightbulb,X,RotateCcw,Minus,CalendarClock} from 'lucide-react';
-import {goalForecast,forecastLine} from '../lib/forecast';
+import {goalForecast,forecastLine,shortDate,type GoalForecast} from '../lib/forecast';
 import ModalFrame from './modal';
 import {progress,rankResource,dayKey,type LearningState} from '../lib/learning';
 import {planProgress,weekLabel,buildRulePlan,fmtMinutes,weekStartOf,type WeeklyPlan,type WeekAnswers} from '../lib/weekly-plan';
@@ -145,5 +145,19 @@ export function MetricHistory({metric,state,now,onClose,series}:{metric:MetricId
   <div className="wk-metric-big"><small>{label(values[sel].d,sel)}</small><strong>{fmt(values[sel].v)}</strong></div>
   <div className="wk-metric-bars">{values.map((x,i)=><button key={x.d} aria-pressed={i===sel} aria-label={label(x.d,i)+': '+fmt(x.v)} onClick={()=>setSel(i)}><span><i style={{height:(x.v?Math.max(4,x.v/max*100):0)+'%'}}/></span><small>{new Intl.DateTimeFormat('en',{weekday:'narrow',timeZone:'UTC'}).format(new Date(x.d+'T12:00:00Z'))}</small></button>)}</div>
   <ul className="wk-metric-list">{values.slice().reverse().slice(0,7).map((x,i)=><li key={x.d}><span>{label(x.d,values.length-1-i)}</span><b>{fmt(x.v)}</b></li>)}</ul>
+ </div></ModalFrame>;
+}
+
+/* ---------------- Goal forecast explained ---------------- */
+const hm=(m:number)=>m<60?`${Math.round(m)} min`:`${Math.floor(m/60)}h${Math.round(m%60)?` ${Math.round(m%60)}m`:''}`;
+export function ForecastSheet({forecast:f,onClose,onGoals,onPlan}:{forecast:GoalForecast;onClose:()=>void;onGoals:()=>void;onPlan:()=>void}){
+ const basis=f.basis==='goal'?`Everything linked to your focus goal “${f.title}”.`:f.basis==='plan'?`The course your weekly plan focuses on.`:`You have no focus goal with linked courses, so this uses your top-priority course.`;
+ return <ModalFrame title="Goal forecast" subtitle="How the numbers on this page are worked out." onClose={onClose}><div className="modal-content fc-sheet">
+  <section><span className="fc-step">1</span><div><strong>What counts</strong><p>{basis}</p><ul>{f.remainingBy.slice(0,6).map(r=><li key={r.id}><span>{r.title}</span><b>{r.minutes?hm(r.minutes)+' left':'Done'}</b></li>)}</ul><p className="fc-total">Total left: <b>{hm(f.remaining)}</b> · {f.pct}% done</p></div></section>
+  <section><span className="fc-step">2</span><div><strong>Your pace</strong><p>{f.paceSource==='goal'?`You studied these for ${hm(f.pace*14)} in the last 14 days, about ${f.pace} min a day.`:f.paceSource==='all'?`You haven’t studied these in the last 14 days. As if all your learning (about ${f.pace} min a day) went here.`:'No learning logged in the last 14 days, so there’s no pace yet.'}</p></div></section>
+  <section><span className="fc-step">3</span><div><strong>Finish at this pace</strong><p>{f.remaining<=0?'Already done.':f.eta?<>{hm(f.remaining)} ÷ {f.pace||'<1'} min a day ≈ {f.days} days → <b>{shortDate(f.eta)}</b>.</>:'Not until you start. Log a session and this updates.'}</p></div></section>
+  <section><span className="fc-step">4</span><div><strong>Deadline</strong><p>{f.deadline?<>{shortDate(f.deadline)}, from {f.deadlineFrom}. {f.daysToDeadline} days left, so you need <b>{hm(f.remaining)} ÷ {f.daysToDeadline} days ≈ {f.needed} min a day</b>.</>:'No deadline set. Add one in Plan my week or on the course.'}</p></div></section>
+  {f.needed!==null&&f.needed>240&&<p className="fc-warn">{f.needed} min a day isn’t realistic. Move the deadline, link fewer courses to this goal, or mark some lessons done if you’ve already covered them.</p>}
+  <div className="wk-row"><button className="wk-ghost" onClick={()=>{onClose();onGoals();}}><Flag size={15}/>Change goal</button><button className="wk-primary" onClick={()=>{onClose();onPlan();}}><Sparkles size={15}/>Adjust deadline</button></div>
  </div></ModalFrame>;
 }

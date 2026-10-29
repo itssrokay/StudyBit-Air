@@ -58,3 +58,21 @@
 .wk-forecast.behind{background:var(--wk-bad-con)}
 .wk-forecast.behind svg{color:var(--wk-bad)}
 .wk-scale{margin:0;padding:10px 12px;border-radius:14px;background:var(--h-card);font-size:13px;line-height:1.4;color:var(--h-muted)}
+.re-top{display:flex;gap:8px;margin:0 0 6px}
+.re-top .re-archive,.re-top .re-delete{flex:0 0 auto;min-height:38px;padding:0 14px;font-size:13px}
+.re-top .re-delete.armed{flex:1}
+
+/* Goal forecast sheet */
+.fc-sheet section{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--h-line)}
+.fc-sheet section:first-child{border-top:0;padding-top:0}
+.fc-step{display:grid;place-items:center;width:28px;height:28px;flex-shrink:0;border-radius:50%;background:var(--h-con);color:var(--h-onc);font-weight:700;font-size:13px}
+.fc-sheet section>div{min-width:0;flex:1}
+.fc-sheet strong{display:block;font-size:15px;color:var(--h-ink)}
+.fc-sheet p{margin:4px 0 0;font-size:14px;line-height:1.45;color:var(--h-muted)}
+.fc-sheet p b{color:var(--h-ink)}
+.fc-sheet ul{list-style:none;margin:8px 0 0;padding:0}
+.fc-sheet li{display:flex;justify-content:space-between;gap:10px;padding:6px 0;font-size:14px;color:var(--h-ink)}
+.fc-sheet li span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fc-sheet li b{flex-shrink:0;font-variant-numeric:tabular-nums}
+.fc-total{margin-top:6px!important}
+.fc-warn{margin:6px 0 0;padding:12px;border-radius:14px;background:var(--wk-bad-con);color:var(--wk-bad);font-size:13px;line-height:1.4}
