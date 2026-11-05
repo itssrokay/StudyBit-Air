@@ -86,3 +86,14 @@ test('add sheet helpers route links and build topic sessions',async()=>{
  assert.equal(linkRoute('https://x.com/a/status/1'),'article');
  assert.deepEqual(topicLessons('Arrays\n- Trees\n\n',5,30).map(l=>l.title),['Arrays','Trees']);assert.equal(topicLessons('',4,25).length,4);assert.ok(linkRoute('https://www.udemy.com/course/x')==='link');
 });
+
+test('reddit links get a real title, and login walls never become the title',async()=>{
+ const {readingLink}=await import('../lib/reading.ts');const {parseHtmlPreview,genericTitle}=await import('../lib/link-preview.ts');
+ const full=readingLink('https://www.reddit.com/r/ExperiencedDevs/comments/1abc23/how_do_you_prepare_for_system_design/?share_id=xyz&utm_source=share');
+ assert.equal(full.title,'How do you prepare for system design · r/ExperiencedDevs');assert.equal(full.url,'https://www.reddit.com/r/ExperiencedDevs/comments/1abc23/how_do_you_prepare_for_system_design/');assert.equal(full.provider,'Reddit');
+ assert.equal(readingLink('https://www.reddit.com/r/developersIndia/s/AbCd123XyZ').title,'Post in r/developersIndia');
+ assert.ok(genericTitle('Reddit')&&genericTitle('Reddit - Dive into anything')&&!genericTitle('Redis internals'));
+ const p=parseHtmlPreview('<html><head><title>Reddit - The heart of the internet</title></head>','https://www.reddit.com/r/java/comments/9xyz12/jvm_memory_tuning_guide/');
+ assert.equal(p.title,'Jvm memory tuning guide · r/java');
+ assert.equal(parseHtmlPreview('<title>Log in</title>','https://example.com/'),null);
+});

@@ -38,10 +38,14 @@ function meta(html:string,names:string[]){
  for(const tag of html.match(/<meta\b[^>]*>/gi)||[]){const key=tag.match(/\b(?:property|name)\s*=\s*["']([^"']+)["']/i)?.[1]?.toLowerCase();if(key&&names.includes(key)){const v=tag.match(/\bcontent\s*=\s*"([^"]*)"/i)?.[1]??tag.match(/\bcontent\s*=\s*'([^']*)'/i)?.[1];if(v&&v.trim())return clean(v);}}
  return '';
 }
+/** Login walls and bot checks return a site name instead of the post title. */
+export const genericTitle=(t:string)=>/^(reddit|reddit\s*[-–:|].*|x|twitter|instagram|facebook|linkedin|threads|medium|youtube|log ?in.*|sign ?in.*|just a moment.*|access denied|attention required.*|page not found|403 forbidden|blocked)$/i.test(t.trim());
 export function parseHtmlPreview(html:string,url:string):LinkPreview|null{
  const head=html.slice(0,600000);
- const title=meta(head,['og:title','twitter:title'])||clean(head.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1]||'');
- if(!title)return null;
+ let title=meta(head,['og:title','twitter:title'])||clean(head.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1]||'');
+ if(!title||genericTitle(title)){// fall back to what the (possibly redirected) link itself says
+  let fallback='';try{const link=readingLink(url);fallback=/^Reading from /.test(link.title)?'':link.title;}catch{/* not a usable link */}
+  if(!fallback)return null;title=fallback;}
  const site=meta(head,['og:site_name'])||new URL(url).hostname.replace(/^www\./,'');
  return {title:title.slice(0,250),excerpt:'',author:meta(head,['author','article:author']),site};
 }

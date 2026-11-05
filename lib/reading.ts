@@ -3,6 +3,10 @@ export function readingLink(value:string){
  const valid=safeUrl(value.trim());if(!valid)throw Error('Use an http or https article or post link.');const url=new URL(valid);if(url.username||url.password)throw Error('Remove credentials from the link.');url.hash='';for(const key of [...url.searchParams.keys()])if(/^(utm_|fbclid$|gclid$)/i.test(key))url.searchParams.delete(key);
  const host=url.hostname.replace(/^(www|mobile|m)\./,'');const post=['x.com','twitter.com'].includes(host)?url.pathname.match(/^\/(?:([A-Za-z0-9_]{1,15})|i\/web)\/status\/(\d{5,25})(?:\/|$)/):null;
  if(post){url.hostname='x.com';url.pathname='/'+(post[1]||'i/web')+'/status/'+post[2];url.search='';return {url:url.href,provider:'X / Twitter',title:post[1]?'Post by @'+post[1]:'Saved post on X',sourceId:'x:'+post[2]};}
+ const reddit=['reddit.com','old.reddit.com','new.reddit.com','np.reddit.com'].includes(host)?url.pathname.match(/^\/r\/([A-Za-z0-9_]{2,30})\/(?:comments\/([a-z0-9]{3,12})(?:\/([^/]+))?|s\/([A-Za-z0-9]{4,20}))/):null;
+ if(reddit){const [,sub,id,slugPart,share]=reddit;url.hostname='www.reddit.com';if(id){url.pathname=`/r/${sub}/comments/${id}/${slugPart?slugPart+'/':''}`;url.search='';}
+  let words='';try{words=decodeURIComponent(slugPart||'').replace(/[-_]+/g,' ').trim();}catch{}
+  return {url:url.href,provider:'Reddit',title:(words?words[0].toUpperCase()+words.slice(1)+' · r/'+sub:'Post in r/'+sub).slice(0,250),sourceId:id?'reddit:'+id:'reddit-share:'+share};}
  let slug='';try{slug=decodeURIComponent(url.pathname.split('/').filter(Boolean).at(-1)||'').replace(/\.(html?|php)$/i,'').replace(/[-_]+/g,' ').trim();}catch{}
  return {url:url.href,provider:host,title:(slug?slug[0].toUpperCase()+slug.slice(1):'Reading from '+host).slice(0,250),sourceId:url.href};
 }
