@@ -15,7 +15,7 @@ python3 android-companion/build-local.py
 echo "▶ Committing and pushing"
 # Keep the README download line on the version being published.
 sed -i '' -E "s|^### 📱 .*$|### 📱 Android app v$version · [Download the APK](https://raw.githubusercontent.com/itssrokay/StudyBit-Air/main/public/downloads/learning-space-android.apk?v=$version)|" README.md
-git add -A README.md public/downloads android-companion/assets app lib offline scripts android-companion/AndroidManifest.xml android-companion/build.gradle tests
+git add -A README.md CHANGELOG.md public/downloads android-companion/assets app lib offline scripts android-companion/AndroidManifest.xml android-companion/build.gradle tests
 git diff --cached --quiet || git commit -m "Build Android $version"
 git push origin HEAD
 echo "✔ Published. Install on your phone from:"
