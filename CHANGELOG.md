@@ -13,9 +13,10 @@ Versions match the Android app (Settings → Apps → Learning Space).
 
 ---
 
-## Unreleased
-- Asked: a small log of everything requested and changed.
-- Changed: added this CHANGELOG.md. The publish step now includes it.
+## 0.30.2 · 2026-11-07
+- Asked: after saving a shared link, 5-6 old shared links popped up one by one and had to be closed each time.
+- Changed: only a link shared in the last 15 minutes pops up now. Older leftover shares are moved quietly to the Inbox (one toast) and cleared from the phone's share queue, so they never come back.
+- Also: added this CHANGELOG.md, and the publish step now includes it.
 
 ## 0.30.1 · 2026-11-05
 - Asked: sharing from X opened an old Reddit link titled "Reddit".
