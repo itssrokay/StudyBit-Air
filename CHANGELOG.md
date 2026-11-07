@@ -13,6 +13,10 @@ Versions match the Android app (Settings → Apps → Learning Space).
 
 ---
 
+## 0.30.3 · 2026-11-07
+- Asked: no way to mark a reading or task as completed after finishing it.
+- Changed: a tick button on each saved reading (and any single-step item) in the Library marks it read or done in one tap; tap again to undo. The item's detail sheet also has a clear "Mark as read" / "Mark as done" button.
+
 ## 0.30.2 · 2026-11-07
 - Asked: after saving a shared link, 5-6 old shared links popped up one by one and had to be closed each time.
 - Changed: only a link shared in the last 15 minutes pops up now. Older leftover shares are moved quietly to the Inbox (one toast) and cleared from the phone's share queue, so they never come back.

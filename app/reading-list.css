@@ -42,3 +42,7 @@ html:root[data-phone=true] .m-subchips>button{min-height:34px;padding:5px 12px;f
 html:root[data-phone=true] .m-subchips>button small{font-size:11px;opacity:.7}
 html:root[data-phone=true] .m-asap{flex:0 0 40px;width:40px;height:40px;display:grid;place-items:center;border:0;border-radius:12px;background:transparent;color:var(--m-muted)}
 html:root[data-phone=true] .m-asap.on{color:#e8a23a;background:color-mix(in srgb,#e8a23a 14%,transparent)}
+
+html:root[data-phone=true] .m-finish{flex:0 0 40px;width:40px;height:40px;display:grid;place-items:center;border:1.5px solid var(--m-line);border-radius:999px;background:transparent;color:var(--m-muted);align-self:center}
+html:root[data-phone=true] .m-finish.on{background:var(--m-accent);border-color:var(--m-accent);color:var(--m-card)}
+.mark-finished{display:inline-flex;align-items:center;gap:6px}
