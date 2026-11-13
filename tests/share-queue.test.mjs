@@ -25,3 +25,14 @@ test('a share with no time is treated as old',()=>{
  const r=planShares([{id:'z',text:'t'}],{known:none,dismissed:none,now});
  assert.equal(r.show,null);assert.equal(r.stale.length,1);
 });
+import {alreadySaved} from '../lib/share-queue.ts';
+test('a share whose link is already saved is skipped, even if it arrives looking new',()=>{
+ const state={inbox:[],resources:[{url:'https://x.com/arpit_bhayani/status/99'}]};
+ assert.ok(alreadySaved(state,'Post by @arpit_bhayani https://x.com/arpit_bhayani/status/99?s=46&t=abc'));
+ assert.ok(!alreadySaved(state,'https://x.com/someone/status/100'));
+ const r=planShares([{id:'n',text:'https://x.com/arpit_bhayani/status/99',createdAt:ago(0.1)}],{known:none,alreadySaved:s=>alreadySaved(state,s.text),dismissed:none,now});
+ assert.equal(r.show,null);assert.deepEqual(r.acknowledge,['n']);
+});
+test('same text already in the inbox is skipped',()=>{
+ assert.ok(alreadySaved({inbox:[{text:'Read  this\nhttps://reddit.com/r/developersIndia/x'}],resources:[]},'read this https://reddit.com/r/developersIndia/x'));
+});

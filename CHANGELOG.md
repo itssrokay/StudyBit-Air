@@ -13,6 +13,10 @@ Versions match the Android app (Settings → Apps → Learning Space).
 
 ---
 
+## 0.30.4 · 2026-11-13
+- Asked: still not fixed. After saving a share, 4-5 old shared links (X, Reddit) popped up one by one (screen recording).
+- Changed: root cause was Android re-delivering old share intents (the app opens inside X's or Reddit's task, and restoring or reopening it from Recents re-imported the old share as brand new). Restored or Recents launches no longer import shares. The phone remembers every handled share for 7 days by id and text, so a replay can't re-enter the queue. Closing a share with X now removes it for good, and a share whose link is already in your Library or Inbox is skipped silently.
+
 ## 0.30.3 · 2026-11-07
 - Asked: no way to mark a reading or task as completed after finishing it.
 - Changed: a tick button on each saved reading (and any single-step item) in the Library marks it read or done in one tap; tap again to undo. The item's detail sheet also has a clear "Mark as read" / "Mark as done" button.
