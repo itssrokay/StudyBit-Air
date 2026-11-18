@@ -1,6 +1,8 @@
 import {liveStudyLogs} from './activity.ts';
 import { dailyPlan, dayKey, doneMinutes, progress, type LearningState } from './learning.ts';
 const shift=(key:string,days:number)=>new Date(Date.parse(key+'T12:00:00Z')+days*86400000).toISOString().slice(0,10);
+/** A day counts as active once it reaches your streak minimum. Used by every "active days" number. */
+export const isActiveDay=(state:LearningState,minutes:number)=>minutes>=state.settings.streakMinimum;
 export function streaks(state:LearningState,now=new Date()){
  const minutes=new Map<string,number>();const add=(date:string,n:number)=>{const day=dayKey(new Date(date),state.settings.timezone);minutes.set(day,(minutes.get(day)||0)+n);};
  for(const r of state.resources)for(const l of r.lessons)if(l.done&&l.completedAt)add(l.completedAt,l.minutes-l.studiedMinutes);

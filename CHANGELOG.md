@@ -13,6 +13,18 @@ Versions match the Android app (Settings → Apps → Learning Space).
 
 ---
 
+## Unreleased
+- Asked: go through the formulas and correct them.
+- Changed (formulas, each pinned by tests/formulas.test.mjs):
+  - Goal forecast pace divides by the days you've actually studied (3 to 14), not always 14, so a new goal isn't shown at a quarter of its real pace.
+  - Finish date and deadline count today as a study day: 30 min left at 30 min/day finishes today; a deadline tomorrow leaves 2 study days, so "needed per day" is no longer overstated. The forecast sheet explains the real pace window.
+  - Deadline urgency uses calendar days in your timezone, not UTC.
+  - A resource with no lessons shows 0% instead of NaN.
+  - The 12-month chart average divides by the days actually covered, not 365.
+  - "Active days" means days at your streak minimum everywhere (This week tile, momentum, weekly plan), not "any minute".
+  - Week report finish estimate uses that course's own minutes this week (not all learning) and shows a date instead of just a year.
+  - Today's "to-dos done this week" starts on Monday in your timezone when there is no weekly plan.
+
 ## 0.30.4 · 2026-11-13
 - Asked: still not fixed. After saving a share, 4-5 old shared links (X, Reddit) popped up one by one (screen recording).
 - Changed: root cause was Android re-delivering old share intents (the app opens inside X's or Reddit's task, and restoring or reopening it from Recents re-imported the old share as brand new). Restored or Recents launches no longer import shares. The phone remembers every handled share for 7 days by id and text, so a replay can't re-enter the queue. Closing a share with X now removes it for good, and a share whose link is already in your Library or Inbox is skipped silently.

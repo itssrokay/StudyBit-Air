@@ -3,7 +3,7 @@ import {roastOpener} from './coach-voice.ts';
 import {currentPlan,planProgress} from './weekly-plan.ts';
 import {validateCoachActions} from './coach-actions.ts';
 import {dailyPlan,dayKey,doneMinutes,dailyBudget,rankResource,eligibleLessons,type LearningState} from './learning.ts';
-import {streaks} from './habits.ts';
+import {streaks,isActiveDay} from './habits.ts';
 import {workspaceState} from './spaces.ts';
 import {z} from 'zod';
 import {automaticCoachContext} from './coach-context.ts';
@@ -15,7 +15,7 @@ const shift=(day:string,n:number)=>new Date(Date.parse(day+'T12:00:00Z')+n*86400
 export function coachActivity(state:LearningState,now=new Date()){
  const today=dayKey(now,state.settings.timezone),habit=streaks(state,now);
  const days=Array.from({length:7},(_,i)=>({day:shift(today,i-6),minutes:habit.minutes.get(shift(today,i-6))||0}));
- return {today,minutesToday:doneMinutes(state,now),minutesWeek:days.reduce((n,d)=>n+d.minutes,0),daysWeek:days.filter(d=>d.minutes>0).length,streak:habit.current,lastLoggedDay:[...habit.minutes].filter(([d,n])=>d<=today&&n>0).map(([d])=>d).sort().at(-1)||null};
+ return {today,minutesToday:doneMinutes(state,now),minutesWeek:days.reduce((n,d)=>n+d.minutes,0),daysWeek:days.filter(d=>isActiveDay(state,d.minutes)).length,streak:habit.current,lastLoggedDay:[...habit.minutes].filter(([d,n])=>d<=today&&n>0).map(([d])=>d).sort().at(-1)||null};
 }
 export type CoachInsight={id:string;label:string;title:string;body:string;details:string[];prompt:string;context:string};
 export function coachInsights(state:LearningState,now=new Date()):CoachInsight[]{

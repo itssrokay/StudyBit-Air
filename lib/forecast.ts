@@ -23,15 +23,20 @@ export function goalForecast(state:LearningState,now=new Date()){
  if(!resources.length)return null;
  const ids=new Set(resources.map(r=>r.id)),remaining=resources.reduce((n,r)=>n+left(r),0),all=Math.max(1,resources.reduce((n,r)=>n+total(r),0));
  const since=now.getTime()-14*DAY,logs=liveStudyLogs(state).filter(l=>Date.parse(l.at)>=since);
- const focused=logs.filter(l=>ids.has(l.resourceId)).reduce((n,l)=>n+l.minutes,0),overall=logs.reduce((n,l)=>n+l.minutes,0);
- const paceSource:'goal'|'all'|'none'=focused>0?'goal':overall>0?'all':'none',pace=focused>0?focused/14:overall/14;// minutes per day
+ const focusedLogs=logs.filter(l=>ids.has(l.resourceId)),focused=focusedLogs.reduce((n,l)=>n+l.minutes,0),overall=logs.reduce((n,l)=>n+l.minutes,0);
+ const paceSource:'goal'|'all'|'none'=focused>0?'goal':overall>0?'all':'none',used=focused>0?focusedLogs:logs,paceMinutes=focused>0?focused:overall;
+ // Divide by the days you've actually been at it (3 to 14), so a goal started 4 days ago isn't averaged over 14.
+ const firstDay=used.length?used.map(l=>dayKey(new Date(l.at),tz)).sort()[0]:today;
+ const paceDays=Math.min(14,Math.max(3,Math.round((Date.parse(today+'T12:00:00Z')-Date.parse(firstDay+'T12:00:00Z'))/DAY)+1));
+ const pace=paceMinutes/paceDays;// minutes per day
+ // Study days needed, counting today as day 1; you finish on the last of them.
  const days=remaining<=0?0:pace>0?Math.ceil(remaining/pace):null;
- const eta=days===null?null:new Date(Date.parse(today+'T12:00:00Z')+days*DAY).toISOString().slice(0,10);
+ const eta=days===null?null:new Date(Date.parse(today+'T12:00:00Z')+Math.max(0,days-1)*DAY).toISOString().slice(0,10);
  const dated=[{d:plan?.answers.deadline,from:'your weekly plan'},...resources.map(r=>({d:r.deadline,from:`“${r.title}”`}))].filter((x):x is {d:string;from:string}=>!!x.d&&x.d>=today).sort((a,b)=>a.d.localeCompare(b.d));
- const deadline=dated[0]?.d||null,deadlineFrom=dated[0]?.from||'',daysToDeadline=deadline?Math.max(1,Math.round((Date.parse(deadline+'T12:00:00Z')-Date.parse(today+'T12:00:00Z'))/DAY)):null;
+ const deadline=dated[0]?.d||null,deadlineFrom=dated[0]?.from||'',daysToDeadline=deadline?Math.round((Date.parse(deadline+'T12:00:00Z')-Date.parse(today+'T12:00:00Z'))/DAY)+1:null;// study days left, today and the deadline day included
  const needed=daysToDeadline?Math.ceil(remaining/daysToDeadline):null;
  const late=eta&&deadline?Math.round((Date.parse(eta+'T12:00:00Z')-Date.parse(deadline+'T12:00:00Z'))/DAY):null;
- return {title:goal?.title||resources[0].title,basis:goal&&resources.some(r=>r.goalId===goal.id)?'goal' as const:planFocus&&resources[0].id===planFocus?'plan' as const:'top' as const,paceSource,deadlineFrom,remainingBy:resources.map(r=>({id:r.id,title:r.title,minutes:left(r)})).sort((a,b)=>b.minutes-a.minutes),resources,remaining,pct:Math.round((1-remaining/all)*100),pace:Math.round(pace),eta,days,deadline,daysToDeadline,needed,late,onTrack:late===null?null:late<=0};
+ return {title:goal?.title||resources[0].title,basis:goal&&resources.some(r=>r.goalId===goal.id)?'goal' as const:planFocus&&resources[0].id===planFocus?'plan' as const:'top' as const,paceSource,deadlineFrom,remainingBy:resources.map(r=>({id:r.id,title:r.title,minutes:left(r)})).sort((a,b)=>b.minutes-a.minutes),resources,remaining,pct:Math.round((1-remaining/all)*100),pace:Math.round(pace),paceMinutes,paceDays,eta,days,deadline,daysToDeadline,needed,late,onTrack:late===null?null:late<=0};
 }
 export type GoalForecast=NonNullable<ReturnType<typeof goalForecast>>;
 

@@ -12,6 +12,6 @@ export function progressSeries(state:LearningState,now:Date,range:ProgressRange,
  else if(range==='3M'){bars=Array.from({length:13},(_,i)=>{const end=shift(today,(i-12)*7),days=Array.from({length:7},(_,j)=>shift(end,-j));const first=days[6];return {key:end,label:i%4===0||i===12?fmt(first,{month:'short',day:'numeric'}):'',minutes:days.reduce((t,d)=>t+on(d),0),current:i===12};});}
  else{const [y,m]=today.split('-').map(Number);bars=Array.from({length:12},(_,i)=>{const date=new Date(Date.UTC(y,m-1-(11-i),1)),prefix=date.toISOString().slice(0,7);let total=0;for(const [d,v] of minutes)if(d.startsWith(prefix)&&d<=today)total+=v;return {key:prefix,label:fmt(prefix+'-01',{month:'narrow'}),minutes:total,current:i===11};});}
  const total=bars.reduce((t,b)=>t+b.minutes,0),active=bars.filter(b=>b.minutes>0).length;
- const days=range==='W'?7:range==='M'?30:range==='3M'?91:365;
+ const yearStart=bars[0]?.key+'-01',days=range==='W'?7:range==='M'?30:range==='3M'?91:Math.round((Date.parse(today+'T12:00:00Z')-Date.parse(yearStart+'T12:00:00Z'))/86400000)+1;// Y: from the 1st of the first month to today
  return {bars,total,average:Math.round(total/days),active,unit:range==='W'||range==='M'?'day':range==='3M'?'week':'month'};
 }

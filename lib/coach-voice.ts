@@ -18,10 +18,16 @@ export function weekScreenMinutes(state:LearningState,start:string){
 }
 
 /** When the focus course finishes at this week's pace. */
-function projection(state:LearningState,plan:WeeklyPlan,minutes:number){
+/** Finish date for the week's focus course at the pace you studied *that course* this week. */
+function projection(state:LearningState,plan:WeeklyPlan,_minutes:number,now=new Date()){
  const r=state.resources.find(x=>x.id===plan.targets.find(t=>t.resourceId)?.resourceId);if(!r||progress(r)>=100)return null;
- const left=r.lessons.filter(l=>!l.done).reduce((n,l)=>n+l.minutes-l.studiedMinutes,0);if(!left)return null;
- const weeks=minutes>0?left/minutes:Infinity;return {title:r.title,weeks,year:Number.isFinite(weeks)?new Date(Date.now()+weeks*7*86400000).getFullYear():null};
+ const left=r.lessons.filter(l=>!l.done).reduce((n,l)=>n+Math.max(0,l.minutes-l.studiedMinutes),0);if(!left)return null;
+ const today=dayKey(now,state.settings.timezone),days=weekDays(plan.weekStart).filter(d=>d<=today),elapsed=Math.max(1,days.length);
+ const spent=planProgress(state,plan).activity.logs.filter(l=>l.resourceId===r.id).reduce((n,l)=>n+l.minutes,0);
+ if(spent<=0)return {title:r.title,weeks:Infinity,year:null,when:null};
+ const perDay=spent/elapsed,finish=new Date(Date.parse(today+'T12:00:00Z')+(Math.ceil(left/perDay)-1)*86400000);
+ const weeks=left/perDay/7,iso=finish.toISOString().slice(0,10);
+ return {title:r.title,weeks,year:finish.getUTCFullYear(),when:weeks<52?shortDate(iso):String(finish.getUTCFullYear())};
 }
 
 export function weekVerdict(state:LearningState,plan:WeeklyPlan,tone:Tone=state.coach.tone as Tone){
@@ -38,13 +44,13 @@ export function weekVerdict(state:LearningState,plan:WeeklyPlan,tone:Tone=state.
   lines.push(`${fmtMinutes(minutes)} of learning${target?` out of ${fmtMinutes(target)} planned`:''} on ${activity.activeDays} day${activity.activeDays===1?'':'s'}. That’s ${pct}% of the plan.`);
   if(phoneHeavy)lines.push(`Meanwhile your phone got ${hours(screen!)}. Your thumbs trained harder than your brain this week. Work on your attention span: reading this little while scrolling that much is a choice.`);
   else if(screen!==null&&pct<60)lines.push(`${hours(screen)} of phone time. Not even the phone’s fault entirely. You just didn’t start.`);
-  if(proj&&pct<80)lines.push(proj.year?`At this pace, ${proj.title} finishes around ${proj.year}. Maybe your grandkids will enjoy it.`:`At this pace, ${proj.title} never finishes. Literally zero minutes is a very long ETA.`);
+  if(proj&&pct<80)lines.push(proj.when?`At this pace, ${proj.title} finishes around ${proj.when}.${proj.weeks>104?' Maybe your grandkids will enjoy it.':''}`:`At this pace, ${proj.title} never finishes. Literally zero minutes is a very long ETA.`);
   lines.push(pct>=80?'Now don’t ruin it next week.':'Next week: phone in another room, 25 minutes, every planned day. No speeches, just reps.');
  }else{
   headline=grade==='A'?'Plan complete. Great week.':grade==='B'?'Strong week, most of the plan done.':grade==='C'?'Some progress, but the plan slipped.':grade==='D'?'The week mostly got away from you.':'The plan didn’t happen this week.';
   lines.push(`${fmtMinutes(minutes)} learned${target?` of ${fmtMinutes(target)} planned`:''} across ${activity.activeDays} day${activity.activeDays===1?'':'s'} (${pct}% of targets).`);
   if(phoneHeavy)lines.push(tone==='direct'?`Phone time was ${hours(screen!)}, about ${Math.round(screen!/Math.max(1,minutes))}× your learning time. That gap is the problem to fix.`:`Phone time was ${hours(screen!)}. Moving a little of that to learning would close the gap.`);
-  if(proj&&pct<80&&proj.year)lines.push(`At this pace ${proj.title} finishes around ${proj.year}.`);
+  if(proj&&pct<80&&proj.when)lines.push(`At this pace ${proj.title} finishes around ${proj.when}.`);
   lines.push(pct>=80?'Keep the same rhythm next week.':'Next week, protect a fixed time slot and start with just 20 minutes.');
  }
  const missed=rows.filter(r=>!r.p.complete).map(r=>r.t.label);

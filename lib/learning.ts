@@ -48,10 +48,10 @@ export function preserveSourceMetadata(raw:LearningState,parsed:LearningState,pr
 export const uid = () => crypto.randomUUID();
 export function dayKey(date = new Date(), timezone='Asia/Kolkata') { return new Intl.DateTimeFormat('en-CA',{timeZone:timezone,year:'numeric',month:'2-digit',day:'2-digit'}).format(date); }
 export function doneMinutes(state:LearningState,date=new Date()){const day=dayKey(date,state.settings.timezone);return state.resources.flatMap(r=>r.lessons).filter(l=>l.done&&l.completedAt&&dayKey(new Date(l.completedAt),state.settings.timezone)===day).reduce((n,l)=>n+l.minutes-l.studiedMinutes,0)+liveStudyLogs(state).filter(log=>dayKey(new Date(log.at),state.settings.timezone)===day).reduce((n,log)=>n+log.minutes,0);}
-export function progress(r:Resource){return Math.round(r.lessons.filter(l=>l.done).length/r.lessons.length*100);}
+export function progress(r:Resource){return r.lessons.length?Math.round(r.lessons.filter(l=>l.done).length/r.lessons.length*100):0;}
 export function rankResource(r:Resource,state:LearningState,now=new Date()){
  const goal=state.goals.find(g=>g.id===r.goalId);
- const deadline=r.deadline ? Math.round((Date.parse(r.deadline+'T23:59:59Z')-now.getTime())/86400000) : Infinity;
+ const deadline=r.deadline ? Math.round((Date.parse(r.deadline+'T12:00:00Z')-Date.parse(dayKey(now,state.settings.timezone)+'T12:00:00Z'))/86400000) : Infinity;// calendar days left in your timezone
  const urgency=deadline<=3?20:deadline<=7?14:deadline<=30?6:0;
  const started=r.lessons.some(l=>l.done)&&progress(r)<100?6:0;
  const focus=r.goalId&&r.goalId===state.settings.focusGoal?12:0;

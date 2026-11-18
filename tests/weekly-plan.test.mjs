@@ -62,11 +62,11 @@ test('coach context carries this week plan with progress and custom instructions
 test('goal forecast: finish date at current pace vs deadline',async()=>{
  const {goalForecast,forecastLine}=await import('../lib/forecast.ts');
  const now=new Date('2026-10-29T10:00:00Z');
- // 10 lessons × 30 min = 300 min on the focus course; 140 min studied in the last 14 days → 10 min/day
+ // 10 lessons × 30 min = 300 min on the focus course; 140 min studied since Oct 20 (10 days, today included) → 14 min/day
  let s=lib([['2026-10-20',70],['2026-10-27',70]]);
  s=applyWeekPlan(s,buildRulePlan(s,{...answers,deadline:'2026-11-10'},now),{...answers,deadline:'2026-11-10'});
  const f=goalForecast(s,now);
- assert.equal(f.pace,10);assert.ok(f.remaining>0);assert.ok(f.eta>'2026-11-10');assert.ok(f.late>0);assert.ok(f.needed>f.pace);
+ assert.equal(f.pace,14);assert.equal(f.paceDays,10);assert.ok(f.remaining>0);assert.ok(f.eta>'2026-11-10');assert.ok(f.late>0);assert.ok(f.needed>f.pace);
  assert.match(forecastLine(f,true),/days after your/);
  const idle=goalForecast(lib(),now);assert.equal(idle.eta,null);assert.match(forecastLine(idle,true),/never/);
 });

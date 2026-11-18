@@ -1,5 +1,5 @@
 import {dailyPlan,dayKey,progress,type LearningState} from './learning.ts';
-import {streaks} from './habits.ts';
+import {streaks,isActiveDay} from './habits.ts';
 import {liveStudyLogs} from './activity.ts';
 import {rewardProgress} from './milestones.ts';
 import {currentPlan,planProgress} from './weekly-plan.ts';
@@ -37,12 +37,12 @@ export function morningBrief(state:LearningState,now=new Date()):MorningBrief{
  const habit=streaks(state,now),minutesOn=(d:string)=>habit.minutes.get(d)||0;
  const goal=state.settings.dailyMinutes,target=state.settings.weeklyDays;
  const last7=Array.from({length:7},(_,i)=>shift(yday,-i));
- const activeDays=last7.filter(d=>minutesOn(d)>0).length,yesterday=minutesOn(yday);
+ const activeDays=last7.filter(d=>isActiveDay(state,minutesOn(d))).length,yesterday=minutesOn(yday);
  const lastActive=[...habit.minutes].filter(([d,n])=>d<today&&n>0).map(([d])=>d).sort().at(-1)||null;
  const daysSince=lastActive?Math.round((Date.parse(today+'T12:00:00Z')-Date.parse(lastActive+'T12:00:00Z'))/86400000):null;
  const streak=habit.todayDone?Math.max(0,habit.current-1):habit.current;// streak as of the end of yesterday
  // Length of the run that ended the day before yesterday, to spot a streak that just broke.
- let previousRun=0;if(!yesterday){let cursor=shift(yday,-1);while((minutesOn(cursor))>=habit.minimum){previousRun++;cursor=shift(cursor,-1);}}
+ let previousRun=0;if(yesterday<habit.minimum){let cursor=shift(yday,-1);while((minutesOn(cursor))>=habit.minimum){previousRun++;cursor=shift(cursor,-1);}}
  const score=momentumScore({activeDays,targetDays:target,yesterday,goal,streak,daysSince});
  const tone=score>=75?'high':score>=55?'steady':score>=30?'building':'low';
  const label={high:'High momentum',steady:'Steady momentum',building:'Building momentum',low:'Low momentum'}[tone];
@@ -88,7 +88,7 @@ export function morningBrief(state:LearningState,now=new Date()):MorningBrief{
  const yClause=yesterday>=goal?`, and ${briefDuration(yesterday)} yesterday beat your ${goal}-minute goal`
   :yesterday>0?`, with ${briefDuration(yesterday)} of your ${goal}-minute goal yesterday`
   :`, but nothing was logged yesterday`;
- const facts=[`Your momentum score is ${score}: you learned on ${activeDays} of ${target} target days this week${yClause}.`];
+ const facts=[`Your momentum score is ${score}: you learned on ${activeDays} of ${target} target days in the last 7 days${yClause}.`];
  const roast=voiceLine(state.coach.tone as Tone,{yesterday,goal,screen:screen>=30?screen:null,score},today);if(roast)facts.push(roast);
  if(week&&plan)facts.push(`This week (“${short(plan.title,50)}”): ${week.pct}% of your plan done, ${daysLeftInWeek} day${daysLeftInWeek===1?'':'s'} left.`);
  const fc=goalForecast(state,now);if(fc&&(fc.onTrack===false||(brutal&&!fc.eta&&fc.remaining>0)))facts.push(forecastLine(fc,brutal));

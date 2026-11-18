@@ -23,7 +23,7 @@ import {coachActivity} from '../lib/coach';
 import {streaks} from '../lib/habits';
 import type {StudySession} from '../lib/coach-schema';
 import {ForecastSheet,WeekCard,WeekReport,DailyFact,WeekHistory,PriorityBoard,MetricHistory,type MetricId} from './week-ui';
-import {currentPlan,previousPlan} from '../lib/weekly-plan';
+import {currentPlan,previousPlan,weekStartOf} from '../lib/weekly-plan';
 import {morningBrief} from '../lib/morning-brief';
 import type {Tone} from '../lib/coach-voice';
 type Props={balance:ReactNode;workspace:Workspace;onWorkspace:(value:Workspace)=>void;onInbox:()=>void;onLog:(mode?:'timer'|'manual')=>void;onShare:()=>void;onEdit:(id:string)=>void;inbox:ReactNode;state:LearningState;now:Date;page:string;name:string;go:(p:string)=>void;onStart:(rid:string,lid:string)=>void;onResource:(id:string)=>void;onAdd:()=>void;onBook:()=>void;onArticle:()=>void;onCourseImport:()=>void;onGoal:(id?:string)=>void;onRanking:()=>void;onDiscuss:(s:StudySession)=>void;onAsk:(prompt:string,context?:string)=>void;update:(fn:(s:LearningState)=>LearningState)=>boolean|void;notify:(s:string)=>void;connected:boolean;settings:ReactNode;coach:ReactNode;loaded:boolean;error:string;saveStatus:string;onPlanWeek:()=>void;screenToday?:number|null;onAddLink:(url:string,route:'link'|'article'|'syllabus')=>void;onRefresh:()=>Promise<unknown>};
@@ -57,7 +57,7 @@ export default function MobileApp(p:Props){
  const weekProg=week?planProgress(state,week):null,weekGoal=week?.targets.find(t=>t.kind==='minutes'&&!t.resourceId)?.target||state.settings.dailyMinutes*state.settings.weeklyDays,weekMinutes=weekProg?weekProg.activity.minutes:activity.minutesWeek;
  const spare=(Object.keys(TILE_NAMES) as TileId[]).filter(id=>!tiles.includes(id)&&id!=='inbox').slice(0,3);
  const todosOpen=state.todos.filter(t=>!t.doneAt).sort((a,b)=>(a.dueDay||'9999').localeCompare(b.dueDay||'9999')||a.createdAt.localeCompare(b.createdAt));
- const weekStartIso=week?.weekStart||new Date(now.getTime()-6*86400000).toISOString().slice(0,10),todosDone=state.todos.filter(t=>t.doneAt&&dayKey(new Date(t.doneAt),state.settings.timezone)>=weekStartIso).length;
+ const weekStartIso=week?.weekStart||weekStartOf(state.settings.timezone,now),todosDone=state.todos.filter(t=>t.doneAt&&dayKey(new Date(t.doneAt),state.settings.timezone)>=weekStartIso).length;
  const toggleTodo=(id:string,title:string)=>{p.update(s=>({...s,todos:s.todos.map(t=>t.id===id?{...t,doneAt:new Date().toISOString()}:t)}));p.notify(`Done: ${title}`);};
  const fc=goalForecast(state,now),brutalTone=tone==='brutal';
  const todoPill=(t:typeof todosOpen[number],i:number)=>({id:t.id,icon:HERO_ICONS.check,label:t.dueDay?(t.dueDay<todayKey?'Overdue':t.dueDay===todayKey?'Due today':'Due '+shortDate(t.dueDay,false)):'To-do',value:t.title,tone:t.dueDay&&t.dueDay<=todayKey?'pink':['blue','teal','purple'][i],onClick:()=>toggleTodo(t.id,t.title)});
