@@ -145,3 +145,18 @@ html:root[data-phone=true] .new-empty{padding:28px 12px!important}
 html:root[data-phone=true] .new-empty h2{font-size:18px!important;margin:10px 0 6px}
 html:root[data-phone=true] .new-empty p{font-size:13px!important}
 html:root[data-phone=true] .capture-note{font-size:11px!important;line-height:1.5;color:var(--m-muted);margin-top:16px}
+
+/* ---- DESIGN.md pass (0.31.0) ---- */
+/* §3 numbers never jiggle; §5 balanced headings, pretty paragraphs */
+html:root[data-phone=true] :is(.h-tile strong,.h-chart-head strong,.h-chart-head small,.m-stat-pair strong,.m-course-copy>span,.hp-curve,.wk-card b,.fc-sheet b){font-variant-numeric:tabular-nums}
+html:root[data-phone=true] :is(h1,h2,h3){text-wrap:balance}
+html:root[data-phone=true] :is(p,small,.m-course-copy>span){text-wrap:pretty}
+/* §6 the cover's page-curl stays a quiet corner detail and never crosses the icon */
+html:root[data-phone=true] .m-cover>i{width:36px;height:36px;right:-18px;bottom:-18px;border-color:color-mix(in srgb,currentColor 18%,transparent)}
+/* §8 a visible focus ring on everything you can tab to */
+/* §7 the tick answers your tap: a 180ms press and pop, transform/opacity only (off under reduced motion) */
+html:root[data-phone=true] .m-finish{transition:transform .12s ease-out,background-color .15s ease-out,border-color .15s ease-out}
+html:root[data-phone=true] .m-finish:active{transform:scale(.9)}
+html:root[data-phone=true] .m-finish.on svg{animation:m-tick .18s ease-out}
+@keyframes m-tick{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+html:root[data-phone=true] :is(button,a,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--m-accent);outline-offset:2px}

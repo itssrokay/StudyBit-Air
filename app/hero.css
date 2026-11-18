@@ -64,3 +64,11 @@ html:root[data-phone=true] .m-layer .hp{padding-bottom:4px}
 
 .hp-todo-sheet .todo-panel{margin:0;padding:0;background:none;box-shadow:none}
 .hp-todo-sheet .motivation-panel-heading{display:none}
+
+/* DESIGN.md §2: one loud thing per view. Dark pills are quiet tints; the icon carries the tone. */
+html:root[data-theme=dark] .hp-pill{--pc:color-mix(in srgb,#a8c7fa 14%,#1b1c20);--pi:color-mix(in srgb,#a8c7fa 28%,#1b1c20);--pt:#d3e3fd}
+html:root[data-theme=dark] .hp-pill.tone-teal{--pc:color-mix(in srgb,#8ff5df 12%,#1b1c20);--pi:color-mix(in srgb,#8ff5df 26%,#1b1c20);--pt:#b2f3e6}
+html:root[data-theme=dark] .hp-pill.tone-purple{--pc:color-mix(in srgb,#d4c0ff 14%,#1b1c20);--pi:color-mix(in srgb,#d4c0ff 28%,#1b1c20);--pt:#ead5ff}
+html:root[data-theme=dark] .hp-pill.tone-orange{--pc:color-mix(in srgb,#ffc48f 13%,#1b1c20);--pi:color-mix(in srgb,#ffc48f 27%,#1b1c20);--pt:#ffdcbf}
+html:root[data-theme=dark] .hp-pill.tone-pink{--pc:color-mix(in srgb,#ffb0c8 13%,#1b1c20);--pi:color-mix(in srgb,#ffb0c8 27%,#1b1c20);--pt:#ffd9e2}
+html:root[data-theme=dark] .hp-pill.tone-green{--pc:color-mix(in srgb,#9ad8ab 13%,#1b1c20);--pi:color-mix(in srgb,#9ad8ab 27%,#1b1c20);--pt:#c4eed0}

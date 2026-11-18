@@ -24,6 +24,13 @@ Versions match the Android app (Settings → Apps → Learning Space).
   - "Active days" means days at your streak minimum everywhere (This week tile, momentum, weekly plan), not "any minute".
   - Week report finish estimate uses that course's own minutes this week (not all learning) and shows a date instead of just a year.
   - Today's "to-dos done this week" starts on Monday in your timezone when there is no weekly plan.
+- Asked: update our design/UI principles using the ui-skills and stageshow skills, and do a full UI pass.
+- Changed (design):
+  - New DESIGN.md: one job, one loudest element and one action per screen; per-tab tones; number, spacing, icon, motion, accessibility and copy rules; a ship checklist. Built from the ui-skills baseline/accessibility/motion skills and stageshow's craft rules.
+  - Library: articles show a document icon and topics a compass (they all showed a play icon). The cover's page-curl no longer cuts across the icon. Readings and other one-step items show the tick instead of a 0% bar.
+  - Progress no longer repeats the "Coaching is tailored to your goals" card from Today.
+  - Dark mode Today pills are quiet tints with a toned icon instead of three saturated blocks.
+  - Numbers use tabular figures, headings wrap evenly, every control shows a focus ring, and the read tick gives a 180ms press-and-pop (off with Reduce Motion). Toast copy is plain: "Marked as read."
 
 ## 0.30.4 · 2026-11-13
 - Asked: still not fixed. After saving a share, 4-5 old shared links (X, Reddit) popped up one by one (screen recording).
