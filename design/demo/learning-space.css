@@ -1,0 +1,173 @@
+/* Learning Space, Library tab: Material-style teal tone on a cool white. Screen units are dp. */
+.lsd {
+  & .ss-stage {
+    --ss-accent: #006a6a;
+    --ss-accent-2: #4a9b9b;
+    --ss-accent-soft: #cdeeee;
+    --lsd-ink: #1b1c20;
+    --lsd-muted: #5c6170;
+    --lsd-line: #dfe3eb;
+    --lsd-card: #ffffff;
+    --lsd-bg: #f4f7f8;
+    --lsd-soft: #e9f2f2;
+    --lsd-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+    overflow: hidden;
+    border-radius: 14px;
+    background: #eef3f3;
+  }
+
+  .lsd-wash {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(70% 55% at 50% 0%, rgba(0, 106, 106, 0.12), transparent 70%);
+  }
+
+  /* Pinned one gutter from the top, centered, running off the bottom */
+  .lsd-phone { position: absolute; top: 40px; left: 30px; }
+  .ss-stage[data-layout='compact'] .lsd-phone { left: 20px; }
+
+  .lsd-app {
+    position: absolute;
+    inset: 0;
+    background: var(--lsd-bg);
+    color: var(--lsd-ink);
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  .lsd-head {
+    position: absolute;
+    top: 70px;
+    left: 20px;
+    right: 20px;
+    display: grid;
+    gap: 6px;
+  }
+  .lsd-title { font-size: 34px; font-weight: 600; letter-spacing: -0.5px; line-height: 1.15; }
+  .lsd-search {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    height: 50px;
+    padding: 0 18px;
+    border-radius: 999px;
+    background: var(--lsd-card);
+    border: 1px solid var(--lsd-line);
+  }
+
+  .lsd-list {
+    position: absolute;
+    top: 214px;
+    left: 12px;
+    right: 12px;
+  }
+  .lsd-row { border-bottom: 1px solid var(--lsd-line); }
+  .lsd-row .ss-row__title { font-size: 16px; font-weight: 600; color: var(--lsd-ink); }
+  .lsd-row .ss-row__subtitle { font-size: 13px; color: var(--lsd-muted); }
+  .lsd-sub { font-variant-numeric: tabular-nums; }
+
+  .lsd-tile {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 60px;
+    border-radius: 4px 12px 12px 4px;
+    background: var(--lsd-soft);
+    color: #2c5f5f;
+    box-shadow: inset 4px 0 0 rgba(0, 0, 0, 0.05);
+  }
+  .lsd-tile--book { background: #eef1f7; color: #3d4a6b; }
+
+  .lsd-track {
+    width: 54px;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--lsd-line);
+    overflow: hidden;
+  }
+  .lsd-track > i { display: block; height: 100%; border-radius: inherit; background: var(--ss-accent); }
+
+  /* The read tick: the kit's Check, at a 44dp touch target */
+  .lsd-tick {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+  }
+  .lsd-tick .ss-check { --ss-success: var(--ss-accent); }
+
+  /* Sheet: rises from the foot over a dimmed list */
+  .lsd-scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(16, 24, 28, 0.32);
+    opacity: 0;
+    transition: opacity 0.32s ease;
+  }
+  .lsd-scrim[data-show] { opacity: 1; }
+
+  .lsd-sheet {
+    position: absolute;
+    top: 196px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 12px 22px 0;
+    border-radius: 28px 28px 0 0;
+    background: var(--lsd-card);
+    box-shadow: 0 -8px 30px rgba(16, 24, 28, 0.12);
+    transform: translateY(105%);
+    will-change: transform;
+    visibility: hidden;
+    transition: transform 0.42s var(--lsd-ease), visibility 0s linear 0.42s;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .lsd-sheet[data-show] { transform: translateY(0); visibility: visible; transition: transform 0.42s var(--lsd-ease), visibility 0s; }
+  .lsd-grabber { align-self: center; width: 36px; height: 4px; border-radius: 999px; background: #c9cfd6; }
+  .lsd-sheet__head { display: grid; gap: 10px; }
+  .lsd-sheet__title { font-size: 24px; font-weight: 600; letter-spacing: -0.3px; }
+
+  .lsd-field {
+    display: grid;
+    gap: 10px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: var(--lsd-bg);
+    border: 1px solid var(--lsd-line);
+  }
+  .lsd-field__value { font-size: 17px; font-weight: 500; line-height: 1.3; }
+
+  .lsd-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .lsd-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 10px;
+    border: 1px solid var(--lsd-line);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .lsd-chip--on { background: var(--ss-accent-soft); border-color: transparent; color: #00403f; padding: 0 12px; }
+
+  .lsd-save.ss-button {
+    height: 52px;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 600;
+    background: var(--ss-accent);
+    color: #fff;
+    justify-content: center;
+  }
+
+  .lsd-toast {
+    position: absolute;
+    left: 20px;
+    right: 20px;
+    top: 468px;
+    font-size: 15px;
+  }
+}

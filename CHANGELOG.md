@@ -13,7 +13,7 @@ Versions match the Android app (Settings → Apps → Learning Space).
 
 ---
 
-## Unreleased
+## 0.31.0 · 2026-11-19
 - Asked: go through the formulas and correct them.
 - Changed (formulas, each pinned by tests/formulas.test.mjs):
   - Goal forecast pace divides by the days you've actually studied (3 to 14), not always 14, so a new goal isn't shown at a quarter of its real pace.
@@ -31,6 +31,8 @@ Versions match the Android app (Settings → Apps → Learning Space).
   - Progress no longer repeats the "Coaching is tailored to your goals" card from Today.
   - Dark mode Today pills are quiet tints with a toned icon instead of three saturated blocks.
   - Numbers use tabular figures, headings wrap evenly, every control shows a focus ring, and the read tick gives a 180ms press-and-pop (off with Reduce Motion). Toast copy is plain: "Marked as read."
+- Asked: use the new skills to make something that makes the product better.
+- Changed: an animated README demo built with stageshow (share → Save to read → lands in Library → tick → Marked as read), recorded frame-exact as a seamless 8.8 s loop. Source and re-render steps in design/demo/.
 
 ## 0.30.4 · 2026-11-13
 - Asked: still not fixed. After saving a share, 4-5 old shared links (X, Reddit) popped up one by one (screen recording).

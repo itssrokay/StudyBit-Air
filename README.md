@@ -7,6 +7,10 @@ Always the latest build. On your phone: tap the link → download → open the f
 
 A personal learning dashboard with a private hosted library and a login-free Android/local mode. Built with React, Vinext, Cloudflare Workers, D1, and a native Android companion.
 
+<p align="center"><img src="design/demo/learning-space-demo.gif" width="400" alt="Learning Space on Android: share a post, tap Save to read, it lands in Library, tap the tick, Marked as read."></p>
+
+Design rules for every screen live in [DESIGN.md](DESIGN.md).
+
 ## What works
 
 - A daily lesson plan with a configurable budget (45 minutes initially), including resumable study blocks for long videos.
