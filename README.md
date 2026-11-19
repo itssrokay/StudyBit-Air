@@ -1,6 +1,6 @@
 # StudyBit Air
 
-### 📱 Android app v0.31.0 · [Download the APK](https://raw.githubusercontent.com/itssrokay/StudyBit-Air/main/public/downloads/learning-space-android.apk?v=0.31.0)
+### 📱 Android app v0.32.0 · [Download the APK](https://raw.githubusercontent.com/itssrokay/StudyBit-Air/main/public/downloads/learning-space-android.apk?v=0.32.0)
 
 Always the latest build. On your phone: tap the link → download → open the file → **Install**. The first time, Android asks you to allow "Install unknown apps" for your browser. Installing over an older version keeps your library and progress (don't uninstall first).
 
