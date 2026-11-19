@@ -20,7 +20,7 @@ Sources: our own system (below), the ui-skills baseline, accessibility and motio
 - **One big number per view** (stageshow: "one number gets to be big; the rest are lines"). Today: the ring. Progress: the period total. Everything else is regular text.
 - **Say it once.** A message, card or promo appears on one screen only. (The "Coaching is tailored to your goals" card lives on Today, not on Progress too.)
 - **Compose, don't stack boxes.** Hierarchy comes from size, space and tone, not from more bordered cards. A list is rows with hairlines, not a card per row.
-- **Accent budget:** one filled, toned control per view (the primary action). Secondary actions are outlined or text. Status pills use a soft tint with a toned icon, never three saturated fills side by side.
+- **Accent budget:** one filled, toned control per view (the primary action: on Today it's hero **Start**). Other actions are tonal (`--h-con` fill), outlined (**Log**) or text. Status pills use a soft tint with a toned icon, never three saturated fills side by side.
 - **Empty states give one next action** (a button), not only text.
 
 ## 3. Numbers (this is a numbers app)
@@ -38,8 +38,14 @@ Sources: our own system (below), the ui-skills baseline, accessibility and motio
 
 - **16px side gutter** on phone; content never touches a card edge (12px minimum inset for words).
 - **Row padding 12px**; a title sits 4 to 6px above its metadata, and a record is visibly closer to its own metadata than to the next record.
-- **Touch targets ≥ 44px**, icon buttons 40 to 44px, at least 8px apart.
+- **Touch targets ≥ 44px** for every control, text or icon, at least 8px apart. Tiny indicators (the hero page dots) get an invisible 44px-tall hit area. Inline links inside a sentence are exempt.
 - **Grow with content.** The phone uses a large system font: no fixed row heights, no `height` on text containers. Long titles wrap to two lines (`line-clamp: 2`), metadata truncates to one.
+- **Large system text (Android Font size ≥ 120%)** sets `html[data-text-scale]` (`l` or `xl`, from the native `textScale()` bridge, see `lib/app-info.ts`). Layouts reflow rather than clip:
+  - the header wraps (Personal/Work goes to its own row)
+  - the tab bar shows icons only, with labels kept for screen readers
+  - the Today ring drops its curved labels for a plain caption, and the pills stack full width
+  - paired tiles stack
+  Test at **320px with text at 200%** in both themes.
 - **Fixed elements respect `env(safe-area-inset-*)`**, and use `100dvh`, never `100vh`.
 - **Columns line up.** Rows in a list share one layout. Optional trailing controls keep their slot, so progress bars and titles don't change width row to row.
 - **Radii:** 12px cards, 999px pills and chips, 10px small controls. A nested shape's radius = outer radius − padding.
@@ -49,6 +55,12 @@ Sources: our own system (below), the ui-skills baseline, accessibility and motio
 - Headings `text-wrap: balance`, paragraphs `text-wrap: pretty`.
 - UI text 12 to 16px, small text line-height ≥ 1.3. Never below 11px.
 - Don't change letter-spacing except on the existing eyebrow labels.
+
+## Library
+
+- Grouped by status, in rank order: **In progress**, then **Not started** (or **Up next** when nothing is started), with **Finished** folded away (`lib/library-sections.ts`). Search and Archived show one flat list.
+- A row's only trailing controls are its state (tick, Read ASAP). Edit lives in the detail sheet, not on every row.
+- The "Add to library" grid appears only while your own library has fewer than 3 items. Otherwise the + button is the way in.
 
 ## 6. Icons and covers
 
@@ -79,9 +91,9 @@ Sources: our own system (below), the ui-skills baseline, accessibility and motio
 
 ## 10. Before you ship a UI change
 
-1. Screenshot Today, Library, Inbox and Progress at **390px and 320px**, **light and dark**.
+1. Screenshot Today, Library, Inbox, Progress and Coach at **390px and 320px**, **light and dark**, and again at **320px with 200% text**.
 2. Check: one loudest element per view, one filled action, no clipped text, numbers aligned, nothing touching edges.
-3. Check with a larger font (Android font size: largest): nothing clips or overlaps.
+3. Measure: every control ≥ 44px tall, and text contrast ≥ 4.5:1, from pixels, not just CSS, since tinted and translucent surfaces fool computed checks.
 4. `npx tsc --noEmit -p .` and the tests pass.
 5. Note the change in CHANGELOG.md.
 

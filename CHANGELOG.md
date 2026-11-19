@@ -13,6 +13,17 @@ Versions match the Android app (Settings → Apps → Learning Space).
 
 ---
 
+## 0.32.0 · 2026-11-19
+- Asked: fix four gaps (large text, dark Coach contrast, small touch targets, competing focal points), make the Library better with the design skills, and show the app version in Profile.
+- Changed:
+  - **Large text:** at Android Font size 200% the app reflows instead of clipping. The header wraps, the tab bar goes icon-only (names kept for screen readers), the Today ring swaps its curved labels for a plain caption, the pills stack, and Progress tiles stack. Android tells the app its font scale through a new `textScale()` bridge.
+  - **Contrast:** dark Coach's selected "Smart" goes from 1.85:1 to readable on-container ink. Today's pill units ("of 45 min", "days") go from 3.7:1 to full ink.
+  - **Touch targets:** 44px for every control: Personal/Work, profile, filters, range buttons, Coach mode and context, brief buttons, to-do add, inbox tabs, tick and Read ASAP. The page dots get tall hit areas.
+  - **Focus:** on Today, Start is the one filled action and Log is outlined. Plan my week and the brief's Start are tonal. The planning card has no gradient. Progress shows the 7-day total once, in the chart. The header reads "Learning and screen time", and the second tile is Best streak.
+  - **Library:** grouped into In progress, Not started and Finished (folded). The edit pencil left every row (edit is in the detail sheet). "Add to library" shows only for a small library. The header shows how many are in progress.
+  - **Profile:** "Learning Space · v0.32.0" at the top, read from the installed app (new `appVersion()` bridge), with a build-time fallback.
+  - DESIGN.md: a large-text section, a Library section, and stricter touch-target and contrast checks.
+
 ## 0.31.0 · 2026-11-19
 - Asked: go through the formulas and correct them.
 - Changed (formulas, each pinned by tests/formulas.test.mjs):

@@ -26,7 +26,7 @@ export function readTiles():TileId[]{try{const v=JSON.parse(localStorage.getItem
 export type TileData={today:number;goal:number;streak:number;best:number;daysWeek:number;weeklyDays:number;minutesWeek:number;screen:number|null;screenWhen?:string;inbox:number;brief:MorningBrief};
 export function tile(id:TileId,d:TileData){
  switch(id){
-  case 'today':return {icon:Timer,label:'Today',value:String(d.today),unit:`of ${d.goal} min`,tone:'blue'};
+  case 'today':return {icon:Timer,label:'Today',value:String(d.today),unit:`of\u00a0${d.goal}\u00a0min`,tone:'blue'};
   case 'streak':return {icon:Flame,label:'Streak',value:String(d.streak),unit:d.streak===1?'day':'days',tone:'orange'};
   case 'momentum':return {icon:Gauge,label:'Momentum',value:String(d.brief.score),unit:d.brief.label.replace(' momentum',''),tone:'purple'};
   case 'week':return {icon:CalendarCheck,label:'This week',value:`${d.daysWeek}/${d.weeklyDays}`,unit:'days',tone:'teal'};

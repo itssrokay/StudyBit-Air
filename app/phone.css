@@ -160,3 +160,77 @@ html:root[data-phone=true] .m-finish:active{transform:scale(.9)}
 html:root[data-phone=true] .m-finish.on svg{animation:m-tick .18s ease-out}
 @keyframes m-tick{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
 html:root[data-phone=true] :is(button,a,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--m-accent);outline-offset:2px}
+
+/* ---- DESIGN.md pass 2 (0.32.0) ---- */
+/* §8 contrast: dark Coach's selected mode uses the on-container ink (was #1a1733 on dark violet, 1.85:1) */
+html:root[data-phone=true][data-theme=dark] .mobile-app .m-coach .studio-mode button[aria-pressed=true]{color:var(--h-onc)}
+/* §8 contrast: pill units at full ink (were 80% opacity, 3.7:1) */
+html:root[data-phone=true] .hp-pill .hp-pill-copy strong small{color:var(--pt);opacity:1}
+html:root[data-phone=true] .hp-pill.is-empty strong{opacity:1}
+
+/* §4 touch targets: 44px for every text control */
+html:root[data-phone=true] .m-header .space-switch{height:auto;padding:3px}
+html:root[data-phone=true] .m-header .space-switch button{height:auto;min-height:44px}
+html:root[data-phone=true] .m-profile{width:44px;height:44px}
+html:root[data-phone=true] .m-chips>button{min-height:44px}
+html:root[data-phone=true] .h-range button{min-height:44px;min-width:48px}
+html:root[data-phone=true] .m-progress-tabs button{min-height:44px}
+html:root[data-phone=true] .mobile-app .studio-mode button{min-height:44px;min-width:56px}
+html:root[data-phone=true] .studio-context-bar.studio-context-bar>button{min-height:44px;height:auto}
+html:root[data-phone=true] .m-coach .icon-button.icon-button,html:root[data-phone=true] [aria-label="Send coach message"][aria-label]{min-width:44px;min-height:44px}
+html:root[data-phone=true] .m-course-entry .m-finish,html:root[data-phone=true] .m-course-entry .m-asap{flex-basis:44px;width:44px;height:44px}
+html:root[data-phone=true] .brief-close{width:44px;height:44px;margin-right:-10px}
+html:root[data-phone=true] .brief-more{min-height:44px}
+html:root[data-phone=true] .m-main .text-button,html:root[data-phone=true] .m-section-heading>button{min-height:44px}
+html:root[data-phone=true] .todo-quick-add :is(input,button){min-height:44px}
+html:root[data-phone=true] .todo-quick-add button{min-width:44px}
+html:root[data-phone=true] .inbox-tabs>button{min-height:44px}
+/* Page dots: small marks, tall invisible hit areas; swiping is the main way to page */
+html:root[data-phone=true] .hp-dots{gap:12px}
+html:root[data-phone=true] .hp-dots button{position:relative}
+html:root[data-phone=true] .hp-dots button::before{content:'';position:absolute;inset:-18px -6px}
+
+/* §2 one filled action: Start leads, Log is the quiet alternative */
+html:root[data-phone=true] .hp-act.hp-act-main{background:var(--h-pri);color:var(--h-sheet)}
+html:root[data-phone=true] .hp-act.hp-act-quiet{background:transparent;color:var(--h-ink);box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--h-ink) 22%,transparent)}
+/* §1 no gradients: the planning invitation is a plain sheet */
+html:root[data-phone=true] .wk-empty{background:var(--h-sheet);box-shadow:0 0 0 1px var(--h-line)}
+html:root[data-phone=true] .wk-empty strong{color:var(--h-ink)}
+html:root[data-phone=true] .wk-empty p{color:var(--h-muted)}
+html:root[data-phone=true] .wk-empty-icon{background:var(--h-con);color:var(--h-onc)}
+
+/* Profile: the app version, first thing on the page */
+html:root[data-phone=true] .m-app-version{margin:4px 0 16px;color:var(--m-muted);font-size:13px}
+html:root[data-phone=true] .m-app-version strong{color:var(--m-ink);font-weight:600;font-variant-numeric:tabular-nums}
+
+/* §4 large system text (Android Font size ≥ 120%): reflow instead of clipping */
+.hp-caption{display:none}
+html:root[data-text-scale] .m-header{flex-wrap:wrap;height:auto;row-gap:8px;padding-top:12px;padding-bottom:12px}
+html:root[data-text-scale] .m-header .space-switch{order:3;flex:1 1 100%;max-width:none}
+html:root[data-phone=true] .m-nav-label{font:inherit;color:inherit}
+html:root[data-text-scale] .m-nav-label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+html:root[data-text-scale] .hp-page{grid-template-columns:minmax(0,1fr);gap:16px}
+html:root[data-text-scale] .hp-ring{width:min(72%,240px);margin:0 auto}
+html:root[data-text-scale] .hp-curve{display:none}
+html:root[data-text-scale] .hp-caption{display:grid;gap:2px;margin-top:6px;text-align:center;color:var(--h-ink)}
+html:root[data-text-scale] .hp-caption small{color:var(--h-muted)}
+html:root[data-text-scale] .hp-pill{min-height:56px;border-radius:24px;padding:8px 14px 8px 8px}
+html:root[data-text-scale] .hp-pill-copy>span,html:root[data-text-scale] .hp-pill-copy strong{white-space:normal;overflow:visible;text-overflow:clip}
+html:root[data-text-scale] .hp-actions{grid-template-columns:1fr 1fr}
+html:root[data-text-scale] .hp-act.hp-edit{grid-column:1/-1}
+html:root[data-text-scale] .m-stat-pair{grid-template-columns:minmax(0,1fr)}
+html:root[data-text-scale] .m-progress-tabs button{white-space:normal}
+html:root[data-text-scale] .h-chart-head small{white-space:normal}
+/* §2 Today keeps one filled action (hero Start); the brief's Start and Plan my week are tonal */
+html:root[data-phone=true] .mobile-app .brief-card .brief-primary.brief-primary,html:root[data-phone=true] .mobile-app .wk-empty .wk-primary{background:var(--h-con);border-color:transparent;color:var(--h-onc)}
+
+/* ---- Library sections (0.32.0, improve-ui pass) ---- */
+html:root[data-phone=true] .m-lib-section{margin-top:18px}
+html:root[data-phone=true] .m-lib-section h2{display:flex;align-items:baseline;gap:8px;margin:0 0 4px;font-size:15px;font-weight:600;color:var(--m-ink);text-wrap:balance}
+html:root[data-phone=true] .m-lib-section h2 small{font-size:13px;font-weight:500;color:var(--m-muted);font-variant-numeric:tabular-nums}
+html:root[data-phone=true] .m-lib-done>summary{display:flex;align-items:center;justify-content:space-between;min-height:44px;cursor:pointer;list-style:none;color:var(--m-muted)}
+html:root[data-phone=true] .m-lib-done>summary::-webkit-details-marker{display:none}
+html:root[data-phone=true] .m-lib-done>summary h2{margin:0}
+html:root[data-phone=true] .m-lib-done>summary svg{transition:transform .15s ease-out}
+html:root[data-phone=true] .m-lib-done[open]>summary svg{transform:rotate(180deg)}
+html:root[data-phone=true] .m-lib-done .m-course-copy strong{color:var(--m-muted)}

@@ -27,6 +27,7 @@ function Ring({page,index}:{page:HeroPage;index:number}){
    <text className="hp-curve hp-curve-low"><textPath href={'#'+bottom} startOffset="50%" textAnchor="middle">{page.bottom}</textPath></text>
    <g className="hp-badge"><circle cx={bx} cy={by} r={21}/><circle className="hp-badge-in" cx={bx} cy={by} r={16}/><Icon x={bx-9} y={by-9} width={18} height={18} strokeWidth={2.4}/></g>
   </svg>
+  <span className="hp-caption" aria-hidden="true"><strong>{page.title}</strong><small>{page.bottom}</small></span>
  </button>;
 }
 
