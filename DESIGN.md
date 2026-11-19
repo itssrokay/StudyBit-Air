@@ -60,7 +60,12 @@ Sources: our own system (below), the ui-skills baseline, accessibility and motio
 
 - Grouped by status, in rank order: **In progress**, then **Not started** (or **Up next** when nothing is started), with **Finished** folded away (`lib/library-sections.ts`). Search and Archived show one flat list.
 - A row's only trailing controls are its state (tick, Read ASAP). Edit lives in the detail sheet, not on every row.
-- The "Add to library" grid appears only while your own library has fewer than 3 items. Otherwise the + button is the way in.
+- The header has one add action. Search stays visible. Type, area, reading category and priority order live in the filter sheet.
+
+## Inbox and Settings
+
+- Inbox opens to the review queue. New capture opens an editor. Each row opens the full capture and its actions.
+- Settings starts with category rows and expands options on demand. Keep the installed version visible and surface focus settings when a timer needs attention.
 
 ## 6. Icons and covers
 

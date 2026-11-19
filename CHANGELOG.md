@@ -13,6 +13,10 @@ Versions match the Android app (Settings → Apps → Learning Space).
 
 ---
 
+## 0.33.0 · 2026-11-19
+- Asked: make Library, Inbox and Settings less overwhelming.
+- Changed: Library keeps search and one add action up front, with filters and priority ordering in a sheet. Inbox opens captures for review from a compact queue. Settings groups controls under expandable categories.
+
 ## 0.32.0 · 2026-11-19
 - Asked: fix four gaps (large text, dark Coach contrast, small touch targets, competing focal points), make the Library better with the design skills, and show the app version in Profile.
 - Changed:
