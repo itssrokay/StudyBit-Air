@@ -23,7 +23,7 @@ const starters=[{label:'Build my learning library',prompt:'Help me build a learn
 export function CoachInsights({state,now,onReply}:{state:LearningState;now:Date;onReply:(insight:CoachInsight)=>void}){
  return <section className="coach-insights" aria-label="Learning insights"><div className="section-heading"><h2><Sparkles size={18}/> A little perspective</h2><span className="muted-label">From your saved activity</span></div><div className="insight-grid">{coachInsights(state,now).map(insight=><article className="insight-card" key={insight.id}><span className="coach-kicker">{insight.label}</span><h3>{insight.title}</h3><p>{insight.body}</p><details><summary>Why this insight <ChevronDown size={13}/></summary><ul>{insight.details.map(d=><li key={d}>{d}</li>)}</ul></details><button className="text-button" onClick={()=>onReply(insight)}><MessageCircle size={15}/> {insight.id==='next'?'Ask coach':'Reply'} <ArrowRight size={14}/></button></article>)}</div></section>;
 }
-export default function LearningCoach({daily,state,aiConnected,localMode,update,notify,onSettings,onGoals,onCommit,launch,onLaunchUsed,workspace='personal',reviewCount=0,onReviews,onPlanWeek}:{onPlanWeek?:()=>void;reviewCount?:number;onReviews?:()=>void;state:LearningState;aiConnected:boolean;localMode:boolean;update:Update;notify:(s:string)=>void;onSettings:()=>void;onGoals:()=>void;onCommit:(fn:(s:LearningState)=>LearningState)=>Promise<boolean>;launch:CoachLaunch|null;onLaunchUsed:()=>void;workspace?:'personal'|'work';daily:DailyCoachController}){
+export default function LearningCoach({daily,state,aiConnected,localMode,update,notify,onSettings,onGoals,onCommit,launch,onLaunchUsed,workspace='personal',reviewCount=0,onReviews,onPlanWeek,phonePatterns}:{phonePatterns?:CoachContextOptions['phonePatterns'];onPlanWeek?:()=>void;reviewCount?:number;onReviews?:()=>void;state:LearningState;aiConnected:boolean;localMode:boolean;update:Update;notify:(s:string)=>void;onSettings:()=>void;onGoals:()=>void;onCommit:(fn:(s:LearningState)=>LearningState)=>Promise<boolean>;launch:CoachLaunch|null;onLaunchUsed:()=>void;workspace?:'personal'|'work';daily:DailyCoachController}){
  const [selected,setSelected]=useState(state.coach.conversations.at(-1)?.id||'');
  const [draft,setDraft]=useState(''),[context,setContext]=useState(''),[useAI,setUseAI]=useState<boolean|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState('');
  const [actionBusy,setActionBusy]=useState(false),[needsSave,setNeedsSave]=useState(false);
@@ -38,7 +38,7 @@ export default function LearningCoach({daily,state,aiConnected,localMode,update,
  const available=aiConnected&&(typeof navigator==='undefined'||navigator.onLine),aiMode=(useAI??aiConnected)&&available;
  const full=messages.length>38||(!conversation&&state.coach.conversations.length>=8);
  const selectedIds=inboxIds.filter(id=>state.inbox.some(i=>i.id===id&&(scope==='all'||i.workspace===scope)));
- const options:CoachContextOptions={contextMode:state.coach.contextMode,workspace:scope,inboxIds:selectedIds,balance};
+ const options:CoachContextOptions={contextMode:state.coach.contextMode,workspace:scope,inboxIds:selectedIds,balance,phonePatterns:state.coach.useScreenTime?phonePatterns:undefined};
  const preview=coachContext(state,messages,context,new Date(),options,draft);
  const brief=useMemo(()=>morningBrief(workspaceState(state,workspace),new Date()),[state,workspace]);
  const memoryCount=state.coach.memories.length+(state.coach.memory.learningIntent?1:0)+(state.coach.memory.preferences?1:0)+(state.coach.memory.instructions?1:0);
@@ -51,7 +51,7 @@ export default function LearningCoach({daily,state,aiConnected,localMode,update,
   const prompt=draft.trim();if(!prompt||busy||actionBusy||needsSave||full)return;
   const snapshot=latest.current,cid=conversation?.id||uid(),at=new Date().toISOString(),history=conversation?.messages||[];
   const capturedContext=context,capturedOptions=options,contextSelection={workspace:scope,inboxIds:selectedIds};
-  const disclosure=`${aiMode?'AI':'Smart guidance'} · ${scope} space · ${preview.memories.length} memories · ${preview.automatic?.inbox.length||preview.inbox.length} captures (${state.coach.contextMode})${balance?' · balance summary':''}`;
+  const disclosure=`${aiMode?'AI':'Smart guidance'} · ${scope} space · ${preview.memories.length} memories · ${preview.automatic?.inbox.length||preview.inbox.length} captures (${state.coach.contextMode})${balance?' · balance summary':''}${aiMode&&preview.phonePatterns?' · phone usage patterns':''}`;
   const entry:CoachMessage={id:uid(),role:'user',source:'learner',text:prompt,at,context:[disclosure,capturedContext].filter(Boolean).join('\n').slice(0,2000),reply:null,appliedAt:null};
   const saved=update(s=>({...s,coach:{...s.coach,conversations:conversation?s.coach.conversations.map(c=>c.id===cid?{...c,contextSelection,messages:[...c.messages,entry]}:c):[...s.coach.conversations,{id:cid,title:prompt.slice(0,80),createdAt:at,contextSelection,messages:[entry]}]}}));if(saved===false){setError('Could not save your message. Check library storage before sending.');return;}
   setSelected(cid);setDraft('');setContext('');setError('');setBusy(true);

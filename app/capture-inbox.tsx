@@ -4,6 +4,7 @@ import {ArrowUpRight,Check,ChevronRight,Inbox,Link2,ListTodo,Plus,Sprout,Archive
 import {makeResource,uid,type LearningState} from '../lib/learning';
 import {captureInbox,captureLinks,captureTitle} from '../lib/capture';
 import ModalFrame from './modal';
+import InboxThemes from './inbox-themes';
 import type {Workspace} from '../lib/spaces';
 
 export type UpdateLibrary=(fn:(s:LearningState)=>LearningState)=>boolean|void;
@@ -16,7 +17,7 @@ export default function CaptureInbox({state,workspace,update,onImport,onLog,noti
  const [selected,setSelected]=useState<string|null>(null);
  const [editing,setEditing]=useState<string|null>(null);
  const [text,setText]=useState('');
- const [tab,setTab]=useState<'inbox'|'filed'>('inbox');
+ const [tab,setTab]=useState<'inbox'|'themes'|'filed'>('inbox');
  const [limit,setLimit]=useState(12);
  const editField=useRef<HTMLTextAreaElement>(null);
  const editAction=useRef<HTMLButtonElement>(null);
@@ -41,9 +42,11 @@ export default function CaptureInbox({state,workspace,update,onImport,onLog,noti
   <div className="inbox-page-head"><h1>Inbox</h1><button className="primary" aria-haspopup="dialog" onClick={()=>setComposing(true)}><Plus size={18} aria-hidden="true"/>New capture</button></div>
   <div className="inbox-tabs" role="group" aria-label="Inbox status">
    <button aria-pressed={tab==='inbox'} className={tab==='inbox'?'selected':''} onClick={()=>changeTab('inbox')}>To review</button>
+   <button aria-pressed={tab==='themes'} className={tab==='themes'?'selected':''} onClick={()=>changeTab('themes')}>Themes</button>
    <button aria-pressed={tab==='filed'} className={tab==='filed'?'selected':''} onClick={()=>changeTab('filed')}>Filed</button>
    <button className="inbox-log-link" onClick={onLog}>Log learning<ArrowUpRight size={15} aria-hidden="true"/></button>
   </div>
+  {tab==='themes'?<InboxThemes state={state} workspace={workspace} update={update} notify={notify} onOpenCapture={setSelected}/>:<>
   <ul className="inbox-rows">
    {items.slice(0,limit).map(entry=>{
     const links=captureLinks(entry.text);
@@ -56,7 +59,7 @@ export default function CaptureInbox({state,workspace,update,onImport,onLog,noti
    })}
   </ul>
   {items.length>limit&&<button className="secondary inbox-more" onClick={()=>setLimit(n=>n+12)}>Show more captures</button>}
-  {!items.length&&<div className="inbox-empty"><h2>{tab==='inbox'?'You’re caught up':'No filed captures'}</h2><p>{tab==='inbox'?'Save a link or note to review later.':'Filed captures will appear here.'}</p>{tab==='filed'&&<button className="secondary" onClick={()=>changeTab('inbox')}>Back to review</button>}</div>}
+  {!items.length&&<div className="inbox-empty"><h2>{tab==='inbox'?'You’re caught up':'No filed captures'}</h2><p>{tab==='inbox'?'Save a link or note to review later.':'Filed captures will appear here.'}</p>{tab==='filed'&&<button className="secondary" onClick={()=>changeTab('inbox')}>Back to review</button>}</div>}</>}
 
   {composing&&<ModalFrame title="New capture" onClose={()=>setComposing(false)}>
    <form className="modal-content inbox-compose" onSubmit={e=>{e.preventDefault();save();}}>

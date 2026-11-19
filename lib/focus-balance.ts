@@ -1,10 +1,11 @@
 import {z} from 'zod';
+import {phoneUsagePatternsSchema} from './phone-usage-patterns.ts';
 import {dayKey,doneMinutes,type LearningState} from './learning.ts';
 import {streaks} from './habits.ts';
 import {sameTimezone,usageMeasurementSchema} from './screen-time-schema.ts';
-export const balanceSettingsSchema=z.object({enabled:z.boolean().default(false),budgetMinutes:z.number().int().min(5).max(480).default(60),deviceId:z.string().max(100).default(''),syncSummaries:z.boolean().default(false),shareAppNames:z.boolean().default(false),categories:z.record(z.enum(['learning','leisure','neutral','mixed'])).default({})});
+export const balanceSettingsSchema=z.object({enabled:z.boolean().default(false),budgetMinutes:z.number().int().min(5).max(480).default(60),deviceId:z.string().max(100).default(''),syncSummaries:z.boolean().default(false),shareAppNames:z.boolean().default(false),shareCoachPatterns:z.boolean().default(false),categories:z.record(z.enum(['learning','leisure','neutral','mixed'])).default({})});
 export type BalanceSettings=z.infer<typeof balanceSettingsSchema>;
-export const usageReportSchema=z.object({granted:z.boolean(),timezone:z.string().max(100).default(''),capturedAt:z.string().datetime(),platform:z.enum(['android','mac']).default('android'),paused:z.boolean().default(false),trackedSince:z.string().datetime().optional(),days:z.array(z.object({day:z.string().regex(/^\d{4}-\d{2}-\d{2}$/),minutes:z.number().min(0).max(1500),available:z.boolean().optional(),measurement:usageMeasurementSchema.optional(),apps:z.array(z.object({id:z.string().max(250),name:z.string().max(250),minutes:z.number().min(0).max(1500)})).max(300)})).max(7)});
+export const usageReportSchema=z.object({granted:z.boolean(),timezone:z.string().max(100).default(''),capturedAt:z.string().datetime(),platform:z.enum(['android','mac']).default('android'),paused:z.boolean().default(false),trackedSince:z.string().datetime().optional(),phonePatterns:phoneUsagePatternsSchema.optional(),days:z.array(z.object({day:z.string().regex(/^\d{4}-\d{2}-\d{2}$/),minutes:z.number().min(0).max(1500),available:z.boolean().optional(),measurement:usageMeasurementSchema.optional(),apps:z.array(z.object({id:z.string().max(250),name:z.string().max(250),minutes:z.number().min(0).max(1500)})).max(300)})).max(7)});
 export type UsageReport=z.infer<typeof usageReportSchema>;
 export function focusBalance(state:LearningState,settings:BalanceSettings,usage:UsageReport|null,now=new Date()){
  const day=dayKey(now,state.settings.timezone),minutes=doneMinutes(state,now),goal=state.settings.dailyMinutes;

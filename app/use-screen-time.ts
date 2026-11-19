@@ -3,6 +3,7 @@ import {useEffect,useRef,useState} from 'react';
 import {balanceSettingsSchema,usageReportSchema,type BalanceSettings,type UsageReport} from '../lib/focus-balance';
 import {localRead,localWrite,nativeBridge,nativeRequest} from '../lib/local-store';
 import {updateScreenSummaries,usageSummaries} from '../lib/screen-time';
+import {shareablePhonePatterns} from '../lib/phone-usage-patterns';
 import type {LearningState} from '../lib/learning';
 export type ScreenTimeController=ReturnType<typeof useScreenTime>;
 export function useScreenTime(state:LearningState,update:(fn:(s:LearningState)=>LearningState)=>boolean|void,localMode:boolean,loaded:boolean){
@@ -18,5 +19,7 @@ export function useScreenTime(state:LearningState,update:(fn:(s:LearningState)=>
  }catch(e){if(token===request.current){setUsage(null);setError((e as Error).message);}}finally{running.current=false;if(token===request.current)setBusy(false);}}
  useEffect(()=>{if(!ready)return;refresh();const visible=()=>{if(document.visibilityState==='visible')refresh();};window.addEventListener('learning-native-ready',visible);document.addEventListener('visibilitychange',visible);const timer=setInterval(visible,120000);return()=>{window.removeEventListener('learning-native-ready',visible);document.removeEventListener('visibilitychange',visible);clearInterval(timer);request.current++;};},[ready,state.settings.timezone]);
  async function save(next:BalanceSettings){try{const parsed=balanceSettingsSchema.parse(next);if(kind==='mac'){const response=await fetch('/api/screen-time',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({settings:parsed})});if(!response.ok)throw Error('Mac preferences could not be saved.');}else await localWrite('focus-balance',parsed);setSettings(parsed);latest.current.settings=parsed;if(!parsed.enabled){request.current++;setUsage(null);setBusy(false);}else await refresh();return true;}catch(e){setError((e as Error).message);return false;}}
- return {settings,usage,granted,kind,busy,error,ready,save,refresh};
+ const coachPhonePatterns=kind==='android'&&granted&&settings.enabled&&settings.shareCoachPatterns
+  ?shareablePhonePatterns(usage?.phonePatterns,settings.shareAppNames):undefined;
+ return {settings,usage,granted,kind,busy,error,ready,save,refresh,coachPhonePatterns};
 }

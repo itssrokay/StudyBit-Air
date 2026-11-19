@@ -13,6 +13,14 @@ Versions match the Android app (Settings → Apps → Learning Space).
 
 ---
 
+## 0.35.0 · 2026-11-20
+- Asked: make the app usable; club what I share and jot down (bookmarks and thoughts) together using AI.
+- Changed: Inbox has a new **Themes** tab. One tap groups everything you've saved (inbox captures plus unread readings) into a few named themes. Each theme says what connects its items and gives one next step. With your OpenAI key, AI does the grouping; without it, or offline, it groups on the phone by topic (system design, career, coding practice, AI, frontend, and your reading categories). Themes are kept until you regroup, the view shows how many new saves arrived since, and tapping an item opens the capture or the link.
+
+## 0.34.0 · 2026-11-19
+- Asked: have AI Coach notice when phone use clusters, which apps account for usage, and ask what drives the pattern.
+- Changed: Android summarizes recurring local-time windows and top foreground-app shares across the last seven completed days. See the pattern under Progress → Screen time and opt in to share it with AI chat and daily reviews. App names have their own switch.
+
 ## 0.33.0 · 2026-11-19
 - Asked: make Library, Inbox and Settings less overwhelming.
 - Changed: Library keeps search and one add action up front, with filters and priority ordering in a sheet. Inbox opens captures for review from a compact queue. Settings groups controls under expandable categories.
