@@ -67,6 +67,13 @@ Sources: our own system (below), the ui-skills baseline, accessibility and motio
 - Inbox opens to the review queue. New capture opens an editor. Each row opens the full capture and its actions.
 - Settings starts with category rows and expands options on demand. Keep the installed version visible and surface focus settings when a timer needs attention.
 
+## Inbox themes
+
+- Everything saved for later (inbox captures to review, unread readings) can be clubbed into **themes** under Inbox → Themes (`lib/themes.ts`, `app/inbox-themes.tsx`).
+- A theme shows a specific title, one line on what connects its items, and **one next step**. Leftovers fold into "Other saves".
+- AI is optional: without a key or offline, the same view groups on the phone. Say which happened ("Grouped by AI" or "Grouped on this phone") once, in the meta line.
+- Never regroup on your own. Show how many new saves arrived since the last grouping and let the person tap Regroup.
+
 ## 6. Icons and covers
 
 - Lucide icons at 16 to 22px, stroke 2. Decorative icons are `aria-hidden`.
