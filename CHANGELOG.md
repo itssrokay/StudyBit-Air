@@ -13,6 +13,10 @@ Versions match the Android app (Settings → Apps → Learning Space).
 
 ---
 
+## 0.36.1 · 2026-11-21
+- Asked: fix Find by meaning for older saves.
+- Changed: older captures without a why or intent can be searched alongside new saves. Search validation errors show a short message.
+
 ## 0.36.0 · 2026-11-21
 - Asked: remember whatever I save, with an optional "why I'm saving this"; save screenshots and links from anywhere on my Galaxy S25, including from a shortcut.
 - Changed:

@@ -14,7 +14,14 @@ export function prepareOfflineAI(path:string,data:any){
  }
  if(data.mode==='week')return prepareWeekPlanAI({state:data.state,answers:data.answers});
  if(data.mode==='screenshot')return prepareScreenshotAI(z.object({image:z.string().max(1400000),why:z.string().max(300).default(''),text:z.string().max(500).default('')}).parse(data));
- if(data.mode==='recall')return prepareRecallAI(z.object({query:z.string().min(1).max(300),items:z.array(z.object({title:z.string().max(200),why:z.string().max(300),intent:z.string().max(40),text:z.string().max(400),date:z.string().max(10)})).min(1).max(150)}).parse(data));
+ if(data.mode==='recall'){
+  const parsed=z.object({query:z.string().trim().min(1).max(300),items:z.array(z.object({
+   title:z.string().max(200),why:z.string().max(300).default(''),intent:z.string().max(40).default(''),
+   text:z.string().max(400),date:z.string().max(10),
+  })).min(1).max(150)}).safeParse(data);
+  if(!parsed.success)throw Error('Could not search your saves by meaning. Try a shorter description or use word search.');
+  return prepareRecallAI(parsed.data);
+ }
  if(data.mode==='themes')return prepareThemesAI(z.object({items:z.array(z.object({id:z.string().max(110),kind:z.enum(['capture','reading']),title:z.string().max(160),text:z.string().max(280),host:z.string().max(200),url:z.string().max(2000),createdAt:z.string().max(40),category:z.string().max(200)})).min(2).max(120),goals:z.array(z.string().max(120)).max(10).default([])}).parse(data));
  if(data.mode==='daily'){const state=stateSchema.parse(data.state);return prepareDailyCoach(state,typeof data.day==='string'?data.day:undefined);}
  const prompt=z.string().min(1).max(12000).parse(data.prompt);const group=data.mode==='group';

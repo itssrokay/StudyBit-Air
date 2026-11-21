@@ -36,7 +36,8 @@ export async function readScreenshot(item:LearningState['inbox'][number],update:
 /** Find saves by meaning. Returns matching capture IDs with a short reason, best first. */
 export async function recallSaves(inbox:LearningState['inbox'],query:string):Promise<{id:string;reason:string}[]>{
  const items=inbox.slice(0,150);
- const response=await apiRequest('/api/coach',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode:'recall',query,items:items.map(i=>({title:saveTitle(i).slice(0,200),why:i.why,intent:i.intent,text:(i.imageText||i.text).slice(0,400),date:i.createdAt.slice(0,10)}))})});
+ if(!items.length)return [];
+ const response=await apiRequest('/api/coach',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode:'recall',query:query.trim().slice(0,300),items:items.map(i=>({title:saveTitle(i).slice(0,200),why:i.why,intent:i.intent,text:(i.imageText||i.text).slice(0,400),date:i.createdAt.slice(0,10)}))})});
  const data=await response.json() as {error?:string;matches?:{n:number;reason:string}[]};
  if(!response.ok)throw Error(data.error||'AI search is unavailable.');
  const seen=new Set<string>();

@@ -73,3 +73,13 @@ test('offline AI routes screenshot and recall modes with validation',()=>{
  assert.equal(prepareOfflineAI('/api/coach',{mode:'recall',query:'q',items:[{title:'t',why:'',intent:'',text:'',date:'2026-11-01'}]}).body.text.format.name,'saved_recall');
  assert.throws(()=>prepareOfflineAI('/api/coach',{mode:'recall',query:'',items:[]}));
 });
+
+test('Find by meaning accepts older saves beside new saves without changing metadata',()=>{
+ const legacy={title:'Distributed systems notes',text:'Read about replication',date:'2026-11-01'};
+ const newer={title:'Kafka notes',why:'interview prep',intent:'For interview',text:'Log compaction',date:'2026-11-21'};
+ const request=prepareOfflineAI('/api/coach',JSON.parse(JSON.stringify({mode:'recall',query:'storage ideas',items:[legacy,newer]})));
+ const items=JSON.parse(request.body.input).items;
+ assert.deepEqual(items,[{n:1,...legacy,why:'',intent:''},{n:2,...newer}]);
+ assert.deepEqual(request.parse({output:[{content:[{type:'output_text',text:'{"matches":[{"n":1,"reason":"Notes about storage replication"}]}'}]}]}).matches,[{n:1,reason:'Notes about storage replication'}]);
+ assert.throws(()=>prepareOfflineAI('/api/coach',{mode:'recall',query:'storage',items:[{...legacy,why:123}]}),{message:'Could not search your saves by meaning. Try a shorter description or use word search.'});
+});
