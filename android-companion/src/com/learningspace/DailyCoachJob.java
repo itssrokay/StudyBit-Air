@@ -30,7 +30,7 @@ public class DailyCoachJob extends JobService {
     int attempts=day.equals(prefs.getString("day",""))?prefs.getInt("attempts",0):0;if(!manual&&attempts>=3)return new JSONObject().put("paused",true);
     prefs.edit().putString("day",day).putInt("attempts",attempts+1).putString("error","").commit();
     JSONObject body=DailyCoachContext.request(template,day,Instant.now()),input=new JSONObject(body.getString("input")),context=input.getJSONObject("context");
-    addUsage(c,context,state,zone);addShares(c,context);DailyCoachContext.alignInput(input,day,zone,Instant.now());body.put("input",input.toString());
+    addUsage(c,context,state,zone,day);addShares(c,context);DailyCoachContext.alignInput(input,day,zone,Instant.now());body.put("input",input.toString());
     PhoneKeyStore keys=new PhoneKeyStore(c);String key=keys.key();if(key.isEmpty())throw new Exception("Add your OpenAI key in Settings.");body.put("model",keys.model()).put("store",false);
     JSONObject reply=DailyCoachContext.parseReply(call(body,key,network));String signature=template.getJSONObject("signatures").optString(day,template.getString("emptySignature"));
     review=new JSONObject().put("id",id).put("day",day).put("timezone",zone).put("at",Instant.now().toString()).put("source","phone").put("requestVersion",DailyCoachContext.VERSION).put("activitySignature",signature).put("snapshotAt",template.getString("preparedAt")).put("reply",reply);
@@ -54,10 +54,11 @@ public class DailyCoachJob extends JobService {
  private static void addShares(Context c,JSONObject context)throws Exception{
   JSONArray pending=ShareDrafts.read(new File(c.getFilesDir(),"pending-shares.json"));JSONArray safe=new JSONArray();for(int i=0;i<pending.length();i++){JSONObject item=pending.getJSONObject(i);String text=item.getString("text");safe.put(new JSONObject().put("id",item.getString("id")).put("createdAt",item.getString("createdAt")).put("text",text.substring(0,Math.min(1500,text.length()))).put("truncated",text.length()>1500));}context.put("pendingPhoneShares",safe); // Saved links/text only; no page fetch.
  }
- private static void addUsage(Context c,JSONObject context,JSONObject state,String zone)throws Exception{
+ private static void addUsage(Context c,JSONObject context,JSONObject state,String zone,String reviewDay)throws Exception{
   if(!state.getJSONObject("coach").optBoolean("useScreenTime",true))return;
   JSONArray summary=new JSONArray();String raw=c.getSharedPreferences("local_preferences",0).getString("focus-balance","");JSONObject settings=raw.isEmpty()?new JSONObject():new JSONObject(raw);
   if(settings.optBoolean("enabled")&&FocusUsage.granted(c)){try{JSONObject usage=new JSONObject(FocusUsage.report(c,zone));JSONArray days=usage.getJSONArray("days");
+   if(settings.optBoolean("shareCoachPatterns"))DailyCoachContext.attachPhonePatterns(context,usage,zone,reviewDay,settings.optBoolean("shareAppNames"));
    for(int i=0;i<days.length();i++){JSONObject d=days.getJSONObject(i);JSONArray apps=d.getJSONArray("apps");if(!d.optBoolean("available",apps.length()>0))continue;summary.put(DailyCoachContext.phoneUsage(d,usage.getString("capturedAt"),settings.optInt("budgetMinutes",60),settings.optBoolean("shareAppNames")));
    }
   }catch(Exception unavailable){context.put("phoneUsageUnavailable",true);}}

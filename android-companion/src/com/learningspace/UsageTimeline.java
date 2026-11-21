@@ -24,14 +24,20 @@ public final class UsageTimeline {
  }
  public static final class Screen {public long millis;public boolean available,complete;public boolean usable(long appMillis){return available&&complete&&(millis>0||appMillis==0);}}
  /** Screen-on alone is insufficient: lock-screen and screen-off time do not count. */
- public static Screen screen(List<Event> events,long begin,long end){
+ public static Screen screen(List<Event> events,long begin,long end){return screen(events,begin,end,null);}
+ interface Interval {void add(long start,long end);}
+ private static void addScreen(Screen screen,long start,long end,Interval interval){
+  if(end<=start)return;
+  screen.millis+=end-start;if(interval!=null)interval.add(start,end);
+ }
+ static Screen screen(List<Event> events,long begin,long end,Interval interval){
   Screen out=new Screen();if(end<=begin)return out;
   boolean interactive=false,unlocked=false,known=false;long started=begin;
   List<Event> ordered=new ArrayList<>(events);ordered.sort(Comparator.comparingLong(e->e.at));
   for(Event e:ordered){if(e.at>end)break;
    if(e.type!=SCREEN_ON&&e.type!=SCREEN_OFF&&e.type!=LOCKED&&e.type!=UNLOCKED&&e.type!=SHUTDOWN&&e.type!=STARTUP)continue;
    // A reboot without a preceding screen-off/shutdown leaves the open interval unknown.
-   if(e.type!=STARTUP&&known&&interactive&&unlocked)out.millis+=Math.max(0,Math.min(e.at,end)-Math.max(started,begin));
+   if(e.type!=STARTUP&&known&&interactive&&unlocked)addScreen(out,Math.max(started,begin),Math.min(e.at,end),interval);
    if(e.type==STARTUP&&interactive&&unlocked)out.complete=false;
    if(e.at<=begin)out.complete=true;
    out.available=true;known=true;
@@ -41,7 +47,7 @@ public final class UsageTimeline {
    else {interactive=false;unlocked=false;}
    started=e.at;
   }
-  if(known&&interactive&&unlocked)out.millis+=Math.max(0,end-Math.max(started,begin));
+  if(known&&interactive&&unlocked)addScreen(out,Math.max(started,begin),end,interval);
   return out;
  }
 }

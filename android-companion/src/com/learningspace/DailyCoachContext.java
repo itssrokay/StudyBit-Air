@@ -26,7 +26,15 @@ public final class DailyCoachContext {
   JSONObject body=new JSONObject(template.getJSONObject("body").toString()),input=new JSONObject(body.getString("input"));
   alignInput(input,day,template.getString("timezone"),now);
   // Fresh phone observations are added by the job, then aligned again before sending.
-  input.getJSONObject("context").remove("screenTime");body.put("input",input.toString()).put("instructions",body.optString("instructions")+" "+DATE_POLICY);return body;
+  input.getJSONObject("context").remove("screenTime");input.getJSONObject("context").remove("phonePatterns");body.put("input",input.toString()).put("instructions",body.optString("instructions")+" "+DATE_POLICY);return body;
+ }
+ public static void attachPhonePatterns(JSONObject context,JSONObject usage,String zone,String reviewDay,boolean shareNames)throws Exception{
+  JSONObject patterns=usage.optJSONObject("phonePatterns");
+  if(patterns==null||!zone.equals(patterns.optString("timezone"))||!reviewDay.equals(patterns.optString("throughDay"))
+    ||!LocalDate.parse(reviewDay).minusDays(6).toString().equals(patterns.optString("fromDay")))return;
+  JSONObject summary=new JSONObject(patterns.toString());
+  if(!shareNames)summary.remove("appUsage");
+  if(summary.has("recurringWindow")||summary.has("appUsage"))context.put("phonePatterns",summary);
  }
  public static JSONObject phoneUsage(JSONObject day,String capturedAt,int budget,boolean shareNames)throws Exception{
   JSONArray apps=day.getJSONArray("apps"),names=new JSONArray();if(shareNames)for(int i=0;i<Math.min(5,apps.length());i++){JSONObject app=apps.getJSONObject(i);names.put(new JSONObject().put("name",app.getString("name")).put("minutes",app.getDouble("minutes")));}
