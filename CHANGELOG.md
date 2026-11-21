@@ -13,6 +13,15 @@ Versions match the Android app (Settings → Apps → Learning Space).
 
 ---
 
+## 0.36.0 · 2026-11-21
+- Asked: remember whatever I save, with an optional "why I'm saving this"; save screenshots and links from anywhere on my Galaxy S25, including from a shortcut.
+- Changed:
+  - **Why, intent, reminder:** every save can carry an optional "why", a one-tap intent (Read later, Watch later, Try this, Buy, For interview, For the shop, For work, Idea; your most used first) and "remind me" (Tonight, Tomorrow, This weekend, Next week). Due saves show under **Saved for today** on Today, with your own words.
+  - **Screenshots:** share any image or screenshot to Learning Space. It's resized and kept privately on the phone. With your AI key, AI reads it: a title, a one-line gist, the text and any links (a link it finds is added to the save).
+  - **Quick save:** a new "Quick save" launcher entry for the Side key's double-press, plus a Quick Settings tile. Either one attaches the link you copied in the last 15 minutes and the screenshot you took in the last 10 minutes. With nothing to attach, it opens a blank note. Set it up in Profile → Quick save.
+  - **Find it again:** search the Inbox by title, text, your why, intent or screenshot text, or tap **Find by meaning** to let AI match what you describe ("the bathtub for the small bathroom").
+  - Themes now use your why, intent and screenshot text. New inbox fields are optional, so older captures, sync and coach proposals are unchanged.
+
 ## 0.35.0 · 2026-11-20
 - Asked: make the app usable; club what I share and jot down (bookmarks and thoughts) together using AI.
 - Changed: Inbox has a new **Themes** tab. One tap groups everything you've saved (inbox captures plus unread readings) into a few named themes. Each theme says what connects its items and gives one next step. With your OpenAI key, AI does the grouping; without it, or offline, it groups on the phone by topic (system design, career, coding practice, AI, frontend, and your reading categories). Themes are kept until you regroup, the view shows how many new saves arrived since, and tapping an item opens the capture or the link.

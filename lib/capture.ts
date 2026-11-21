@@ -9,9 +9,12 @@ export function captureLinks(text:string){
  return matches.map(raw=>raw.replace(/[.,;!?\])}]+$/,'')).flatMap(raw=>{const url=safeUrl(raw);if(!url||seen.has(url))return [];seen.add(url);const u=new URL(url),host=u.hostname.replace(/^www\./,'');let kind='Article';if(['youtube.com','m.youtube.com','youtu.be'].includes(host))kind=u.searchParams.has('list')?'YouTube playlist':'YouTube video';else if(['x.com','twitter.com','mobile.twitter.com'].includes(host))kind='X post / thread';return [{url,kind,host}];}).slice(0,20);
 }
 export function captureTitle(text:string){const bare=captureLinks(text);if(bare.length===1&&text.trim()===bare[0].url){try{return readingLink(bare[0].url).title;}catch{/* fall through */}}const first=text.split('\n').find(s=>s.trim())||text;return first.trim().replace(/https?:\/\/\S+/g,'').replace(/^(todo|idea|learn|read)\s*:\s*/i,'').trim().slice(0,160)||captureLinks(text)[0]?.host||'A new idea';}
-export function captureInbox(state:LearningState,text:string,workspace:Workspace,source:'typed'|'shared'='typed',id=uid(),now=new Date()){
+export type SaveMeta={why?:string;intent?:string;remindOn?:string;image?:string;title?:string};
+export function captureInbox(state:LearningState,text:string,workspace:Workspace,source:'typed'|'shared'='typed',id=uid(),now=new Date(),meta:SaveMeta={}){
  if(state.inbox.some(i=>i.id===id))return state;
- const item=inboxSchema.parse({id,text,workspace,source,createdAt:now.toISOString(),status:'inbox'});return {...state,inbox:[item,...state.inbox]};
+ const body=text.trim()||(meta.image?'Screenshot':meta.why?.trim()||'');
+ const extra=Object.fromEntries(Object.entries({why:(meta.why||'').trim().slice(0,300),intent:(meta.intent||'').slice(0,40),remindOn:meta.remindOn||'',image:meta.image||'',title:(meta.title||'').trim().slice(0,200)}).filter(([,v])=>v));
+ const item=inboxSchema.parse({id,text:body,workspace,source,createdAt:now.toISOString(),status:'inbox',...extra});return {...state,inbox:[item,...state.inbox]};
 }
 export function logExtra(state:LearningState,input:{title:string;url:string;minutes:number;kind:'article'|'video'|'topic';reflection:string;workspace:Workspace;keep:boolean},now=new Date(),id=uid()):LearningState{
  if(state.resources.some(r=>r.id===id)||state.activityRemovals.some(e=>e.kind==='resource'&&e.targetId===id))return state;
@@ -23,11 +26,11 @@ export function logExtra(state:LearningState,input:{title:string;url:string;minu
  return finishStudySession({...state,resources:[...state.resources,r]},r.id,r.lessons[0].id,input.minutes,{difficulty:'unknown',reflection:input.reflection,timerSeconds:0,timeSource:'logged',plannedMinutes:input.minutes},now,state,id+'-session');
 }
 
-export function saveSharedReading(state:LearningState,input:{id:string;text:string;title:string;workspace:Workspace;category?:string;asap?:boolean},now=new Date()):LearningState{
+export function saveSharedReading(state:LearningState,input:{id:string;text:string;title:string;workspace:Workspace;category?:string;asap?:boolean;meta?:SaveMeta},now=new Date()):LearningState{
  if(state.inbox.some(i=>i.id===input.id))return state;
  const links=captureLinks(input.text);if(links.length!==1||links[0].kind.startsWith('YouTube'))throw Error('Save this capture to the inbox, then import its links.');
  const link=readingLink(links[0].url),excerpt=input.text.replace(/https?:\/\/[^\s<>"']+/gi,'').trim();
- const next=captureInbox(state,input.text,input.workspace,'shared',input.id,now);
+ const next=captureInbox(state,input.text,input.workspace,'shared',input.id,now,{...input.meta,title:input.title});
  const existing=state.resources.find(r=>r.workspace===input.workspace&&r.kind==='article'&&r.url===link.url);
  const resource=existing?null:makeReading({url:link.url,title:input.title.trim()||link.title,excerpt,minutes:excerpt?readingMinutes(excerpt):5,goalId:input.workspace==='work'?state.settings.workFocusGoal:state.settings.focusGoal,priority:3,folderPath:normalizePath(input.category||'')});
  const tune=(r:typeof resource&{})=>input.asap===undefined?r:setAsap(r,input.asap,state.settings.timezone,now);

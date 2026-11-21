@@ -74,6 +74,13 @@ Sources: our own system (below), the ui-skills baseline, accessibility and motio
 - AI is optional: without a key or offline, the same view groups on the phone. Say which happened ("Grouped by AI" or "Grouped on this phone") once, in the meta line.
 - Never regroup on your own. Show how many new saves arrived since the last grouping and let the person tap Regroup.
 
+## Saves: why, reminders, screenshots
+
+- **Capture first, ask later.** Saving is never blocked: the "why", intent and reminder are optional and sit in one compact group (`app/save-meta.tsx`). Intent chips are ordered by your own use.
+- **Your words come back with the item.** Wherever a save resurfaces (Today's "Saved for today", search results, the review sheet), show your "why" before anything else.
+- **Screenshots stay on the phone** until you ask AI to read one. A screenshot is titled "Screenshot" until AI names it; the why is never repeated as the title.
+- **One search box, two modes:** word matching is instant and offline; **Find by meaning** (AI) is a visible, optional second step that shows the reason for each match.
+
 ## 6. Icons and covers
 
 - Lucide icons at 16 to 22px, stroke 2. Decorative icons are `aria-hidden`.

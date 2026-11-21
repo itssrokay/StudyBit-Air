@@ -1,6 +1,6 @@
 /** Decides which shared draft (if any) should pop up. Only a share made in the last few minutes
  * is shown. Older leftovers never pop up again: they are filed quietly into the Inbox instead. */
-export type QueuedShare={id:string;text:string;createdAt?:string};
+export type QueuedShare={id:string;text:string;createdAt?:string;image?:string};
 export const FRESH_SHARE_MS=15*60*1000;
 export function planShares(items:QueuedShare[],opts:{known:(id:string)=>boolean;alreadySaved?:(share:QueuedShare)=>boolean;dismissed:(id:string)=>boolean;now?:Date;freshMs?:number}){
  const now=(opts.now??new Date()).getTime(),fresh=opts.freshMs??FRESH_SHARE_MS;

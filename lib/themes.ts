@@ -10,7 +10,7 @@ export type ThemeGroup={id:string;title:string;summary:string;next:string;itemId
 export type ThemeSet=LearningState['themes'][number];
 
 export function collectSaves(state:LearningState,workspace:Workspace,limit=120):SaveItem[]{
- const captures=state.inbox.filter(i=>i.workspace===workspace&&i.status==='inbox').map(i=>{const link=captureLinks(i.text)[0];return {id:'c:'+i.id,kind:'capture' as const,title:captureTitle(i.text).slice(0,160),text:i.text.replace(/https?:\/\/\S+/g,'').trim().slice(0,280),host:link?.host||'',url:link?.url||'',createdAt:i.createdAt,category:''};});
+ const captures=state.inbox.filter(i=>i.workspace===workspace&&i.status==='inbox').map(i=>{const link=captureLinks(i.text)[0];return {id:'c:'+i.id,kind:'capture' as const,title:(i.title||captureTitle(i.text)).slice(0,160),text:[i.why?'Why: '+i.why:'',i.intent?'For: '+i.intent:'',i.text.replace(/https?:\/\/\S+/g,'').trim(),i.imageText].filter(Boolean).join(' · ').slice(0,280),host:link?.host||'',url:link?.url||'',createdAt:i.createdAt,category:''};});
  const readings=state.resources.filter(r=>r.workspace===workspace&&r.kind==='article'&&!r.archived&&!r.demo&&r.lessons.some(l=>!l.done)).map(r=>({id:'r:'+r.id,kind:'reading' as const,title:r.title.slice(0,160),text:r.excerpt.slice(0,280),host:r.provider,url:r.url,createdAt:r.createdAt,category:r.folderPath.split('/')[0]||''}));
  return [...captures,...readings].sort((a,b)=>b.createdAt.localeCompare(a.createdAt)).slice(0,limit);
 }
