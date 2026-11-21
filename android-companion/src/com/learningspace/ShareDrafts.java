@@ -18,8 +18,10 @@ public final class ShareDrafts {
   if(text==null)text="";if(image==null)image="";
   boolean hasText=!text.trim().isEmpty(),hasImage=SavedImages.validName(image);
   if(id==null||!id.matches("[a-zA-Z0-9-]{1,100}")||(!hasText&&!hasImage))throw new IllegalArgumentException();
-  if(wasHandled(file,id,hasText?text:null,now))return false;
-  JSONArray a=read(file);String key=hasText?textKey(text):null;
+  // A new screenshot can carry a link or caption the learner already saved.
+  boolean dedupeText=hasText&&!hasImage;
+  if(wasHandled(file,id,dedupeText?text:null,now))return false;
+  JSONArray a=read(file);String key=dedupeText?textKey(text):null;
   for(int i=0;i<a.length();i++){JSONObject j=a.getJSONObject(i);if(j.getString("id").equals(id)||(key!=null&&!j.optString("text").trim().isEmpty()&&textKey(j.optString("text")).equals(key))||(hasImage&&image.equals(j.optString("image"))))return false;}
   if(a.length()>=20)throw new IOException("Save your existing shared drafts before adding more.");
   String bounded=text.length()>10000?text.substring(0,9950)+"\n[Shared text shortened to fit the inbox.]":text;

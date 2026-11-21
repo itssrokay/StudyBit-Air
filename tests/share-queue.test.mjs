@@ -36,3 +36,12 @@ test('a share whose link is already saved is skipped, even if it arrives looking
 test('same text already in the inbox is skipped',()=>{
  assert.ok(alreadySaved({inbox:[{text:'Read  this\nhttps://reddit.com/r/developersIndia/x'}],resources:[]},'read this https://reddit.com/r/developersIndia/x'));
 });
+
+test('a screenshot survives duplicate text or links, but a saved share ID is still acknowledged',()=>{
+ const item={id:'image-with-link',text:'https://shop.example/tub',image:'11111111-1111-1111-1111-111111111111.jpg',createdAt:ago(0.1)};
+ const options={known:none,alreadySaved:()=>true,dismissed:none,now};
+ assert.equal(planShares([item],options).show?.id,item.id);
+ const handled=planShares([item],{...options,known:id=>id===item.id});
+ assert.equal(handled.show,null);
+ assert.deepEqual(handled.acknowledge,[item.id]);
+});

@@ -18,6 +18,7 @@ Versions match the Android app (Settings → Apps → Learning Space).
 - Changed:
   - **Why, intent, reminder:** every save can carry an optional "why", a one-tap intent (Read later, Watch later, Try this, Buy, For interview, For the shop, For work, Idea; your most used first) and "remind me" (Tonight, Tomorrow, This weekend, Next week). Due saves show under **Saved for today** on Today, with your own words.
   - **Screenshots:** share any image or screenshot to Learning Space. It's resized and kept privately on the phone. With your AI key, AI reads it: a title, a one-line gist, the text and any links (a link it finds is added to the save).
+  - A new screenshot stays in the share queue even if its attached link was saved before.
   - **Quick save:** a new "Quick save" launcher entry for the Side key's double-press, plus a Quick Settings tile. Either one attaches the link you copied in the last 15 minutes and the screenshot you took in the last 10 minutes. With nothing to attach, it opens a blank note. Set it up in Profile → Quick save.
   - **Find it again:** search the Inbox by title, text, your why, intent or screenshot text, or tap **Find by meaning** to let AI match what you describe ("the bathtub for the small bathroom").
   - Themes now use your why, intent and screenshot text. New inbox fields are optional, so older captures, sync and coach proposals are unchanged.

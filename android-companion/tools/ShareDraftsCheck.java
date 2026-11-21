@@ -10,6 +10,10 @@ if(!ShareDrafts.add(imgs,"img-3","","33333333-3333-3333-3333-333333333333.jpg",3
 if(ShareDrafts.add(imgs,"img-1","","44444444-4444-4444-4444-444444444444.jpg",3000L))throw new Exception("A handled share id came back");
 if(!ShareDrafts.read(imgs).getJSONObject(0).optString("image").equals(a2))throw new Exception("Image name not kept");
 boolean bad=false;try{ShareDrafts.add(imgs,"img-x","","../evil.jpg",3000L);}catch(IllegalArgumentException e){bad=true;}if(!bad)throw new Exception("Unsafe image name accepted");
+String caption="https://shop.example/tub";
+ShareDrafts.add(imgs,"old-link",caption,3100L);ShareDrafts.acknowledge(imgs,"old-link",3200L);
+if(!ShareDrafts.add(imgs,"caption-1",caption,"55555555-5555-5555-5555-555555555555.jpg",3300L))throw new Exception("A saved caption blocked a new screenshot");
+if(!ShareDrafts.add(imgs,"caption-2",caption,"66666666-6666-6666-6666-666666666666.jpg",3400L))throw new Exception("Two screenshots sharing one caption were deduplicated");
 imgs.delete();new File(imgs.getPath()+".handled").delete();imgs.getParentFile().delete();
 System.out.println("Native incoming share checks passed: durable drafts, idempotency, text bounds, acknowledgement, no replay of handled shares, image drafts, capacity, and local raster image allowlist.");}
 }

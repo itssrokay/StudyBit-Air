@@ -8,7 +8,7 @@ export function planShares(items:QueuedShare[],opts:{known:(id:string)=>boolean;
  const sorted=valid.slice().reverse().sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''));
  const acknowledge:string[]=[],stale:QueuedShare[]=[];let show:QueuedShare|null=null;
  for(const i of sorted){
-  if(opts.known(i.id)||opts.alreadySaved?.(i)){acknowledge.push(i.id);continue;}
+  if(opts.known(i.id)||(!i.image&&opts.alreadySaved?.(i))){acknowledge.push(i.id);continue;}
   const at=Date.parse(i.createdAt||'');
   if(!Number.isFinite(at)||now-at>fresh){stale.push(i);continue;}
   if(opts.dismissed(i.id))continue;

@@ -69,3 +69,6 @@ run('java','-cp',str(build)+os.pathsep+checkpath,'UsageTimelineCheck')
 
 run('javac','-cp',checkpath,'-d',build,root/'tools/DailyCoachCheck.java')
 run('java','-cp',str(build)+os.pathsep+checkpath,'com.learningspace.DailyCoachCheck')
+
+run('javac','-cp',checkpath,'-d',build,root/'tools/PhoneUsagePatternsCheck.java')
+run('java','-cp',str(build)+os.pathsep+checkpath,'com.learningspace.PhoneUsagePatternsCheck')
